@@ -1,0 +1,499 @@
+<h1>P1 · UML 圖：Class diagram + Sequence diagram</h1>
+<p class="sub">必考，每年 Q24 + Q25 共 9–27 分 · 對應 L5 System Modelling、L8 OO Analysis &amp; Design（前半）、L5 Exercise、Asm2 Q1</p>
+<ul class="toc">
+<li><a href="#exam">一、點考</a></li><li><a href="#notes">二、筆記：由零講起</a></li>
+<li><a href="#demo">三、完整示範：2025 Q24</a></li><li><a href="#past">四、Past paper 全答</a></li>
+<li><a href="#drill">五、Drill</a></li><li><a href="#fill">六、互動填表</a></li>
+<li><a href="#mcq">七、T/F + MC</a></li><li><a href="#short">八、短答題</a></li><li><a href="#faq">九、常見疑問</a></li></ul>
+
+<h2 id="exam">一、點考</h2>
+<div class="key"><b>一分鐘重點</b><ul>
+<li><b>Class diagram 4 年都有考</b>（9、14、18、10 分）：俾你一段文字，叫你畫 class、attribute、operation、association 同佢嘅類型。</li>
+<li><b>Sequence diagram 考過 2 次</b>（2022 14 分、2025 9 分）：俾你一段情境，叫你搵 actor，畫訊息次序。</li>
+<li>評分重點：class 名、attribute、operation <b>齊</b>；關係<b>類型</b>（association／aggregation／composition／inheritance）同 <b>multiplicity</b> 啱。其他（visibility、type）係 optional。</li></ul></div>
+<div class="tw"><table class="stack"><tr><th>卷</th><th>題目</th><th>分數</th><th>答案</th></tr>
+<tr><td>2025 Q24</td><td>圖書館：Book／DVD 兩種 item、category、user、loan、fine</td><td>9</td><td><a href="#demo">三</a></td></tr>
+<tr><td>2024 Q24</td><td>醫院：hospital、department、person／patient／staff（4 種）、prescription</td><td>18</td><td><a href="#p2024">四</a></td></tr>
+<tr><td>2023 Q24</td><td>銀行：customer、debit card、savings／currency account、transaction、shared account</td><td>14</td><td><a href="#p2023">四</a></td></tr>
+<tr><td>2022 Q24 = Asm2 Q1</td><td>訂單：product、person／company customer、order、order item（唔可以刪）</td><td>10（Asm 13）</td><td><a href="#p2022">四</a></td></tr>
+<tr><td>2025 Q25</td><td>圖書館借書：librarian、user DB、book DB、loan DB；逐本書檢查</td><td>9</td><td><a href="#s2025">四</a></td></tr>
+<tr><td>2022 Q25</td><td>訂機票：search、選 bundle、login、乘客資料、付款、reservation</td><td>14</td><td><a href="#s2022">四</a></td></tr>
+<tr><td>L5 Exercise</td><td>叫外賣：restaurant、payment gateway、notification，成功／失敗兩條路</td><td>練習</td><td><a href="#sfood">四</a></td></tr></table></div>
+<h3>Class diagram 答題步驟</h3>
+<ol class="steps">
+<li><b>圈名詞（noun hunt）</b>：每個名詞係候選 class。描述性嘅名詞（name、ID、price）變 attribute；「system」「record」呢類軟件字眼刪走。</li>
+<li><b>搵「two types of」「either…or」</b> → generalization（inheritance）。共有 attribute 放 parent，各自嘅放 child。</li>
+<li><b>搵「consists of」「has」「contains」</b> → 判斷 composition（同生同死、只屬一個）定 aggregation（可以獨立存在）；其他關係用普通 association。</li>
+<li><b>寫 multiplicity</b>：每條線<b>兩頭</b>都寫。逐句問「一個 A 有幾多個 B？一個 B 有幾多個 A？」</li>
+<li><b>圈動詞</b> → operation，放喺「擁有相關資料」嗰個 class（Information Expert）。</li>
+<li><b>最後檢查</b>：題目每句都有對應（「Your design should support all the requirements」）；三角形喺 parent、菱形喺 whole。</li></ol>
+<h3>Sequence diagram 答題步驟</h3>
+<ol class="steps">
+<li><b>搵 participant</b>：人 = actor（公仔）；系統同 database = object（方框，名加底線，例如 <code>:LMS</code>）。題目叫你「identify the actors」，記得寫出嚟。</li>
+<li><b>由左到右排</b>：發起者最左，按訊息第一次出現嘅次序排，減少箭咀交叉。</li>
+<li><b>逐句變 message</b>：主語 → 箭咀起點；動詞 → message 名；受詞 → 參數。有回覆就加虛線 return。</li>
+<li><b>條件同重複加 frame</b>：if／otherwise → <code>alt</code>；if 冇 else → <code>opt</code>；for each → <code>loop</code>。Guard 寫喺 <code>[ ]</code>。</li>
+<li><b>檢查次序</b>：時間由上到下；建立新 object 用 «create» 虛線箭咀指去個 object 方框。</li></ol>
+
+<h2 id="notes">二、筆記：由零講起</h2>
+<div class="key"><b>一分鐘重點</b><ul>
+<li><b>Model</b> 係系統嘅抽象（abstraction），唔係另一個版本；UML 係畫 model 嘅標準語言，有 14 種圖（7 structure + 7 behavior）。</li>
+<li>四個角度：<b>context</b>（系統同環境）、<b>interaction</b>（use case、sequence）、<b>structure</b>（class）、<b>behavior</b>（activity、state）。</li>
+<li>Class diagram 6 種關係：dependency、association、aggregation、composition、generalization、realization。</li>
+<li>Sequence diagram：lifeline、message、return、activation，同 loop／alt／opt frame。</li></ul></div>
+
+<div class="concept">
+<h3>1. System modelling 同 UML：點解要畫圖</h3>
+<span class="lab">一句講完</span>
+<p><b>System modelling</b> 係為系統整<b>抽象 model</b>：故意忽略細節，只留低某個角度需要嘅資訊。UML（Unified Modeling Language）係業界標準嘅畫法。</p>
+<span class="lab why">點解要咁做</span>
+<p>一個系統太複雜，一幅圖講唔晒，所以要由唔同角度各畫一幅：</p>
+<ul><li><b>傾偈用</b>：草稿、唔完整都得（agile 常用）。</li>
+<li><b>記錄現有系統</b>：要啱，但可以唔完整。</li>
+<li><b>生成 code</b>（model-driven engineering）：要完整又要啱。</li></ul>
+<span class="lab pic">圖解：四個角度</span>
+<figure class="fig"><svg viewBox="0 0 360 250" role="img" aria-label="four modelling perspectives" style="max-width:380px">
+<rect class="ac" x="125" y="100" width="110" height="50" rx="10"/><text x="180" y="122" text-anchor="middle" font-weight="700" font-size="14">系統</text><text x="180" y="140" text-anchor="middle" font-size="12">System</text>
+<rect class="hl" x="10" y="10" width="160" height="62" rx="8"/><text x="90" y="32" text-anchor="middle" font-weight="700" font-size="13.5">Context</text><text x="90" y="50" text-anchor="middle" font-size="12">系統同外面點連</text><text x="90" y="65" text-anchor="middle" font-size="11.5" fill="#566273">activity diagram</text>
+<rect class="hl" x="190" y="10" width="160" height="62" rx="8"/><text x="270" y="32" text-anchor="middle" font-weight="700" font-size="13.5">Interaction</text><text x="270" y="50" text-anchor="middle" font-size="12">邊個同邊個講嘢</text><text x="270" y="65" text-anchor="middle" font-size="11.5" fill="#566273">use case、sequence</text>
+<rect class="hl" x="10" y="178" width="160" height="62" rx="8"/><text x="90" y="200" text-anchor="middle" font-weight="700" font-size="13.5">Structure</text><text x="90" y="218" text-anchor="middle" font-size="12">由咩組成（靜態）</text><text x="90" y="233" text-anchor="middle" font-size="11.5" fill="#566273">class diagram</text>
+<rect class="hl" x="190" y="178" width="160" height="62" rx="8"/><text x="270" y="200" text-anchor="middle" font-weight="700" font-size="13.5">Behavior</text><text x="270" y="218" text-anchor="middle" font-size="12">運行時點變（動態）</text><text x="270" y="233" text-anchor="middle" font-size="11.5" fill="#566273">activity、state</text>
+<g class="ln"><line x1="140" y1="100" x2="110" y2="72"/><line x1="220" y1="100" x2="250" y2="72"/><line x1="140" y1="150" x2="110" y2="178"/><line x1="220" y1="150" x2="250" y2="178"/></g>
+</svg><figcaption>考試主要考 structure（class diagram）同 interaction（sequence diagram）</figcaption></figure>
+<span class="lab eg">例子</span>
+<p>網上書店：context model 畫書店同 payment system、物流系統點連；use case 畫顧客可以做咩；class diagram 畫 Book、Order、Customer；state diagram 畫一張 order 由 Pending → Paid → Shipped。</p>
+<span class="lab trap">易錯</span>
+<p>「Model 係系統嘅另一個完整表示」係<b>錯</b>：model 係 <b>abstraction</b>，刻意省略細節。另外 UML 有 <b>14</b> 種圖（7 structure + 7 behavior），但研究話大部分人用 5 種已經夠。</p>
+</div>
+
+<div class="concept">
+<h3>2. Class 同 object；class 方框點寫</h3>
+<span class="lab">一句講完</span>
+<p><b>Class</b> 係藍圖（blueprint），定義 attribute（state）同 operation（behavior）；<b>object</b> 係用藍圖整出嚟、喺記憶體入面有實際數值嘅實例（instance）。</p>
+<span class="lab why">點解要分三格</span>
+<p>Class 方框分三格：名、attribute、operation。咁樣一眼睇到「佢知道啲咩」同「佢識做啲咩」。<b>只有 class 名係必須</b>，其他可以省略。</p>
+<span class="lab pic">圖解：Octopus class</span>
+{{UML:p1-octopus}}
+<div class="tw"><table><tr><th>符號</th><th>意思</th></tr>
+<tr><td><code>-</code></td><td>private（只有自己用到）</td></tr><tr><td><code>+</code></td><td>public</td></tr>
+<tr><td><code>#</code></td><td>protected（自己同子類）</td></tr><tr><td><code>/</code></td><td>derived（可以由其他 attribute 計出嚟）</td></tr>
+<tr><td>底線</td><td>static（屬於 class，唔屬於個別 object）</td></tr><tr><td>斜體 class 名</td><td>abstract class</td></tr></table></div>
+<span class="lab eg">例子：Class ≈ type，object ≈ variable</span>
+<p>好似 <code>int x</code>：<code>int</code> 係 type（class），<code>x</code> 係 variable（object）。<code>Octopus card1 = new Octopus()</code>：Octopus 係 class，card1 係 object，佢嘅 amount 可能係 150.5。</p>
+<span class="lab trap">易錯</span>
+<p>考試題目通常寫明「attribute types 同 operation parameters 係 optional」（Asm2 甚至話唔好寫 type），所以寫 <code>price</code> 就夠，唔使 <code>- price: double</code>。但 <b>operation 一定要寫</b>，冇寫會扣分。</p>
+</div>
+
+<div class="concept">
+<h3>3. 六種關係（考試最重要）</h3>
+<span class="lab">一句講完</span>
+<p>Class 之間嘅線分 3 類：一般（dependency）、object 層面（association、aggregation、composition）、class 層面（generalization、realization）。</p>
+<span class="lab why">點解要分咁多種</span>
+<p>唔同嘅線表達唔同嘅「關係強度」：由弱到強係 dependency（用一用）→ association（認識）→ aggregation（擁有，但可以分開）→ composition（擁有，同生同死）。Generalization 就係 is-a（「係一種」）。</p>
+<span class="lab pic">圖解：6 種線點畫</span>
+{{UML:p1-rels}}
+<div class="tw"><table class="stack"><tr><th>關係</th><th>畫法</th><th>意思</th><th>關鍵字</th></tr>
+<tr><td>Dependency</td><td>虛線 + 開口箭咀</td><td>A 改，B 可能要跟住改（例如 Game 用 Clock）</td><td>uses、depends on</td></tr>
+<tr><td>Association</td><td>實線</td><td>兩個 object 互相認識、可以溝通</td><td>has、works for、places</td></tr>
+<tr><td>Aggregation</td><td>實線 + <b>空心菱形</b>（喺 whole 嗰頭）</td><td>part-of；part 可以屬幾個 whole，可以獨立存在</td><td>contains（但可以分開）</td></tr>
+<tr><td>Composition</td><td>實線 + <b>實心菱形</b>（喺 whole 嗰頭）</td><td>強 part-of；part 只屬一個 whole，同生同死</td><td>consists of、cannot exist without</td></tr>
+<tr><td>Generalization</td><td>實線 + <b>空心三角形</b>（喺 parent 嗰頭）</td><td>is-a；子類繼承 parent 嘅 attribute 同 operation</td><td>two types of、kind of</td></tr>
+<tr><td>Realization</td><td>虛線 + 空心三角形</td><td>class 實作 interface</td><td>implements</td></tr></table></div>
+<span class="lab eg">例子：逐個判斷</span>
+<ol class="steps"><li>「Each <b>building</b> consists of rooms」：房冇咗棟樓就冇意義 → <b>composition</b>，◆ 喺 Building。</li>
+<li>「A <b>curriculum</b> includes courses」：一科可以喺幾個 curriculum，curriculum 取消咗科目仍然存在 → <b>aggregation</b>，◇ 喺 Curriculum。</li>
+<li>「Students are persons」→ <b>generalization</b>，△ 指向 Person。</li>
+<li>「A person works for companies」→ 普通 <b>association</b>。</li></ol>
+<span class="lab trap">易錯</span>
+<p><b>菱形同三角形畫錯邊</b>係最常見錯：菱形永遠喺「整體」（whole）嗰頭；三角形永遠喺「parent」嗰頭。拿唔準 aggregation 定 composition，就問：「whole 冇咗，part 仲存唔存在？」存在 → aggregation。</p>
+</div>
+
+<div class="concept">
+<h3>4. Association 同 multiplicity</h3>
+<span class="lab">一句講完</span>
+<p><b>Association</b> 表示兩個 class 嘅 object 會互相認識；<b>multiplicity</b> 寫喺線兩頭，講「對面每一個 object 對應我呢邊幾多個」。</p>
+<span class="lab why">點解重要</span>
+<p>Multiplicity 就係業務規則：「每個客至少一個戶口」、「一張 order 至少一個 item」。寫錯 multiplicity 等於理解錯 requirement，係考試必扣分位。</p>
+<span class="lab pic">圖解：L5 嘅三個例子</span>
+{{UML:p1-mult}}
+<div class="tw"><table><tr><th>寫法</th><th>意思</th></tr>
+<tr><td><code>1</code></td><td>剛好 1 個</td></tr><tr><td><code>0..1</code></td><td>冇或者 1 個</td></tr>
+<tr><td><code>*</code> 或 <code>0..*</code></td><td>任何數量（包括 0）</td></tr><tr><td><code>1..*</code></td><td>至少 1 個</td></tr>
+<tr><td><code>1..2</code></td><td>1 至 2 個（例如 shared account 最多 2 個 owner）</td></tr></table></div>
+<span class="lab eg">例子：點樣讀</span>
+<ol class="steps"><li>City —— Country（is capital of）：City 旁邊寫 <code>1</code>，Country 旁邊寫 <code>0..1</code>。</li>
+<li>由 Country 出發問：「一個 Country 有幾多個首都 City？」→ 睇 <b>City 旁邊</b> → 1。</li>
+<li>由 City 出發問：「一個 City 係幾多個 Country 嘅首都？」→ 睇 <b>Country 旁邊</b> → 0..1（大部分城市唔係首都）。</li>
+<li>Mother —— Child：Child 旁邊 <code>1..*</code>（一個媽媽有 1 個或以上仔女），Mother 旁邊 <code>1</code>（每個仔女剛好 1 個媽媽）。</li>
+<li>Person —— Company（works for）：兩頭都係 <code>*</code>（一個人可以打幾份工，一間公司有好多員工）。</li></ol>
+<p class="memo"><b>記法</b>「我有幾多個你」→ 寫喺「你」旁邊。由 A 行過去 B，數字喺 B 嗰頭。</p>
+<span class="lab trap">易錯</span>
+<p>每條線<b>兩頭都要寫</b>。題目講「at least one」→ <code>1..*</code>，唔係 <code>*</code>；講「exactly one」→ <code>1</code>；講「may have」→ 由 <code>0</code> 開始。</p>
+</div>
+
+<div class="concept">
+<h3>5. Generalization（inheritance）同 abstract class</h3>
+<span class="lab">一句講完</span>
+<p>Generalization 表示「is-a」：子類（subclass）係 parent（superclass）嘅一種，自動繼承 parent 嘅 attribute 同 operation。</p>
+<span class="lab why">點解要咁做</span>
+<p>消除重複：Book 同 DVD 都有 id、title，就放喺 LibraryItem 一次，唔使寫兩次。之後加多種 item（例如 Magazine），只需要加一個子類。</p>
+<span class="lab pic">圖解：L8 嘅 library domain model</span>
+{{UML:p1-domain-lib}}
+<span class="lab eg">例子：由文字判斷</span>
+<ol class="steps"><li>「There are two types of library items, i.e., books and DVDs」→ LibraryItem 係 parent，Book、DVD 係 child。</li>
+<li>「Each library item has an ID and a title」→ id、title 放 parent。</li>
+<li>「Each book is also associated with an ISBN」→ isbn 只放 Book。</li>
+<li>LibraryItem 本身唔會有實例（每件嘢一定係 Book 或 DVD）→ abstract，class 名寫<b>斜體</b>。</li></ol>
+<span class="lab trap">易錯</span>
+<p>三角形箭咀指向 <b>parent</b>，唔係 child。子類<b>唔使</b>再寫一次 parent 嘅 attribute。「Fine」呢類可以計出嚟嘅嘢（L8：fine 由 Loan 計）唔應該做 class，做 operation 或 derived attribute。</p>
+</div>
+
+<div class="concept">
+<h3>6. Domain model → design class diagram（L8 noun hunt）</h3>
+<span class="lab">一句講完</span>
+<p><b>Analysis</b> 用 noun hunt 整 <b>domain model</b>（只有概念、attribute、association，<b>冇 operation</b>）；<b>design</b> 再加 operation、type、visibility，變成 <b>design class diagram</b>。</p>
+<span class="lab why">點解要分兩步</span>
+<p>Domain model 係大家對「問題」嘅共同理解，同實作無關；design class diagram 係接近 code 嘅藍圖。L8 嘅金句：<b>「A noun is earned, not invented」</b>：requirement 冇要求嘅名詞唔好加做 class。</p>
+<span class="lab pic">流程圖</span>
+<figure class="fig"><svg viewBox="0 0 360 330" role="img" aria-label="noun hunt flow" style="max-width:380px">
+<defs><marker id="n1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#15202B"/></marker></defs>
+<rect class="hl" x="90" y="6" width="180" height="36" rx="8"/><text x="180" y="29" text-anchor="middle" font-size="13.5" font-weight="700">Requirements 文字</text>
+<line class="ln" x1="180" y1="42" x2="180" y2="62" marker-end="url(#n1)"/>
+<rect class="bx" x="90" y="64" width="180" height="36" rx="8"/><text x="180" y="87" text-anchor="middle" font-size="13.5">圈晒所有名詞</text>
+<line class="ln" x1="180" y1="100" x2="180" y2="118" marker-end="url(#n1)"/>
+<polygon class="ac" points="180,120 280,152 180,184 80,152"/><text x="180" y="149" text-anchor="middle" font-size="12.5">呢個名詞係</text><text x="180" y="165" text-anchor="middle" font-size="12.5">咩嚟？</text>
+<g class="ln"><line x1="95" y1="160" x2="45" y2="210" marker-end="url(#n1)"/><line x1="180" y1="184" x2="180" y2="210" marker-end="url(#n1)"/><line x1="265" y1="160" x2="315" y2="210" marker-end="url(#n1)"/></g>
+<rect class="hl" x="5" y="212" width="105" height="56" rx="8"/><text x="57" y="233" text-anchor="middle" font-size="13" font-weight="700">Class</text><text x="57" y="251" text-anchor="middle" font-size="11.5">真實世界嘅嘢</text><text x="57" y="264" text-anchor="middle" font-size="11.5">Member、Loan</text>
+<rect class="bx" x="127" y="212" width="106" height="56" rx="8"/><text x="180" y="233" text-anchor="middle" font-size="13" font-weight="700">Attribute</text><text x="180" y="251" text-anchor="middle" font-size="11.5">簡單數值</text><text x="180" y="264" text-anchor="middle" font-size="11.5">id、title</text>
+<rect class="bx" x="250" y="212" width="105" height="56" rx="8"/><text x="302" y="233" text-anchor="middle" font-size="13" font-weight="700">刪走</text><text x="302" y="251" text-anchor="middle" font-size="11.5">軟件字眼／計得出</text><text x="302" y="264" text-anchor="middle" font-size="11.5">system、fine</text>
+<rect class="ac" x="60" y="288" width="240" height="36" rx="8"/><text x="180" y="311" text-anchor="middle" font-size="13">加 association + multiplicity</text>
+<line class="ln" x1="57" y1="268" x2="100" y2="288" marker-end="url(#n1)"/>
+</svg><figcaption>Book／CD／Magazine 係 LibraryItem 嘅種類 → generalization，唔係三個無關嘅 class</figcaption></figure>
+<span class="lab eg">例子：L8 library</span>
+<div class="tw"><table class="stack"><tr><th>名詞</th><th>決定</th><th>原因</th></tr>
+<tr><td>member、loan、catalog、item</td><td>Class</td><td>真實嘅 domain 概念</td></tr>
+<tr><td>book、CD、magazine</td><td>LibraryItem 嘅子類</td><td>UR-5 每種借期唔同</td></tr>
+<tr><td>identifier、title</td><td>Attribute</td><td>簡單數值</td></tr>
+<tr><td>fine</td><td>Loan 嘅 operation（computeFine）</td><td>由 loan 計得出</td></tr>
+<tr><td>system、record</td><td>刪走</td><td>軟件字眼，唔係 domain 概念</td></tr></table></div>
+<span class="lab trap">易錯</span>
+<p>Domain model <b>冇 operation</b>；但考試題目通常要你畫 design 級（「specify names, attributes and operations」），所以考試時一定要加 operation。</p>
+</div>
+
+<div class="concept">
+<h3>7. Operation 放邊個 class：Information Expert</h3>
+<span class="lab">一句講完</span>
+<p>將一個職責交俾<b>擁有相關資料</b>嗰個 class（GRASP 嘅 Information Expert）；新 object 由<b>聚合佢</b>嘅 class 建立（Creator）。</p>
+<span class="lab why">點解要咁做</span>
+<p>規則同資料放埋一齊，改資料格式時只影響一個 class（high cohesion、low coupling）。L8 例子：fine 依賴 dueDate，dueDate 喺 Loan，所以 <code>computeFine()</code> 放 Loan，唔放 Catalog。</p>
+<span class="lab pic">圖解：L5 lecture example</span>
+{{UML:p1-l5-order}}
+<span class="lab eg">例子</span>
+<ol class="steps"><li><code>calculateTotal()</code> 要用晒所有 item → Order 擁有 items → 放 Order。</li>
+<li><code>getSubtotal()</code> 要 quantity × price → OrderItem 有呢兩個 → 放 OrderItem。</li>
+<li><code>updateStock()</code> 改 stockQuantity → 放 Product。</li></ol>
+<span class="lab trap">易錯</span>
+<p>唔好將所有 operation 塞落一個「System」或「Manager」class（L8 叫 god class）。考試動詞例如「deposit、withdraw、check balance」要放喺 Account，唔放 Customer。</p>
+</div>
+
+<div class="concept">
+<h3>8. Use case diagram</h3>
+<span class="lab">一句講完</span>
+<p>Use case diagram 畫<b>系統同外面嘅 actor</b>之間有咩互動：每個 use case（橢圓）係一個有目的嘅任務，actor（公仔）可以係人或者其他系統。</p>
+<span class="lab why">點解要咁做</span>
+<p>用嚟搵 user requirements：一眼睇到邊類用戶可以做咩。四種關係：association（actor—use case）、generalization（actor 之間或 use case 之間）、«include»、«extend»。</p>
+<span class="lab pic">圖解：L5 Order Processing（簡化）</span>
+<figure class="fig"><svg viewBox="0 0 360 330" role="img" aria-label="use case diagram" style="max-width:380px">
+<defs><marker id="c1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="none" stroke="#15202B"/></marker><marker id="c2" viewBox="0 0 12 12" refX="11" refY="6" markerWidth="10" markerHeight="10" orient="auto"><path d="M0 0L11 6L0 12z" fill="#fff" stroke="#15202B"/></marker></defs>
+<rect x="75" y="6" width="210" height="318" rx="6" fill="none" stroke="#15202B" stroke-width="1.3"/><text x="180" y="22" text-anchor="middle" font-size="12" font-weight="700">Order Processing System</text>
+<g stroke="#BF4A14" stroke-width="1.5" fill="none"><circle cx="35" cy="60" r="7" fill="#FAE6DA"/><line x1="35" y1="67" x2="35" y2="86"/><line x1="24" y1="74" x2="46" y2="74"/><line x1="35" y1="86" x2="26" y2="98"/><line x1="35" y1="86" x2="44" y2="98"/>
+<circle cx="35" cy="200" r="7" fill="#FAE6DA"/><line x1="35" y1="207" x2="35" y2="226"/><line x1="24" y1="214" x2="46" y2="214"/><line x1="35" y1="226" x2="26" y2="238"/><line x1="35" y1="226" x2="44" y2="238"/>
+<circle cx="325" cy="200" r="7" fill="#F6EBCB" stroke="#8F6200"/><line x1="325" y1="207" x2="325" y2="226" stroke="#8F6200"/><line x1="314" y1="214" x2="336" y2="214" stroke="#8F6200"/><line x1="325" y1="226" x2="316" y2="238" stroke="#8F6200"/><line x1="325" y1="226" x2="334" y2="238" stroke="#8F6200"/></g>
+<text x="35" y="114" text-anchor="middle" font-size="11.5">Customer</text><text x="35" y="254" text-anchor="middle" font-size="11.5">VIP</text><text x="35" y="267" text-anchor="middle" font-size="11.5">Customer</text><text x="325" y="254" text-anchor="middle" font-size="11.5">Payment</text><text x="325" y="267" text-anchor="middle" font-size="11.5">Gateway</text>
+<g class="bx"><ellipse cx="180" cy="70" rx="58" ry="20"/><ellipse cx="180" cy="160" rx="64" ry="20"/><ellipse cx="180" cy="240" rx="58" ry="20"/><ellipse cx="180" cy="298" rx="60" ry="20"/></g>
+<g font-size="12" text-anchor="middle"><text x="180" y="74">Checkout</text><text x="180" y="156">Authenticate</text><text x="180" y="170">User</text><text x="180" y="236">Pay for</text><text x="180" y="250">Order</text><text x="180" y="294">Apply Promo</text><text x="180" y="308">Discount</text></g>
+<g class="ln"><line x1="48" y1="76" x2="122" y2="72"/><line x1="236" y1="244" x2="312" y2="220"/></g>
+<line x1="35" y1="185" x2="35" y2="120" stroke="#15202B" stroke-width="1.3" marker-end="url(#c2)"/>
+<g stroke="#15202B" stroke-width="1.3" stroke-dasharray="5 4" fill="none"><line x1="180" y1="90" x2="180" y2="138" marker-end="url(#c1)"/><path d="M215 86 C 260 140, 250 200, 222 222" marker-end="url(#c1)"/><path d="M135 282 C 100 200, 110 120, 130 86" marker-end="url(#c1)"/></g>
+<g font-size="11" fill="#566273"><text x="184" y="118">«include»</text><text x="252" y="150">«include»</text><text x="82" y="200">«extend»</text></g>
+</svg><figcaption>include 由 base 指去被包含嘅；extend 由擴充嗰個指返 base；VIP 繼承 Customer</figcaption></figure>
+<span class="lab eg">例子：include vs extend（L5 ATM）</span>
+<div class="tw"><table class="stack"><tr><th></th><th>«include»</th><th>«extend»</th></tr>
+<tr><td>意思</td><td>base 一定要用佢先完成到</td><td>有條件先加，base 自己都完成到</td></tr>
+<tr><td>箭咀方向</td><td>base → included</td><td>extension → base</td></tr>
+<tr><td>例子</td><td>Withdraw Cash、Check Balance 都 include Authenticate User</td><td>Send Low Balance Alert extend Withdraw Cash（餘額低過門檻先觸發）</td></tr></table></div>
+<span class="lab trap">易錯</span>
+<p>Include 同 extend 嘅箭咀方向相反，而且都係<b>虛線</b>。Actor 之間嘅 generalization 用實線 + 空心三角形。</p>
+</div>
+
+<div class="concept">
+<h3>9. Sequence diagram：基本元素</h3>
+<span class="lab">一句講完</span>
+<p>Sequence diagram 畫一個情境入面，actor 同 object 之間<b>按時間次序</b>傳嘅訊息：橫向係參與者，縱向係時間（由上到下）。</p>
+<span class="lab why">點解要咁做</span>
+<p>Class diagram 只講「有咩 class」，sequence diagram 講「佢哋點合作完成一件事」。L8 強調兩者要<b>一致</b>：sequence diagram 每個 message 都要係 class diagram 某個 class 嘅 method。</p>
+<span class="lab pic">圖解：L5 View Patient Information</span>
+{{UML:p1-seq-patient}}
+<div class="tw"><table class="stack"><tr><th>元素</th><th>畫法</th><th>意思</th></tr>
+<tr><td>Actor／object</td><td>公仔／方框（<code>name:Class</code> 加底線）</td><td>參與者</td></tr>
+<tr><td>Lifeline</td><td>向下嘅虛線</td><td>參與者喺呢段時間存在</td></tr>
+<tr><td>Activation</td><td>窄長方形（青色）</td><td>正在處理緊</td></tr>
+<tr><td>Message</td><td>實線 + 實心箭咀</td><td>call 一個 method</td></tr>
+<tr><td>Return</td><td>虛線 + 開口箭咀</td><td>回覆結果</td></tr></table></div>
+<span class="lab eg">例子：逐步讀</span>
+<ol class="steps"><li>Receptionist 叫 P（PatientInfo）嘅 <code>ViewInfo(PID)</code>。</li>
+<li>P 叫 database <code>report(Info, PID, UID)</code>，同時俾埋 receptionist 嘅 UID 做保安檢查。</li>
+<li>Database 問 Authorization 系統呢個人有冇權限。</li>
+<li><code>alt</code>：有權限 → 返 patient info；冇 → 返 error。</li></ol>
+<span class="lab trap">易錯</span>
+<p>Lifeline、activation、frame 係 L5 所講嘅「syntactic sugar」：考試最重要係 participant 齊、message 次序同方向啱、條件有 frame。Return 一定要用<b>虛線</b>。</p>
+</div>
+
+<div class="concept">
+<h3>10. Sequence diagram：loop、alt、opt frame 同 «create»</h3>
+<span class="lab">一句講完</span>
+<p>Frame 係圍住一段 message 嘅方框，左上角寫類型：<code>loop</code>（重複）、<code>alt</code>（多條路揀一條，用虛線分隔）、<code>opt</code>（有條件先做）。Guard 寫喺 <code>[ ]</code>。</p>
+<span class="lab why">點解要咁做</span>
+<p>真實情境有 if 同 for each；冇 frame 就畫唔到「條件唔成立會點」。Frame 可以 nest（例如 loop 入面再有 opt）。</p>
+<span class="lab pic">圖解</span>
+{{UML:p1-seq-frames}}
+<div class="tw"><table class="stack"><tr><th>文字線索</th><th>用咩</th><th>Guard 例子</th></tr>
+<tr><td>for each、repeat、until</td><td><code>loop</code></td><td>[more items]、[for each book]</td></tr>
+<tr><td>if … otherwise／else</td><td><code>alt</code>（加 [else] 分隔線）</td><td>[payment ok]、[else]</td></tr>
+<tr><td>if（冇 else）、optionally</td><td><code>opt</code></td><td>[has coupon]</td></tr>
+<tr><td>creates a new …</td><td>«create» 虛線箭咀，指向新 object 方框（方框畫喺嗰個高度）</td><td>—</td></tr></table></div>
+<span class="lab eg">例子</span>
+<p>上圖：Cashier 開單，Register 建立新 Sale（«create»，所以 :Sale 方框喺中間先出現）；每件貨品重複 enterItem（loop）；有優惠券先 applyCoupon（opt）。</p>
+<span class="lab trap">易錯</span>
+<p><code>alt</code> 一定有分隔虛線同兩個 guard；只有一條路就用 <code>opt</code>。「Finally …」嘅步驟要放喺 frame <b>外面</b>，因為無論點都會做。</p>
+</div>
+
+<div class="concept">
+<h3>11. State diagram（behavioral model）</h3>
+<span class="lab">一句講完</span>
+<p>State diagram 畫一個系統（或 object）有幾多個 <b>state</b>，同埋咩 <b>event</b> 令佢由一個 state 轉去另一個。</p>
+<span class="lab why">點解要咁做</span>
+<p>Behavioral model 有兩類：<b>data-driven</b>（資料到咗就處理，用 activity diagram）同 <b>event-driven</b>（有事件先反應，用 state diagram）。微波爐、ATM 呢類即時系統適合 state diagram。</p>
+<span class="lab pic">圖解：L8 LibraryItem 嘅一生</span>
+<figure class="fig"><svg viewBox="0 0 360 275" role="img" aria-label="library item state machine" style="max-width:380px">
+<defs><marker id="s1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#15202B"/></marker></defs>
+<circle cx="40" cy="40" r="8" fill="#15202B"/><line class="ln" x1="48" y1="40" x2="88" y2="40" marker-end="url(#s1)"/>
+<rect class="hl" x="90" y="20" width="110" height="40" rx="18"/><text x="145" y="45" text-anchor="middle" font-weight="700" font-size="13.5">Available</text>
+<rect class="hl" x="90" y="150" width="110" height="40" rx="18"/><text x="145" y="175" text-anchor="middle" font-weight="700" font-size="13.5">On Loan</text>
+<rect class="ac" x="230" y="222" width="110" height="40" rx="18"/><text x="285" y="247" text-anchor="middle" font-weight="700" font-size="13.5">Overdue</text>
+<g class="ln"><line x1="120" y1="60" x2="120" y2="148" marker-end="url(#s1)"/><line x1="172" y1="150" x2="172" y2="62" marker-end="url(#s1)"/><line x1="200" y1="182" x2="240" y2="222" marker-end="url(#s1)"/><path d="M300 222 C 345 130, 300 40, 202 38" marker-end="url(#s1)"/></g>
+<g font-size="11.5"><text x="114" y="92" text-anchor="end">checkout(member,</text><text x="114" y="106" text-anchor="end">today) [free &amp;</text><text x="114" y="120" text-anchor="end">under limit]</text>
+<text x="178" y="98">giveBack(date)</text><text x="178" y="112">[on time] / fine $0</text>
+<text x="355" y="150" text-anchor="end">giveBack(date)</text><text x="355" y="164" text-anchor="end">[late] / fine =</text><text x="355" y="178" text-anchor="end">days × $1</text>
+<text x="120" y="226">due date passes</text></g>
+</svg><figcaption>圓角方框 = state；箭咀 = transition，寫法係 trigger [guard] / action；實心點 = 開始</figcaption></figure>
+<span class="lab eg">例子：微波爐（L5）</span>
+<p>Waiting →（按 Full power）→ Full power →（按 Timer）→ Set time →（門關咗）→ Enabled →（Start）→ Operation →（時間到）→ Waiting。門打開會去 Disabled（安全理由）。State 太多時用 <b>superstate</b>：高層圖當一個 state，另一幅圖再展開。</p>
+<span class="lab trap">易錯</span>
+<p>「due date passes」係<b>時間觸發</b>，唔係資料流，所以 DFD 畫唔到，要用 state machine（L8 原話）。</p>
+</div>
+
+<div class="concept">
+<h3>12. 畫完點檢查：class diagram 同 sequence diagram 要一致</h3>
+<span class="lab">一句講完</span>
+<p>Static model（class diagram）同 dynamic model（sequence、state diagram）描述同一個設計，<b>必須一致</b>。</p>
+<span class="lab why">點解</span>
+<p>Sequence diagram 入面每個 message 都會變成 code 入面某個 class 嘅 method。如果 sequence 叫咗 <code>loan.computeFine()</code>，class diagram 嘅 Loan 就一定要有 <code>computeFine()</code>。</p>
+<span class="lab pic">檢查清單</span>
+<ol class="steps"><li>Class diagram：題目每個名詞都有歸宿（class、attribute 或者有理由刪走）。</li>
+<li>每條線兩頭有 multiplicity；菱形、三角形方向啱。</li>
+<li>每個動詞都有 operation，放喺 Information Expert。</li>
+<li>Sequence diagram：每個 message 嘅接收者，喺 class diagram 都有對應 method。</li>
+<li>條件、重複都有 frame；return 用虛線。</li></ol>
+<span class="lab eg">例子</span>
+<p>2025 卷 Q24（class）同 Q25（sequence）都係圖書館：Q25 嘅 <code>verifyUser</code>、<code>isAvailable</code> 等 message，應該對應 Q24 class 入面嘅 operation。考試時兩題一齊諗會快好多。</p>
+<span class="lab trap">易錯</span>
+<p>唔好喺 sequence diagram 入面畫一個 class diagram 冇嘅 participant 但冇解釋；database 可以當外部 actor 或者 object，兩種都接受，但要一致。</p>
+</div>
+
+<h2 id="demo">三、完整示範：2025 Q24 圖書館（9 分）</h2>
+<div class="key"><b>一分鐘重點</b><ul>
+<li>6 個 class：Category、LibraryItem（abstract）、Book、DVD、User、Loan。</li>
+<li>Book、DVD 繼承 LibraryItem；Category ◇ LibraryItem；Loan 連 User 同 LibraryItem。</li></ul></div>
+<div class="card"><p style="font-family:ui-monospace,Menlo,monospace;font-size:13.5px">A library management system tracks information about its library items, users, and the items loaned by each member. There are two types of library items, i.e., books and DVDs. Each library item has an ID and a title, and it is available if checked in or unavailable if checked out. Each book is also associated with an ISBN and a list of authors, and each DVD is also associated with a director and its runtime in seconds. The library items are organized in different categories with distinct names. People add each library item to a category when it arrives at the library, and can search for library items within a category. Each library user has a unique name and ID and can borrow/return items from/to the library. Each loan has a unique ID, and people may need to know the fine to be paid for an overdue loan.</p></div>
+<h3>Step 1：名詞表</h3>
+<div class="tw"><table class="stack"><tr><th>名詞</th><th>決定</th><th>原因</th></tr>
+<tr><td>library item</td><td>Class（abstract）</td><td>有兩種，自己唔會有實例</td></tr>
+<tr><td>book、DVD</td><td>LibraryItem 子類</td><td>「two types of library items」</td></tr>
+<tr><td>ID、title、available</td><td>LibraryItem 嘅 attribute</td><td>兩種 item 共有</td></tr>
+<tr><td>ISBN、authors／director、runtime</td><td>Book／DVD 各自嘅 attribute</td><td>「also associated with」</td></tr>
+<tr><td>category（有 name）</td><td>Class</td><td>有自己嘅資料同操作（add、search）</td></tr>
+<tr><td>user（name、ID）</td><td>Class</td><td>會借書還書</td></tr>
+<tr><td>loan（ID）</td><td>Class</td><td>記錄「邊個借咗咩」</td></tr>
+<tr><td>fine</td><td>Loan 嘅 operation</td><td>可以由 loan 計（L8 一樣做法）</td></tr>
+<tr><td>library management system</td><td>刪走（或者做 controller，optional）</td><td>係系統本身</td></tr></table></div>
+<h3>Step 2：動詞 → operation</h3>
+<div class="tw"><table><tr><th>動詞</th><th>Operation</th><th>放邊</th></tr>
+<tr><td>checked in／out</td><td>checkIn()、checkOut()</td><td>LibraryItem（佢擁有 available）</td></tr>
+<tr><td>add item to a category</td><td>addItem(item)</td><td>Category</td></tr>
+<tr><td>search items within a category</td><td>searchItems(keyword)</td><td>Category</td></tr>
+<tr><td>borrow／return</td><td>borrowItem()、returnItem()</td><td>User</td></tr>
+<tr><td>know the fine</td><td>calculateFine()</td><td>Loan（佢有 dueDate）</td></tr></table></div>
+<h3>Step 3：關係同 multiplicity</h3>
+<ol class="steps"><li>Book、DVD —△ LibraryItem（generalization）。</li>
+<li>Category ◇— LibraryItem：一個 category 有好多 item（0..*），每件 item 屬 1 個 category。用 aggregation：category 取消咗，item 仍然存在。</li>
+<li>User 1 —— 0..* Loan：一個 user 可以有好多 loan，每個 loan 屬 1 個 user。</li>
+<li>Loan 0..* —— 1..* LibraryItem：一次借可以借幾件（2025 Q25 正係一次借幾本書）；一件 item 歷史上可以被借好多次。</li></ol>
+<h3>Step 4：答案</h3>
+{{UML:p1-2025-lib}}
+<p class="memo"><b>考試見到「two types of X」就畫 generalization；見到「organized in categories」就諗 aggregation</b>。Category 同 LibraryItem 用普通 association 都可以接受，但要寫 multiplicity。</p>
+
+<h2 id="past">四、Past paper 全答</h2>
+<div class="key"><b>一分鐘重點</b><ul>
+<li>以下 4 個 class diagram 同 3 個 sequence diagram 係<b>所有出過嘅題</b>（包括今年 Asm2 Q1 同 L5 Exercise）。</li>
+<li>真卷冇官方答案：以下按 L5／L8 規則設計，標明咗有選擇餘地嘅位。</li></ul></div>
+
+<div class="practice" id="p2022"><span class="src">2022 Q24 = Asm2 Q1 · Class Diagram · 10 分（Asm 13 分） · L5、L8</span>
+<div class="card"><p style="font-family:ui-monospace,Menlo,monospace;font-size:13.5px">An order management system keeps track of various products in stock and orders. For each product, its name, price, and quantity in stock are recorded. Both the price and quantity of a product may be updated. The system has two types of customers, namely companies and persons, and for each customer, the system records its phone number and address. Besides, the first and last names of persons and the government registration numbers of companies are recorded. All customers can place orders. The information associated with an order includes the customer, date, and order items. An order item is for a specific product, and it also specifies the quantity of the product as well as the price of the product at the time the order item was created. When creating an order item, an order to which the new order item belongs must be specified, and the newly created order item will be added to the order automatically. Order items may not be removed from an order.</p></div>
+<details class="ans"><summary>答案（圖 + 解釋）</summary><div>
+{{UML:p1-2022-order}}
+<ol class="steps"><li><b>Customer abstract</b>，Person、Company 繼承：「two types of customers」。phoneNumber、address 放 parent。</li>
+<li><b>OrderItem ◆ Order（composition）</b>：order item 一定屬於一張 order（建立時要指定 order），而且唔可以由 order 刪走 → 同生同死。Order 嗰頭 1，OrderItem 嗰頭 1..*。</li>
+<li><b>OrderItem 自己有 price</b>：要記「建立時嘅價錢」，因為 product 價錢之後可能改（updatePrice）。呢個係陷阱位，唔好用 product.price 代替。</li>
+<li><b>Operation</b>：Product 有 updatePrice()、updateQuantity()；Customer 有 placeOrder()；Order 有 addItem()（俾 OrderItem 建立時自動 call）；<b>冇 removeItem()</b>（「may not be removed」）。</li>
+<li>Asm2 版本要求：唔寫 type、唔寫參數、唔寫 association 名。上圖保留 constructor 參數只係為咗講清楚「建立時要指定 order」，Asm2 作答時寫 <code>OrderItem()</code> 就得。</li></ol>
+<p class="memo"><b>記法</b>「price at the time … created」→ 要喺 OrderItem 自己存一份。「may not be removed」→ 唔好畫 remove operation。</p></div></details></div>
+
+<div class="practice" id="p2023"><span class="src">2023 Q24 · Class Diagram · 14 分 · L5、L8</span>
+<div class="card"><p style="font-family:ui-monospace,Menlo,monospace;font-size:13.5px">A banking system keeps track of the bank's customers as well as their debit cards, accounts, and transactions. Each customer has a name, a unique ID, and a mailing address, and owns at least one bank account. There are two types of accounts, namely savings accounts and currency accounts. Each account is associated with a unique account ID, and the owner of an account may deposit money into the account, withdraw money from the account, and check the balance of the account. All these operations are recorded as the related types of transactions and associated with the corresponding account. An account is usually owned by a single customer, but a shared account is, as its name suggests, shared by two customers. Each customer exclusively owns one debit card with a unique card number which provides access to all the accounts owned by the customer.</p></div>
+<details class="ans"><summary>答案（圖 + 解釋）</summary><div>
+{{UML:p1-2023-bank}}
+<ol class="steps"><li><b>Account abstract</b>，SavingsAccount、CurrencyAccount 繼承；deposit()、withdraw()、checkBalance() 放 Account，balance 做 attribute。</li>
+<li><b>Customer 1..2 —— 1..* Account</b>：「owns at least one account」→ Account 嗰頭 1..*；「usually single, shared by two」→ Customer 嗰頭 1..2。呢個係全題最考細心嘅 multiplicity。</li>
+<li><b>Transaction 三種</b>：「recorded as the related types of transactions」→ Deposit、Withdrawal、BalanceCheck 繼承 Transaction。Transaction ◆ Account（composition）：交易記錄屬於一個戶口。</li>
+<li><b>DebitCard</b>：「exclusively owns one」→ Customer 1 —— 1 DebitCard；「access to all accounts owned」→ DebitCard 連 Account（1..2 —— 1..*）。呢條線亦可以唔畫（經 Customer 已經搵到），兩種都合理。</li>
+<li>Savings／Currency 嘅 interestRate、currency 係合理補充，題目冇講，可以唔寫。</li></ol></div></details></div>
+
+<div class="practice" id="p2024"><span class="src">2024 Q24 · Class Diagram · 18 分 · L5、L8</span>
+<div class="card"><p style="font-family:ui-monospace,Menlo,monospace;font-size:13.5px">A hospital management system keeps track of information about the hospital as well as its departments, staff members, and patients. Each hospital has a name, an address, a phone number, and a collection of departments, and each department has a group of staff members, including doctors, nurses, technical staff, and administrative staff. The system maintains for each person his/her name, birth date, gender, home address, and phone number. For each patient, the system also maintains his/her ID and a list of his/her allergies. For each staff member, the system tracks his/her certifications and languages. Doctors write prescriptions to patients. Each prescription has a unique ID, is for a specific patient, describes the sickness being treated, and prescribes the required medication.</p></div>
+<details class="ans"><summary>答案（圖 + 解釋）</summary><div>
+{{UML:p1-2024-hosp}}
+<ol class="steps"><li><b>兩層 inheritance</b>：Person（name、birthDate、gender、homeAddress、phoneNumber）→ Patient、Staff；Staff → Doctor、Nurse、TechnicalStaff、AdminStaff。「For each person」講明共有 attribute 放 Person。</li>
+<li><b>Hospital ◆ Department（composition）</b>：department 冇咗醫院就冇意義。</li>
+<li><b>Department ◇ Staff（aggregation）</b>：員工可以調去第二個部門，自己仍然存在。</li>
+<li><b>Doctor 1 —— 0..* Prescription</b>（writes）；<b>Prescription 0..* —— 1 Patient</b>（for a specific patient）。</li>
+<li>allergies、certifications、languages 係「list」→ 寫 <code>allergies[*]</code>，或者另開 Allergy class 都得。</li>
+<li>18 分好多：一定要寫 operation（例如 writePrescription()、addAllergy()、addDepartment()、addStaff()）。Department 嘅 name 係合理假設，題目冇寫。</li></ol></div></details></div>
+
+<div class="practice" id="s2025"><span class="src">2025 Q25 · Sequence Diagram · 9 分 · L5、L8</span>
+<div class="card"><p style="font-family:ui-monospace,Menlo,monospace;font-size:13.5px">A user presents her user ID and a pile of books to the librarian for checkout. The librarian enters the user ID into the system to verify whether the user is eligible to borrow more books. The system gets the user information from the user database. If the user database successfully returns the user's information and the user has a positive book loan quota (i.e., is eligible), the system creates a new loan record for the user and sets its due date, and the librarian can further process the requested books. For each requested book, the system checks if it is available for checkout against the book database. If available, the system associates the book with the loan record and updates the book's status to "unavailable". Once all the requested books have been processed, the loan record is stored in the loan database, and the system confirms the checkout to the librarian, providing the due date and the loan ID. The librarian passes such information to the user.</p></div>
+<details class="ans"><summary>答案（圖 + 解釋）</summary><div>
+<p><b>Actors：</b>User、Librarian（人）；UserDB、BookDB、LoanDB 係外部 database（可以當 actor 或 object）。系統 :LMS；新建立嘅 :LoanRecord。</p>
+{{UML:p1-2025-checkout}}
+<ol class="steps"><li>User 將 ID 同書交俾 Librarian（人同人之間嘅 message 都要畫）。</li>
+<li>Librarian → LMS：verifyUser；LMS → UserDB：getUser，返 userInfo。</li>
+<li><code>alt [user found and quota &gt; 0]</code>：LMS «create» LoanRecord（設定 due date）。</li>
+<li><code>loop [for each requested book]</code>：checkAvailable；入面再 <code>opt [available]</code>：addBook 同 setStatus(unavailable)。</li>
+<li>loop 完之後（仲喺 alt 入面）：store 去 LoanDB，返 dueDate、loanID 俾 Librarian，Librarian 再話俾 User。</li>
+<li><code>[else]</code>：返 notEligible。</li></ol>
+<p class="memo"><b>考試見到「For each」就揀 loop；「If available」冇 else 就揀 opt；「If … eligible」有失敗情況就揀 alt</b>。</p></div></details></div>
+
+<div class="practice" id="s2022"><span class="src">2022 Q25 · Sequence Diagram · 14 分 · L5</span>
+<div class="card"><p style="font-family:ui-monospace,Menlo,monospace;font-size:13.5px">The scenario starts with the customer searching for flights on a booking system. The booking system queries a flight database and returns the flights matching the search criteria to the customer. Next, the customer selects a particular flight bundle and wants to see the detailed information. Provided the customer is happy with the bundle, she picks the bundle and proceeds with the booking. At this point, the customer will be prompted to input her credentials to log in to the system. Once the credentials have been checked and validated against the information from the customer database, the customer is logged in. Next, the customer needs to input into the booking system the passenger information and select the desired seats. Afterward, once the customer confirms all the details of the booking and finishes the payment, the booking system will store the passenger information into the customer database, make the booking on the reservation system, and send a confirmation message to the customer.</p></div>
+<details class="ans"><summary>答案（圖 + 解釋）</summary><div>
+<p><b>Actors：</b>Customer；外部系統：FlightDB、CustomerDB、ReservationSystem。系統：:BookingSystem。</p>
+{{UML:p1-2022-flight}}
+<ol class="steps"><li>搜尋：Customer → BookingSystem → FlightDB，結果兩次 return 返去 Customer。</li>
+<li>揀 bundle 睇詳情，再 book。</li>
+<li>BookingSystem <b>主動</b>叫 Customer 輸入 credentials（實線箭咀指去 Customer），Customer login，系統去 CustomerDB validate。</li>
+<li>輸入乘客資料、揀位、確認付款：三個由 Customer 發出嘅 message。</li>
+<li>最後三件事按題目次序：storePassengers → makeBooking（ReservationSystem）→ sendConfirmation。</li></ol>
+<p class="tip"><b>可以加分嘅位</b>題目講「Provided the customer is happy」，可以用 <code>opt [happy with bundle]</code> 包住 book 之後嘅步驟；login 失敗可以加 <code>alt</code>。題目只要求主要情境，唔加都得分。</p></div></details></div>
+
+<div class="practice" id="sfood"><span class="src">L5 Exercise · Placing a Food Order · 練習</span>
+<details class="ans"><summary>答案（圖 + 解釋）</summary><div>
+{{UML:p1-l5-food}}
+<ol class="steps"><li>Customer submitOrder；App 問 RestaurantService 做唔做到，返 confirmation 同總價。</li>
+<li>App 叫 PaymentGateway 收錢，返 success／failure。</li>
+<li><code>alt [payment successful]</code>：通知 NotificationService、叫 RestaurantService prepareOrder，RestaurantService «create» 新 Order，App 話俾 Customer orderConfirmed。</li>
+<li><code>[else]</code>：orderFailed("Payment declined")。</li></ol></div></details></div>
+
+<h2 id="drill">五、Drill：變化題</h2>
+<div class="key"><b>一分鐘重點</b><ul><li>每題先自己喺紙上畫，再睇答案。重點係判斷關係類型同 multiplicity。</li></ul></div>
+<div class="practice"><span class="src">Drill 1 · 關係判斷</span>
+<p class="q">「A university has many faculties; closing the university closes all faculties. A faculty employs many professors; a professor may work for several faculties and remains employed by the university if a faculty closes.」畫 University、Faculty、Professor 之間嘅關係。</p>
+<details class="ans"><summary>答案</summary><div><p>University ◆—— Faculty（composition，1 —— 1..*）：大學冇咗學院就冇。Faculty ◇—— Professor（aggregation，* —— 1..*）：教授可以屬幾個學院，學院關咗教授仍然存在。</p>
+<p class="memo"><b>記法</b>「closing A closes B」→ composition；「B remains if A closes」→ aggregation。</p></div></details></div>
+<div class="practice"><span class="src">Drill 2 · Multiplicity</span>
+<p class="q">「Each flight has exactly one pilot and one or two co-pilots. A pilot may fly several flights a day or none.」寫出 Flight—Pilot 同 Flight—CoPilot 兩頭嘅 multiplicity。</p>
+<details class="ans"><summary>答案</summary><div><p>Flight * —— 1 Pilot（Pilot 嗰頭寫 1，Flight 嗰頭寫 *，因為一個 pilot 可以 0 至多班機）。Flight * —— 1..2 CoPilot（CoPilot 嗰頭寫 1..2）。如果 Pilot 同 CoPilot 都係 Person，可以用同一個 class 加 role name（pilot、coPilot）。</p></div></details></div>
+<div class="practice"><span class="src">Drill 3 · Sequence diagram 文字 → frame</span>
+<p class="q">「The app retries sending the message up to 3 times until it succeeds. If all attempts fail, it logs an error; otherwise it shows 'Sent'.」應該用咩 frame？</p>
+<details class="ans"><summary>答案</summary><div><p>用 <code>loop [attempt ≤ 3 and not sent]</code> 包住 send，之後 <code>alt [sent]</code> showSent()，<code>[else]</code> logError()。</p></div></details></div>
+<div class="practice"><span class="src">Drill 4 · 搵錯</span>
+<p class="q">一位同學嘅 class diagram：Book —△ LibraryItem 嘅三角形畫喺 Book 嗰頭；Room ◆—— Building 個菱形畫喺 Room 嗰頭；Customer 同 Order 條線冇寫 multiplicity。逐個改正。</p>
+<details class="ans"><summary>答案</summary><div><ol><li>三角形要喺 <b>parent</b>（LibraryItem）嗰頭。</li><li>菱形要喺 <b>whole</b>（Building）嗰頭。</li><li>Customer 嗰頭寫 1，Order 嗰頭寫 0..*（或者按題目）。</li></ol></div></details></div>
+
+<h2 id="fill">六、互動填表：關係類型 + multiplicity</h2>
+<p>每句判斷 A 同 B 嘅關係（association／aggregation／composition／generalization），再填兩頭 multiplicity（generalization 填 -）。英文細楷，例如 <code>1..*</code>。</p>
+<div class="practice fill"><span class="src">Fill · 6 句</span>
+<div class="frow"><p><b>1.</b> An Order consists of one or more OrderItems; an item cannot exist without its order.（Order — OrderItem）</p><div class="fin"><span>關係 <input class="blank" data-ans="composition"></span><span>A 嗰頭 <input class="blank" data-ans="1"></span><span>B 嗰頭 <input class="blank" data-ans="1..*"></span></div></div>
+<div class="frow"><p><b>2.</b> A Playlist contains any number of Songs; a song can be in many playlists.（Playlist — Song）</p><div class="fin"><span>關係 <input class="blank" data-ans="aggregation"></span><span>A 嗰頭 <input class="blank" data-ans="*§0..*"></span><span>B 嗰頭 <input class="blank" data-ans="*§0..*"></span></div></div>
+<div class="frow"><p><b>3.</b> A SavingsAccount is a kind of Account.（SavingsAccount — Account）</p><div class="fin"><span>關係 <input class="blank" data-ans="generalization§inheritance"></span><span>A 嗰頭 <input class="blank" data-ans="-"></span><span>B 嗰頭 <input class="blank" data-ans="-"></span></div></div>
+<div class="frow"><p><b>4.</b> A Customer places zero or more Orders; each order is placed by one customer.（Customer — Order）</p><div class="fin"><span>關係 <input class="blank" data-ans="association"></span><span>A 嗰頭 <input class="blank" data-ans="1"></span><span>B 嗰頭 <input class="blank" data-ans="0..*§*"></span></div></div>
+<div class="frow"><p><b>5.</b> A shared Account is owned by one or two Customers; each customer owns at least one account.（Customer — Account）</p><div class="fin"><span>關係 <input class="blank" data-ans="association"></span><span>A 嗰頭 <input class="blank" data-ans="1..2"></span><span>B 嗰頭 <input class="blank" data-ans="1..*"></span></div></div>
+<div class="frow"><p><b>6.</b> A Hospital consists of Departments; departments do not exist without the hospital.（Hospital — Department）</p><div class="fin"><span>關係 <input class="blank" data-ans="composition"></span><span>A 嗰頭 <input class="blank" data-ans="1"></span><span>B 嗰頭 <input class="blank" data-ans="1..*"></span></div></div>
+<div class="fillbar"><button class="btn pri" data-check>對答案</button><button class="btn" data-show>顯示答案</button><button class="btn" data-clear>清除</button><span class="fillmsg"></span></div></div>
+
+<h2 id="mcq">七、T/F + MC</h2>
+<div class="key"><b>一分鐘重點</b><ul><li>Set T 係 Section A 風格嘅 True/False；Set M 係 MC（有多選）。每題答完會講點解，同其他選項錯喺邊。</li></ul></div>
+<h3>T/F（20 題）</h3>
+<div class="mcq" data-set="T"><script type="application/json">[
+{"t":"L5","s":"<p>A model is an alternative, complete representation of the system that includes all of its details.</p>","a":1,"e":"<b>False</b>。Model 係 <b>abstraction</b>，刻意忽略細節。"},
+{"t":"L5","s":"<p>UML defines 14 types of diagrams: 7 structure diagrams and 7 behavior diagrams.</p>","a":0,"e":"<b>True</b>。L5「UML Diagram Types」。"},
+{"t":"L5","s":"<p>In a UML class box, the class name is the only mandatory information.</p>","a":0,"e":"<b>True</b>。Attribute 同 operation 格都可以省略。"},
+{"t":"L5","s":"<p>In UML, the symbol '#' in front of an attribute means the attribute is private.</p>","a":1,"e":"<b>False</b>。<code>#</code> = protected；<code>-</code> = private；<code>+</code> = public；<code>/</code> = derived。"},
+{"t":"L5","s":"<p>An attribute shown underlined in a class diagram is a static attribute.</p>","a":0,"e":"<b>True</b>。底線 = static，屬於 class 本身。"},
+{"t":"L5","s":"<p>In aggregation, a part can be created and destroyed independently of the aggregate.</p>","a":0,"e":"<b>True</b>。呢個正係 aggregation 同 composition 嘅分別。"},
+{"t":"L5","s":"<p>In composition, a part may belong to several wholes at the same time.</p>","a":1,"e":"<b>False</b>。Composition：part 只可以屬<b>一個</b> whole，同生同死。可以屬幾個嘅係 aggregation。"},
+{"t":"L5","s":"<p>Generalization expresses a \"has-a\" relationship between classes.</p>","a":1,"e":"<b>False</b>。Generalization 係 <b>is-a</b>（kind-of）；has-a 係 aggregation／composition。"},
+{"t":"L5","s":"<p>Generalization simplifies a model by eliminating redundancy, because subclasses inherit the attributes and operations of the superclass.</p>","a":0,"e":"<b>True</b>。L5 原文。"},
+{"t":"L5","s":"<p>A dependency means that a change to the definition of one class may cause changes to another class.</p>","a":0,"e":"<b>True</b>。Dependency 定義（Game 依賴 Clock）。"},
+{"t":"L5","s":"<p>Navigability on an association indicates whether objects can be accessed through the association in a given direction.</p>","a":0,"e":"<b>True</b>。例如箭咀由 Course 指去 Student：Course 知道 Student。"},
+{"t":"L5","s":"<p>In a use case diagram, an actor must always be a human user.</p>","a":1,"e":"<b>False</b>。Actor 可以係人<b>或者其他系統</b>（例如 Payment Gateway）。"},
+{"t":"L5","s":"<p>«include» is used to factor out common step sequences shared by several use cases.</p>","a":0,"e":"<b>True</b>。例如 Withdraw Cash 同 Check Balance 都 include Authenticate User。"},
+{"t":"L5","s":"<p>With «extend», the base use case cannot complete successfully unless the extension is triggered.</p>","a":1,"e":"<b>False</b>。Extend 係可選：base 自己都完成到，條件成立先觸發 extension。"},
+{"t":"L5","s":"<p>Sequence diagrams show the sequence of interactions between actors and objects during a particular process.</p>","a":0,"e":"<b>True</b>。L5 原文。"},
+{"t":"L5","s":"<p>An 'alt' frame in a sequence diagram is used to show a group of messages that is repeated while a condition holds.</p>","a":1,"e":"<b>False</b>。重複用 <code>loop</code>；<code>alt</code> 係幾條路揀一條。"},
+{"t":"L5","s":"<p>Frames in a sequence diagram can be nested.</p>","a":0,"e":"<b>True</b>。L5「Frames could be nested」，例如 loop 入面有 opt。"},
+{"t":"L5","s":"<p>State diagrams are mainly used for data-driven modelling, where the arrival of data triggers processing.</p>","a":1,"e":"<b>False</b>。State diagram 用喺 <b>event-driven</b> modelling；data-driven 用 activity diagram（或 sequence）。"},
+{"t":"L8","s":"<p>A domain model produced during OO analysis contains classes, attributes, associations and operations.</p>","a":1,"e":"<b>False</b>。Domain model <b>冇 operation</b>；operation 喺 design class diagram 先加。"},
+{"t":"L8","s":"<p>Every message in a sequence diagram should correspond to a method of some class in the design class diagram.</p>","a":0,"e":"<b>True</b>。L8：static 同 dynamic model must agree。"}
+]</script></div>
+<h3>MC（8 題，含多選）</h3>
+<div class="mcq" data-set="M"><script type="application/json">[
+{"t":"L5","s":"<p>\"A Car consists of exactly four Wheels; when the car is scrapped its wheels are scrapped too.\" Which notation is correct?</p>","o":["Filled diamond at Car, multiplicity 4 at Wheel","Hollow diamond at Wheel, multiplicity 4 at Car","Hollow triangle pointing to Car","Dashed arrow from Wheel to Car"],"a":0,"e":"A 啱：同生同死 → composition，實心菱形喺 whole（Car），Wheel 嗰頭寫 4。B 菱形擺錯邊而且係 aggregation；C 係 is-a；D 係 dependency。"},
+{"t":"L5","s":"<p>Which of the following are instance-level relationships in UML class diagrams? (Select all that apply)</p>","o":["Association","Aggregation","Composition","Generalization","Realization"],"a":[0,1,2],"e":"L5：instance-level = association、aggregation、composition；class-level = generalization、realization；dependency 係 general。"},
+{"t":"L5","s":"<p>\"Each employee has at most one parking space; some parking spaces are unassigned.\" What multiplicities belong at the Employee end and the ParkingSpace end respectively?</p>","o":["Employee end 0..1, ParkingSpace end 0..1","Employee end 1, ParkingSpace end 0..1","Employee end 1..*, ParkingSpace end 1","Employee end *, ParkingSpace end *"],"a":0,"e":"A 啱：每個 employee 有 0..1 個車位（寫喺 ParkingSpace 旁）；每個車位有 0..1 個 employee（有啲未分配，寫喺 Employee 旁）。B 話每個車位一定有人，錯。"},
+{"t":"L5","s":"<p>In the ATM system, 'Print Receipt' happens only when the customer asks for it after a withdrawal. Which relationship links 'Print Receipt' and 'Withdraw Cash'?</p>","o":["«include» from Withdraw Cash to Print Receipt","«extend» from Print Receipt to Withdraw Cash","Generalization from Print Receipt to Withdraw Cash","Association"],"a":1,"e":"B 啱：有條件、可選 → extend，箭咀由 extension 指返 base。A 會變成「一定要印」。C 係 is-a，唔啱。D 只用喺 actor 同 use case 之間。"},
+{"t":"L5","s":"<p>Which sequence diagram elements are described as 'syntactic sugar' in L5? (Select all that apply)</p>","o":["Lifelines","Activations","Frames","Messages"],"a":[0,1,2],"e":"L5：entities = objects/actors；relations = message passing；syntactic sugar = lifelines、activations、frames。"},
+{"t":"L8","s":"<p>During a noun hunt, the word \"fine\" appears (\"the system computes the fine owed\"). According to L8, how should it be modelled?</p>","o":["As a separate class Fine","As an operation or derived value of Loan","As a subclass of LibraryItem","It must be ignored completely"],"a":1,"e":"B 啱：fine 可以由 loan（dueDate）計出嚟，所以係 attribute 或 method 結果，唔係 class。"},
+{"t":"L8","s":"<p>Which GRASP principle suggests that LibraryItem should create its Loan inside checkout(), because it already holds the data the new object needs?</p>","o":["Controller","Creator","Pure Fabrication","Indirection"],"a":1,"e":"B 啱：Creator = 由聚合／密切使用嗰個 class 建立新 object。A 係接收 system event 嘅 coordinator；C 係發明 domain 冇嘅 helper class；D 係加中間人減少 coupling。"},
+{"t":"L5","s":"<p>A customer can pay by credit card or PayPal. In a use case diagram, 'Pay via Credit Card' and 'Pay via PayPal' are best related to 'Pay for Order' by:</p>","o":["«include»","«extend»","Use case generalization","Actor generalization"],"a":2,"e":"C 啱：佢哋係 Pay for Order 嘅特殊版本（L5 例子用實線空心三角形）。"}
+]</script></div>
+
+<h2 id="short">八、短答題</h2>
+<p class="q">1. Explain the difference between aggregation and composition, with one example each. (&lt;80 words)</p>
+<details class="ans"><summary>參考答案</summary><div><div class="ansbox"><b>答案</b>Both are part-of relationships. In aggregation, a part can belong to several wholes and can be created and destroyed independently, e.g., a Course can be part of several Curricula. In composition, a part belongs to only one whole and exists only together with it, e.g., a Room is part of exactly one Building and is destroyed with it. Aggregation uses a hollow diamond; composition a filled diamond at the whole.</div></div></details>
+<p class="q">2. Distinguish «include» and «extend» in use case diagrams. (&lt;60 words)</p>
+<details class="ans"><summary>參考答案</summary><div><div class="ansbox"><b>答案</b>«include»: the base use case always needs the included use case to complete, so common steps are factored out (Withdraw Cash includes Authenticate User). «extend»: the extension adds optional behaviour to the base use case only when a condition holds; the base can complete without it (Send Low Balance Alert extends Withdraw Cash).</div></div></details>
+<p class="q">3. Why must the design class diagram and the sequence diagrams of a system agree? (&lt;50 words)</p>
+<details class="ans"><summary>參考答案</summary><div><div class="ansbox"><b>答案</b>They describe the same design from static and dynamic views. Every message sent in a sequence diagram is a call of a method on the receiving object, so that method must exist in that class in the class diagram; otherwise the design cannot be implemented consistently.</div></div></details>
+<p class="q">4. What is the difference between a domain model and a design class diagram? (&lt;60 words)</p>
+<details class="ans"><summary>參考答案</summary><div><div class="ansbox"><b>答案</b>A domain model is produced in analysis: it shows real-world concepts, their attributes and associations, independent of implementation and without operations. A design class diagram is produced in design: it adds typed attributes, references, operations and visibility, forming a blueprint close to the code.</div></div></details>
+
+<h2 id="faq">九、常見疑問</h2>
+<dl class="faq">
+<dt>Q：Attribute 要唔要寫 type 同 visibility？</dt><dd>考試題目寫明「other information is optional」。寫 <code>name</code> 就夠；寫埋 <code>- name: String</code> 唔會扣分，但浪費時間。Asm2 更加要求唔好寫 type。</dd>
+<dt>Q：Aggregation 定 association 分唔清點算？</dt><dd>題目冇「part of／consists of／contains／has a group of」呢類字，就用普通 association。有呢類字，再問「whole 冇咗，part 仲喺唔喺度」：喺 → aggregation，唔喺 → composition。</dd>
+<dt>Q：Multiplicity 寫喺邊頭？</dt><dd>「一個 A 有幾多個 B」嘅答案寫喺 B 旁邊。逐條線用兩句問自己：一個 A 對幾多個 B？一個 B 對幾多個 A？</dd>
+<dt>Q：Database 喺 sequence diagram 係 actor 定 object？</dt><dd>兩種都接受。佢喺系統外面就當 actor（公仔）或者外部系統方框；最重要係畫咗，同埋 message 次序啱。</dd>
+<dt>Q：要唔要畫 activation 長方形？</dt><dd>L5 話係 syntactic sugar，唔畫唔會扣主要分。時間夠先畫。</dd>
+<dt>Q：題目話 operation 要「support all requirements」，點先算夠？</dt><dd>逐句搵動詞：update、place、add、search、borrow、return、deposit、withdraw、check、write……每個動詞都要喺某個 class 有對應 operation。冇動詞嘅 class 都可以加 getter，但唔係必須。</dd>
+<dt>Q：Abstract class 點表示？</dt><dd>Class 名寫斜體，或者加 «abstract»。手寫時寫 «abstract» 最清楚。</dd>
+</dl>

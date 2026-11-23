@@ -1,0 +1,488 @@
+<!DOCTYPE html><html lang="zh-HK"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light"><title>COMP3211 Software Engineering · Final 溫習包</title><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css"><style>
+:root{color-scheme:light;--bg:#F2F4F7;--card:#FFFFFF;--ink:#15202B;--mut:#566273;--line:#D2D9E1;--acc:#BF4A14;--acc2:#0B7472;--soft:#D9EFEE;--ok:#17733A;--okbg:#DCF1E3;--bad:#B42318;--badbg:#FADFDB;--code:#E9EDF2;--warn:#8F6200;--warnbg:#F6EBCB}
+*{box-sizing:border-box}html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.7 -apple-system,BlinkMacSystemFont,"PingFang HK","Noto Sans HK","Microsoft JhengHei",sans-serif}
+nav.top{position:sticky;top:0;z-index:20;background:var(--bg);border-bottom:1px solid var(--line);display:flex;gap:4px;overflow-x:auto;padding:8px 12px;scrollbar-width:none}
+nav.top::-webkit-scrollbar{display:none}
+nav.top a{flex:none;text-decoration:none;color:var(--mut);font-size:14px;padding:5px 11px;border-radius:999px;border:1px solid var(--line);white-space:nowrap}
+nav.top a.on{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+main{max-width:860px;margin:0 auto;padding:20px 16px 80px}
+h1{font-size:26px;line-height:1.3;margin:12px 0 4px}h2{font-size:21px;margin:40px 0 10px;padding-top:8px;border-top:2px solid var(--ink)}
+h3{font-size:17px;margin:26px 0 8px}h4{font-size:15px;margin:18px 0 6px;color:var(--acc2)}
+.sub{color:var(--mut);margin:0 0 16px}
+p,li{overflow-wrap:anywhere}
+a{color:var(--acc2)}
+code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.88em;background:var(--code);padding:1px 5px;border-radius:4px}
+pre{background:var(--code);border:1px solid var(--line);border-radius:8px;padding:12px;overflow-x:auto;font-size:13.5px;line-height:1.55;margin:10px 0}
+pre code{background:none;padding:0;font-size:inherit}
+.tw{overflow-x:auto;margin:10px 0;-webkit-overflow-scrolling:touch}
+table{border-collapse:collapse;width:100%;font-size:14.5px}
+th,td{border:1px solid var(--line);padding:6px 9px;text-align:left;vertical-align:top}
+th{background:var(--soft);font-weight:600}
+td.c,th.c{text-align:center}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin:14px 0}
+.toc{columns:2;column-gap:20px;font-size:14.5px;padding-left:18px}@media(max-width:560px){.toc{columns:1}}
+.tag{display:inline-block;white-space:nowrap;font-size:12px;padding:1px 8px;border-radius:999px;border:1px solid var(--line);color:var(--mut);margin-right:4px;vertical-align:middle}
+.t-must{background:var(--badbg);color:var(--bad);border-color:transparent}
+.t-likely{background:var(--warnbg);color:var(--warn);border-color:transparent}
+.t-know{background:var(--okbg);color:var(--ok);border-color:transparent}
+.tip,.warn,.memo{border-radius:0;padding:10px 14px;margin:12px 0;border-left:4px solid}
+.tip{background:var(--soft);border-color:var(--acc2)}.warn{background:var(--warnbg);border-color:var(--warn)}.memo{background:var(--okbg);border-color:var(--ok)}
+.tip b:first-child,.warn b:first-child,.memo b:first-child{display:block;margin-bottom:2px}
+details.ans{border:1px dashed var(--acc);border-radius:10px;margin:10px 0;background:var(--card)}
+details.ans>summary{cursor:pointer;padding:8px 14px;color:var(--acc);font-weight:600;list-style:none}
+details.ans>summary::-webkit-details-marker{display:none}
+details.ans>summary::before{content:"▸ "}details.ans[open]>summary::before{content:"▾ "}
+details.ans>div{padding:0 14px 12px}
+.q{font-weight:600;margin-top:18px}
+.faq dt{font-weight:600;margin-top:14px}.faq dd{margin:4px 0 0 0;padding-left:12px;border-left:2px solid var(--line)}
+svg{max-width:100%;height:auto;display:block;margin:10px auto}
+svg text{fill:var(--ink);font-family:inherit}
+svg .ln{stroke:var(--ink);fill:none;stroke-width:1.4}
+svg .bx{fill:var(--card);stroke:var(--ink);stroke-width:1.2}
+svg .hl{fill:var(--soft);stroke:var(--acc2);stroke-width:1.4}
+svg .ac{fill:var(--badbg);stroke:var(--acc);stroke-width:1.4}
+.done{display:flex;align-items:center;gap:8px;font-size:14px;color:var(--mut);margin:6px 0 0}
+.done input{width:18px;height:18px}
+.mcq{margin:18px 0}
+.mcq .bar{position:sticky;top:46px;z-index:5;background:var(--bg);display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid var(--line);font-size:14px}
+.mcq .bar button{font:inherit;font-size:13px;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:8px;padding:3px 10px;cursor:pointer}
+.mq{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin:12px 0}
+.mq .stem{margin-bottom:8px}.mq .stem p{margin:4px 0}
+.mq .num{font-size:12px;color:var(--mut)}
+.opt{display:flex;gap:8px;width:100%;text-align:left;font:inherit;font-size:15px;background:var(--bg);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:8px 10px;margin:6px 0;cursor:pointer}
+.opt>span:first-child{font-weight:700;color:var(--mut);flex:none}.opt>span:last-child{overflow-wrap:anywhere}
+.opt.right{background:var(--okbg);border-color:var(--ok)}.opt.wrong{background:var(--badbg);border-color:var(--bad)}
+.opt:disabled{cursor:default;opacity:1}
+.opt.sel{background:var(--soft);border-color:var(--acc2)}.opt.miss{border-style:dashed}
+.mq .btn{margin-top:4px}
+.exp{margin-top:8px;padding:8px 10px;border-radius:8px;background:var(--soft);font-size:14.5px;overflow-wrap:anywhere}
+.exp .v{font-weight:700}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}@media(max-width:600px){.grid2{grid-template-columns:1fr}}
+.prog{display:flex;flex-direction:column;gap:6px}.prog .row{display:flex;justify-content:space-between;gap:10px;font-size:14.5px;border-bottom:1px solid var(--line);padding:4px 0}
+.mflow{display:flex;gap:10px;align-items:stretch;margin:10px 0}.mfcol{flex:1;min-width:0}.mfh{font-weight:700;font-size:14px;margin-bottom:6px}.fb{border:1px solid var(--line);background:var(--card);border-radius:8px;padding:6px 9px;margin-bottom:6px;font-size:13px;line-height:1.5;font-family:ui-monospace,Menlo,monospace;overflow-wrap:anywhere}.fb b{font-family:inherit}.hl2{background:var(--soft);border-color:var(--acc2)}.ac2{background:var(--badbg);border-color:var(--acc)}.mfarr{align-self:center;color:var(--mut);font-size:20px}.mfarr::before{content:"→"}@media(max-width:640px){.mflow{flex-direction:column}.mfarr{text-align:center}.mfarr::before{content:"↓"}}
+
+:root{--surface:var(--card);--muted:var(--mut);--accent:var(--acc);--accent-soft:var(--badbg);--map:var(--acc2);--map-soft:var(--soft);--shuf:var(--warn);--shuf-soft:var(--warnbg);--red:#3D4BAA;--red-soft:#E2E6F8;--ok-soft:var(--okbg);--bad-soft:var(--badbg);--code-bg:var(--code);--code-ink:var(--ink);--code-dim:var(--mut);--f-mono:ui-monospace,Menlo,monospace}
+
+.fmap{fill:var(--map-soft);stroke:var(--map);stroke-width:1.2}.fshuf{fill:var(--shuf-soft);stroke:var(--shuf);stroke-width:1.2}.fred{fill:var(--red-soft);stroke:var(--red);stroke-width:1.2}.facc{fill:var(--accent-soft);stroke:var(--accent);stroke-width:1.2}.tacc{fill:var(--accent);font-weight:600}
+svg .arr{stroke:var(--ink);stroke-width:1.6;fill:none}.ah{fill:var(--ink)}.dash{stroke:var(--muted);stroke-width:1.4;stroke-dasharray:5 5;fill:none}
+svg .small{font-size:11.5px;fill:var(--muted)}svg.dia{width:100%;height:auto}.mono{font-family:var(--f-mono);font-size:12.5px}
+.diawrap{overflow-x:auto;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px;margin:10px 0}.w700{min-width:640px}
+span.hl{background:var(--accent-soft);color:var(--accent);border-radius:3px;padding:0 2px;font-weight:600}
+.dp table{width:auto}.num{font-variant-numeric:tabular-nums}td.brk code{white-space:normal}
+.practice{border:1px solid var(--line);border-radius:14px;background:var(--card);padding:14px 16px;margin:16px 0}
+.practice .src{font-family:var(--f-mono);font-size:12px;color:var(--mut);display:block}
+.practice h4{margin-top:6px}
+input.blank{font-family:var(--f-mono);font-size:13px;background:var(--card);color:var(--ink);border:1px solid var(--acc);border-radius:5px;padding:1px 4px;margin:0 1px;max-width:100%}
+input.blank.ok{border-color:var(--ok);background:var(--okbg)}input.blank.bad{border-color:var(--bad);background:var(--badbg)}input.blank.shown{border-style:dashed}
+.bn{display:inline-block;min-width:1.35em;text-align:center;font-size:10.5px;font-weight:600;color:var(--card);background:var(--acc);border-radius:999px;margin-right:2px}
+.fillbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:6px}
+.btn{font:inherit;font-size:13.5px;font-weight:600;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:8px;padding:6px 12px;cursor:pointer}.btn.pri{background:var(--acc);border-color:var(--acc);color:var(--card)}
+.fillmsg{font-size:13.5px;color:var(--mut)}
+
+
+.key{background:#FAE6DA;border-left:4px solid var(--acc);padding:12px 16px;margin:14px 0}
+.key>b:first-child{display:block;color:var(--acc);margin-bottom:4px}
+.key ul{margin:4px 0;padding-left:20px}
+.fx{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:6px 12px;margin:12px 0;overflow-x:auto;text-align:center}
+.concept{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:6px 16px 12px;margin:18px 0}
+.concept>h3{margin-top:14px}
+.lab{display:inline-block;font-size:12.5px;font-weight:700;color:#fff;background:var(--acc2);border-radius:6px;padding:1px 8px;margin:14px 0 4px}
+.lab.why{background:#3D4BAA}.lab.pic{background:#8F6200}.lab.eg{background:var(--acc)}.lab.trap{background:var(--bad)}
+figure.fig{margin:14px 0;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px}
+figure.fig figcaption{font-size:13.5px;color:var(--mut);text-align:center;margin-top:6px}
+.scroll{overflow-x:auto}
+ol.steps{padding-left:0;list-style:none;counter-reset:s}
+ol.steps>li{counter-increment:s;position:relative;padding:8px 10px 8px 42px;margin:8px 0;background:var(--card);border:1px solid var(--line);border-radius:10px}
+ol.steps>li::before{content:counter(s);position:absolute;left:10px;top:8px;width:22px;height:22px;border-radius:50%;background:var(--acc2);color:#fff;font-size:13px;font-weight:700;text-align:center;line-height:22px}
+.katex-display{margin:.4em 0;overflow-x:auto;overflow-y:hidden;padding:4px 0}
+@media(max-width:600px){table.stack thead{display:none}table.stack tr:first-child:has(th){display:none}table.stack,table.stack tbody,table.stack tr,table.stack td{display:block;width:100%}
+table.stack tr{border:1px solid var(--line);border-radius:10px;margin:0 0 10px;background:var(--card);padding:4px 0}
+table.stack td{border:0;border-bottom:1px dashed var(--line);padding:6px 12px}table.stack td:last-child{border-bottom:0}
+table.stack td::before{content:attr(data-label);display:block;font-size:12px;font-weight:700;color:var(--acc2)}}
+
+
+/* COMP3211 additions */
+.uml{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:8px;margin:12px 0;overflow-x:auto;-webkit-overflow-scrolling:touch}
+.uml svg{margin:0 auto}
+.legend{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:13px;color:var(--mut);margin:6px 0}
+.legend i{display:inline-block;width:14px;height:14px;border-radius:3px;vertical-align:-2px;margin-right:4px;border:1px solid var(--line)}
+table.pt td,table.pt th{text-align:center;white-space:nowrap;font-family:ui-monospace,Menlo,monospace;font-size:13px}
+table.pt td,table.pt th{padding:4px 3px;font-size:12.5px}table.pt input.blank{width:3ch!important;padding:1px 1px;text-align:center;font-size:12.5px}table.pt td.ex input.blank{width:7ch!important}
+.wl{font-size:12.5px;color:var(--mut)}.scrollhint{text-align:center;margin-top:-6px}@media(min-width:760px){.scrollhint{display:none}}
+.frow{border-bottom:1px dashed var(--line);padding:6px 0 10px}.frow p{margin:4px 0 6px}.fin{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:14px;color:var(--mut)}
+.ansbox{background:var(--okbg);border-left:4px solid var(--ok);padding:10px 14px;margin:8px 0}
+.ansbox>b:first-child{display:block;color:var(--ok);margin-bottom:2px}
+footer{color:var(--mut);font-size:13px;text-align:center;margin-top:50px}
+</style></head><body data-page="index.html"><nav class="top"><a href="index.html" class=on>總覽</a><a href="P1-UML.html">P1 UML 圖</a><a href="P2-Testing.html">P2 Testing</a><a href="P3-Process-Agile.html">P3 Process</a><a href="P4-Requirements.html">P4 Requirements</a><a href="P5-Architecture.html">P5 Architecture</a><a href="P6-Evolution-Reuse.html">P6 Evolution</a><a href="P7-Design-OO.html">P7 Design</a></nav><main><h1>COMP3211 Software Engineering · Final 溫習包</h1>
+<p class="sub">考試 2026-12-05 · 3 小時 closed book · 佔總成績 70% · 老師：Prof. PEI Yu Max</p>
+<ul class="toc">
+<li><a href="#use">一、點用呢個溫習包</a></li><li><a href="#prog">二、溫習進度</a></li>
+<li><a href="#format">三、考試格式</a></li><li><a href="#analysis">四、逐份卷比較</a></li>
+<li><a href="#habit">五、老師出題習慣</a></li><li><a href="#predict">六、預測同分頁</a></li>
+<li><a href="#asm">七、Assignment 對應</a></li><li><a href="#mockA">八、模擬卷 Section A（T/F）</a></li>
+<li><a href="#mockMC">九、跨課 MC 練習</a></li><li><a href="#mockB">十、模擬卷 Section B（長題）</a></li>
+<li><a href="#memo">十一、必背清單</a></li><li><a href="#trap">十二、易錯位總表</a></li></ul>
+
+<h2 id="use">一、點用呢個溫習包</h2>
+<div class="key"><b>一分鐘重點</b><ul>
+<li>呢科<b>唔係計數科</b>，係「識概念 + 識寫短答 + 識畫圖」。80 分短答入面，畫圖（class diagram、sequence diagram、testing 表）佔 25–35 分。</li>
+<li>老師<b>好鍾意重用舊題</b>：今年 3 條 assignment 題直接係 2022 卷原題。所以 4 份真卷要識晒。</li>
+<li>每題有<b>字數上限</b>：答案要短、要分點，唔好寫散文。</li>
+<li>Section A 係 <b>20 題 True/False</b>：考你有冇讀過 lecture 嘅細節，每頁都有大量 T/F 練習。</li></ul></div>
+<ol class="steps">
+<li><b>先睇第六部分「預測」</b>：知道邊啲必考、邊啲只係識認就得。</li>
+<li><b>按次序溫分頁</b>：P1 UML → P2 Testing → P3 Process → P4 Requirements → P5 Architecture → P6 Evolution → P7 Design。每頁由「一、點考」開始，跟住讀「二、筆記」嘅概念卡。</li>
+<li><b>每頁做晒練習</b>：Past paper 全答先自己諗，再撳開答案；T/F 同 MC 即時計分，答錯要讀解釋。</li>
+<li><b>每部分溫完剔「呢部分溫完」</b>：進度會記喺呢部機（同一個瀏覽器），第二部分會顯示總進度。</li>
+<li><b>最後做第八到十部分嘅模擬卷</b>：限時 3 小時，做完先對答案。</li></ol>
+<figure class="fig"><svg viewBox="0 0 360 300" role="img" aria-label="study flow" style="max-width:380px">
+<defs><marker id="u1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#15202B"/></marker></defs>
+<rect class="hl" x="20" y="8" width="200" height="44" rx="10"/><text x="120" y="28" text-anchor="middle" font-size="15" font-weight="700">① 預測</text><text x="120" y="45" text-anchor="middle" font-size="12.5">知道考咩、幾多分</text>
+<rect class="bx" x="20" y="72" width="200" height="44" rx="10"/><text x="120" y="92" text-anchor="middle" font-size="15" font-weight="700">② 概念卡</text><text x="120" y="109" text-anchor="middle" font-size="12.5">由零學，睇圖</text>
+<rect class="bx" x="20" y="136" width="200" height="44" rx="10"/><text x="120" y="156" text-anchor="middle" font-size="15" font-weight="700">③ 真卷全答</text><text x="120" y="173" text-anchor="middle" font-size="12.5">睇每分點拎</text>
+<rect class="bx" x="20" y="200" width="200" height="44" rx="10"/><text x="120" y="220" text-anchor="middle" font-size="15" font-weight="700">④ T/F + MC + 填表</text><text x="120" y="237" text-anchor="middle" font-size="12.5">即時計分，查漏</text>
+<rect class="ac" x="20" y="256" width="200" height="40" rx="10"/><text x="120" y="281" text-anchor="middle" font-size="15" font-weight="700">⑤ 模擬卷（3 小時）</text>
+<g class="ln"><line x1="120" y1="52" x2="120" y2="70" marker-end="url(#u1)"/><line x1="120" y1="116" x2="120" y2="134" marker-end="url(#u1)"/><line x1="120" y1="180" x2="120" y2="198" marker-end="url(#u1)"/><line x1="120" y1="244" x2="120" y2="254" marker-end="url(#u1)"/></g>
+<path class="dash" d="M220 222 C 300 222, 300 94, 222 94" marker-end="url(#u1)"/><text x="296" y="152" text-anchor="middle" font-size="12.5" fill="#566273">答錯</text><text x="296" y="168" text-anchor="middle" font-size="12.5" fill="#566273">返轉頭</text>
+</svg><figcaption>每一頁都係呢個循環：學 → 睇真卷 → 練 → 答錯返轉頭</figcaption></figure>
+
+<h2 id="prog">二、溫習進度</h2>
+<p>下面會自動顯示每頁剔咗幾多個「溫完」同 T/F、MC 答咗幾多題（記錄喺呢部機嘅瀏覽器）。</p>
+<div class="card"><div id="progress" class="prog" data-pages="[[&quot;index.html&quot;, &quot;總覽&quot;], [&quot;P1-UML.html&quot;, &quot;P1 UML 圖&quot;], [&quot;P2-Testing.html&quot;, &quot;P2 Testing&quot;], [&quot;P3-Process-Agile.html&quot;, &quot;P3 Process&quot;], [&quot;P4-Requirements.html&quot;, &quot;P4 Requirements&quot;], [&quot;P5-Architecture.html&quot;, &quot;P5 Architecture&quot;], [&quot;P6-Evolution-Reuse.html&quot;, &quot;P6 Evolution&quot;], [&quot;P7-Design-OO.html&quot;, &quot;P7 Design&quot;]]"></div></div>
+
+<h2 id="format">三、考試格式</h2>
+<div class="key"><b>一分鐘重點</b><ul>
+<li>3 小時、closed book、總分 100、<b>冇 formula sheet</b>（呢科都冇公式要用）。</li>
+<li><b>Section A：Q1–20 True/False，每題 1 分（20 分）</b>。4 份真卷呢部分全部被學校抽走，所以冇原題，要靠 lecture 細節。</li>
+<li><b>Section B：Q21–27，7 條大題（80 分）</b>，次序幾乎固定：Process → Requirements → Architecture → Class diagram → Sequence diagram → Testing → Evolution。</li></ul></div>
+<figure class="fig"><svg viewBox="0 0 360 336" role="img" aria-label="exam structure" style="max-width:380px"><rect class="hl" x="5" y="6" width="350" height="44" rx="8"/><text x="180" y="26" text-anchor="middle" font-size="14.5" font-weight="700">Section A · Q1–20 · True/False</text><text x="180" y="43" text-anchor="middle" font-size="12.5">每題 1 分，共 20 分</text><text x="8" y="80" font-size="14" font-weight="700">Section B · 7 條大題 · 80 分</text><text x="352" y="80" font-size="12" text-anchor="end" fill="#566273">（2025 配分）</text><rect class="bx" x="5" y="92" width="350" height="28" rx="6"/><text x="14" y="111" font-size="13.5">Q21 Software Process</text><text x="346" y="111" font-size="13.5" text-anchor="end" font-weight="700">15 分</text><rect class="bx" x="5" y="126" width="350" height="28" rx="6"/><text x="14" y="145" font-size="13.5">Q22 Requirements</text><text x="346" y="145" font-size="13.5" text-anchor="end" font-weight="700">12 分</text><rect class="bx" x="5" y="160" width="350" height="28" rx="6"/><text x="14" y="179" font-size="13.5">Q23 Architecture</text><text x="346" y="179" font-size="13.5" text-anchor="end" font-weight="700">14 分</text><rect class="ac" x="5" y="194" width="350" height="28" rx="6"/><text x="14" y="213" font-size="13.5">Q24 Class diagram</text><text x="346" y="213" font-size="13.5" text-anchor="end" font-weight="700">9 分</text><rect class="ac" x="5" y="228" width="350" height="28" rx="6"/><text x="14" y="247" font-size="13.5">Q25 Sequence diagram</text><text x="346" y="247" font-size="13.5" text-anchor="end" font-weight="700">9 分</text><rect class="ac" x="5" y="262" width="350" height="28" rx="6"/><text x="14" y="281" font-size="13.5">Q26 Software Testing</text><text x="346" y="281" font-size="13.5" text-anchor="end" font-weight="700">11 分</text><rect class="bx" x="5" y="296" width="350" height="28" rx="6"/><text x="14" y="315" font-size="13.5">Q27 Software Evolution</text><text x="346" y="315" font-size="13.5" text-anchor="end" font-weight="700">10 分</text></svg><figcaption>橙色 = 要畫圖或者填表嘅題；每小題都有字數上限（&lt;50／&lt;100／&lt;150 words）</figcaption></figure>
+<div class="tw"><table class="stack"><tr><th>項目</th><th>內容</th><th>點應付</th></tr>
+<tr><td>時間</td><td>3 小時（2022–24 係 2 小時，2025 起 3 小時；L0 寫明今年 3 小時）</td><td>Section A 15 分鐘做完，留 2.5 小時俾長題同畫圖</td></tr>
+<tr><td>作答</td><td>Section A 寫喺題目紙／答題紙；畫圖題寫喺題目紙空白位</td><td>畫圖要用筆，字要清楚（2025 卷特登寫「Write legibly, especially Q24 and Q25」）</td></tr>
+<tr><td>字數</td><td>每小題有上限，例如 (&lt;100 words, 4 points)</td><td>大約「每 1 分寫 1 點」，4 分就寫 4 個重點</td></tr>
+<tr><td>冇 formula sheet</td><td>但要背好多「清單」：CMMI 5 級、elicitation 4 stage、5 個 validation check……</td><td>睇第十一部分「必背清單」</td></tr></table></div>
+
+<h2 id="analysis">四、逐份卷比較（Section B）</h2>
+<div class="key"><b>一分鐘重點</b><ul>
+<li>4 年 Section B 全部都有：<b>Process、Requirements、Architecture、Class diagram、Testing</b>。</li>
+<li>Sequence diagram 出過 2 次（2022、2025），Evolution／VC 出過 3 次，Reuse 出過 1 次。</li>
+<li>Partition testing 填表 3 次（2022、2024、2025），加埋今年 Asm2 都有。</li></ul></div>
+<div class="tw"><table class="stack"><tr><th>題型</th><th>2022</th><th>2023</th><th>2024</th><th>2025</th><th>頁</th></tr>
+<tr><td><b>Software Process／Agile</b></td><td>Q21（8）智能交通系統：贊成定反對 agile + 3 個理由</td><td>Q21（15）CMMI：performance／capability／maturity；Defined／QM／Managed 特徵 + 排序；staged vs continuous</td><td>Q21（15）change anticipation vs tolerance；XP practice 配 agile principle；refactoring</td><td>Q21（15）waterfall；incremental delivery 好處／問題；product vs sprint backlog；sprint 只完成 80%</td><td><a href="P3-Process-Agile.html">P3</a></td></tr>
+<tr><td><b>Requirements</b></td><td>Q22（12）Tom 圖書館：elicitation 4 stage + 每 stage 嘅問題</td><td>Q22（10）F/NF 分唔清嘅例子；performance vs maintainability 衝突；inspection／testing 可驗證嘅 requirement</td><td>Q22（12）Tom 醫院用是非題訪問；observation 優缺點；consistency／verifiability／realism／completeness</td><td>Q22（12）F vs NF + reliability 例子；activity 歸類；4 stage 排序；moving target</td><td><a href="P4-Requirements.html">P4</a></td></tr>
+<tr><td><b>Architecture</b></td><td>Q23（14）layered 排 4 層 + 6 module 分層；Dependency Inversion</td><td>Q23（13）MVC 圖填 12 格；MVC 優缺點；printTask 放 model 啱唔啱</td><td>Q23（10）layered 排 4 層；MVC 拆唔拆到 3 層；layered 優缺點</td><td>Q23（14）MVC、layered、client-server 缺點；repository vs blackboard；e-commerce 揀 2 個 pattern</td><td><a href="P5-Architecture.html">P5</a></td></tr>
+<tr><td><b>Class diagram</b></td><td>Q24（10）訂單管理</td><td>Q24（14）銀行</td><td>Q24（18）醫院</td><td>Q24（9）圖書館</td><td><a href="P1-UML.html">P1</a></td></tr>
+<tr><td><b>Sequence diagram</b></td><td>Q25（14）訂機票</td><td>—</td><td>—</td><td>Q25（9）圖書館借書</td><td><a href="P1-UML.html">P1</a></td></tr>
+<tr><td><b>Testing</b></td><td>Q26（12）removeLDLetters partition 表</td><td>Q25（14）testing vs inspection；statement／branch coverage；black vs white box</td><td>Q25（15）TDD；nextDate partition 表；alpha vs beta</td><td>Q26（11）V&amp;V 嘅 successful test；test oracle；calculateDiscount partition 表</td><td><a href="P2-Testing.html">P2</a></td></tr>
+<tr><td><b>Evolution／VC</b></td><td>Q27（10）DVCS 優點；open source</td><td>—</td><td>Q26（10）CCB 流程圖填 6 格；DVCS 優點</td><td>Q27（10）change request 原因；legacy system；evolving strategy</td><td><a href="P6-Evolution-Reuse.html">P6</a></td></tr>
+<tr><td><b>Reuse</b></td><td>—</td><td>Q26（14）component vs service；container services；reuse RE 流程圖填格</td><td>—</td><td>—</td><td><a href="P6-Evolution-Reuse.html">P6</a></td></tr>
+<tr><td><b>Section A</b></td><td colspan="4">20 題 True/False（每年都係，原題冇公開）</td><td>每頁第七部分</td></tr></table></div>
+<div class="warn"><b>缺頁／讀唔到</b>4 份真卷嘅 Section A 全部冇。2025 Q21(4) 嘅兩個選項唔喺卷上（嗰頁被抽走），P3 會按 Scrum 原則答並註明。2025 份卷 6 頁得 5 頁。4 份卷都冇官方答案，溫習包嘅答案按 lecture 寫，每題標明出處。</div>
+
+<h2 id="habit">五、老師出題習慣</h2>
+<div class="key"><b>一分鐘重點</b><ul>
+<li>舊題會<b>原封不動</b>再出（assignment 已經證明咗），所以真卷每題都要識。</li>
+<li>題型有 8 種固定套路，識咗套路就知點答。</li></ul></div>
+<div class="tw"><table class="stack"><tr><th>套路</th><th>例子</th><th>點答</th></tr>
+<tr><td>1. 重用舊題</td><td>Asm1 Q4 = 2022 Q22；Asm2 Q1 = 2022 Q24；Asm2 Q3 = 2022 Q26；「Tom」出咗 3 次；圖書館出咗 3 次</td><td>4 份真卷 + 2 份 assignment 嘅答案要熟到可以默寫</td></tr>
+<tr><td>2. 大題次序固定</td><td>Process → RE → Arch → Class → (Sequence) → Testing → Evolution／Reuse</td><td>溫書次序可以跟分數，但考試時跟題號做</td></tr>
+<tr><td>3. Partition testing 表</td><td>2022、2024、2025、Asm2：「same branch coverage」嗰段定義一字不改</td><td>逐條 if 列 true/false 組合，刪走做唔到嘅，每組揀一個 input（<a href="P2-Testing.html">P2</a>）</td></tr>
+<tr><td>4. 填圖題</td><td>MVC 圖 12 格（2023）、CCB 流程 6 格（2024）、reuse RE 4 格（2023）</td><td>要記住 lecture 個圖點砌，唔使自己畫</td></tr>
+<tr><td>5. 排序／配對</td><td>CMMI 等級排序、layer 由上到下、4 個 elicitation stage；XP practice 配 agile principle</td><td>背清單（第十一部分）</td></tr>
+<tr><td>6. 情境判斷</td><td>「用唔用 agile？」「printTask 放 model 啱唔啱？」「Tom 做錯咗咩？」</td><td>先答立場（1 句），再逐點用 lecture 術語講理由</td></tr>
+<tr><td>7. X vs Y 比較</td><td>F vs NF、product vs sprint backlog、alpha vs beta、black vs white box、component vs service、centralized vs distributed VC</td><td>用細表或者「X…；而 Y…」句式，每個比較點一句</td></tr>
+<tr><td>8. 字數上限</td><td>&lt;50／&lt;100／&lt;150 words</td><td>參考答案全部控制喺上限之內，照住嗰個長度寫</td></tr></table></div>
+
+<h2 id="predict">六、預測同分頁</h2>
+<div class="key"><b>一分鐘重點</b><ul>
+<li><span class="tag t-must">必考</span> 6 類：Class diagram、Testing、Process／Agile、Architecture、Requirements、Evolution（約 70 分）。</li>
+<li><span class="tag t-likely">好可能</span> Sequence diagram（3 小時制下 2025 有出）、Reuse（可能代替 Evolution）、SOLID 小題。</li>
+<li><span class="tag t-know">識認就得</span> 其餘 lecture 細節：Section A T/F。</li></ul></div>
+<div class="tw"><table class="stack"><tr><th>預測</th><th>題型</th><th>預計分數</th><th>對應課</th><th>溫習頁</th></tr>
+<tr><td><span class="tag t-must">必考</span></td><td>Class diagram：由一段文字砌 class、attribute、operation、association 類型、multiplicity、inheritance</td><td>9–18</td><td>L5、L8</td><td><a href="P1-UML.html">P1</a></td></tr>
+<tr><td><span class="tag t-must">必考</span></td><td>Testing：partition testing 表 + V&amp;V／TDD／alpha-beta／coverage／black-white box</td><td>11–15</td><td>L9、L3</td><td><a href="P2-Testing.html">P2</a></td></tr>
+<tr><td><span class="tag t-must">必考</span></td><td>Process／Agile：waterfall、incremental、coping with change、CMMI、XP、Scrum</td><td>15</td><td>L2、L3</td><td><a href="P3-Process-Agile.html">P3</a></td></tr>
+<tr><td><span class="tag t-must">必考</span></td><td>Architecture：MVC、layered、client-server、repository，揀 pattern 並解釋</td><td>10–14</td><td>L6、L12</td><td><a href="P5-Architecture.html">P5</a></td></tr>
+<tr><td><span class="tag t-must">必考</span></td><td>Requirements：F/NF 用 shall 寫、elicitation stage、validation check、interview／observation</td><td>10–12</td><td>L4</td><td><a href="P4-Requirements.html">P4</a></td></tr>
+<tr><td><span class="tag t-must">必考</span></td><td>Evolution／VC：CCB 流程、legacy system、evolving strategy、centralized vs distributed VC</td><td>10</td><td>L10</td><td><a href="P6-Evolution-Reuse.html">P6</a></td></tr>
+<tr><td><span class="tag t-likely">好可能</span></td><td>Sequence diagram：actor、lifeline、message、return、alt／loop frame</td><td>9–14</td><td>L5、L8</td><td><a href="P1-UML.html">P1</a></td></tr>
+<tr><td><span class="tag t-likely">好可能</span></td><td>Reuse：component vs service、container、framework、product line</td><td>0–14</td><td>L11</td><td><a href="P6-Evolution-Reuse.html">P6</a></td></tr>
+<tr><td><span class="tag t-likely">好可能</span></td><td>SOLID／Dependency Inversion 小題（2022 考過）</td><td>3–5</td><td>L8</td><td><a href="P7-Design-OO.html">P7</a></td></tr>
+<tr><td><span class="tag t-know">識認就得</span></td><td>Section A T/F：SE 定義同 ethics、structured／DFD、Java OOP、GRASP、distributed（CAP、transparency）、MDE</td><td>20（T/F）</td><td>L1、L7、L7b、L8、L11、L12</td><td>每頁第七部分</td></tr></table></div>
+
+<h2 id="asm">七、Assignment 對應</h2>
+<p>今年 2 份 assignment 大部分都係舊卷題目。每題嘅完整答案放咗喺對應頁。</p>
+<div class="tw"><table class="stack"><tr><th>Assignment 題</th><th>同邊條真卷一樣</th><th>答案喺</th></tr>
+<tr><td>Asm1 Q1：insulin pump 用唔用 agile（10 分）</td><td>2022 Q21 嘅套路（換情境）</td><td><a href="P3-Process-Agile.html#past">P3 四</a>（有官方 solution）</td></tr>
+<tr><td>Asm1 Q2：Ayed et al. 論文 agile 文化挑戰</td><td>—（老師話任何合理答案都得，唔會喺閉卷考）</td><td>唔使溫</td></tr>
+<tr><td>Asm1 Q3：寫 FR 同 NFR（availability）</td><td>2025 Q22(1)、2023 Q22(3) 嘅套路</td><td><a href="P4-Requirements.html#past">P4 四</a>（有官方 solution）</td></tr>
+<tr><td>Asm1 Q4：Tom 圖書館 elicitation</td><td><b>2022 Q22 原題</b></td><td><a href="P4-Requirements.html#past">P4 四</a>（有官方 solution）</td></tr>
+<tr><td>Asm2 Q1：訂單管理 class diagram</td><td><b>2022 Q24 原題</b></td><td><a href="P1-UML.html#past">P1 四</a></td></tr>
+<tr><td>Asm2 Q2：layered → client-server 兩個 design</td><td>2025 Q23(3) 相關（thin vs fat client）</td><td><a href="P5-Architecture.html#past">P5 四</a></td></tr>
+<tr><td>Asm2 Q3：removeLDLetters partition 表</td><td><b>2022 Q26 原題</b></td><td><a href="P2-Testing.html#past">P2 四</a></td></tr>
+<tr><td>Asm2 Q4：centralized vs distributed VC + VC key features</td><td>2022 Q27、2024 Q26(2)</td><td><a href="P6-Evolution-Reuse.html#past">P6 四</a></td></tr></table></div>
+
+<h2 id="mockA">八、模擬卷 Section A（T/F，20 分，建議 15 分鐘）</h2>
+<div class="key"><b>一分鐘重點</b><ul>
+<li>同真卷一樣 20 題、每題 1 分，題目覆蓋晒 L1–L12。</li>
+<li>T/F 嘅陷阱通常係<b>調轉兩個概念</b>（例如 aggregation ↔ composition、alpha ↔ beta、include ↔ extend）或者<b>加「always／only／never」</b>。</li>
+<li>撳完即刻話你知啱唔啱，同埋點解。</li></ul></div>
+<div class="mcq" data-set="A"><script type="application/json">[
+{"t":"L1","s":"<p>Software engineering is concerned only with the technical process of writing program code.</p>","a":1,"e":"<b>False</b>。L1 定義：SE 係 concerned with <b>all aspects of software production</b>，包括 development process、tools/methods，同 <b>project management</b>。"},
+{"t":"L1","s":"<p>For most systems, software costs more to maintain than it does to develop.</p>","a":0,"e":"<b>True</b>。L1「Necessity for SE」：software costs more to maintain than to develop，所以長遠用 SE 方法更平。"},
+{"t":"L2","s":"<p>In the waterfall model, in principle, a phase must be completed before moving on to the next phase.</p>","a":0,"e":"<b>True</b>。呢個正正係 waterfall 嘅定義，亦係佢難應付 requirement 改變嘅原因。"},
+{"t":"L2","s":"<p>System prototyping supports both change anticipation and change tolerance.</p>","a":1,"e":"<b>False</b>。Prototyping 只係 <b>change anticipation</b>（交貨前試，預早發現要改咩）。同時支持兩樣嘅係 <b>incremental delivery</b>。"},
+{"t":"L2","s":"<p>At CMMI maturity level 3 (Defined), processes are standardized across the entire organization.</p>","a":0,"e":"<b>True</b>。Level 2 Managed 係 project 層面；Level 3 Defined 係<b>成間公司</b>統一標準 process。"},
+{"t":"L3","s":"<p>In Scrum, the product backlog only contains the items selected for the current sprint.</p>","a":1,"e":"<b>False</b>。Product backlog 係<b>成個 project</b> 嘅 to-do list；揀咗入今個 sprint 嘅先係 sprint backlog。"},
+{"t":"L3","s":"<p>Pair programming acts as an informal review process because at least two people look at each line of code.</p>","a":0,"e":"<b>True</b>。L3 列出 pair programming 嘅好處之一：informal review。"},
+{"t":"L4","s":"<p>Non-functional requirements often apply to the system as a whole rather than to individual features.</p>","a":0,"e":"<b>True</b>。NFR 通常係 emergent property（例如 performance、reliability），影響整體 architecture。"},
+{"t":"L4","s":"<p>\"The system should be easy to use\" is a verifiable non-functional requirement.</p>","a":1,"e":"<b>False</b>。冇可量度嘅標準就驗證唔到。要改成例如「trained users shall complete a booking within 2 minutes, error rate &lt; 5%」。"},
+{"t":"L4","s":"<p>Requirements validation checks whether the requirements define the system that the customer really wants.</p>","a":0,"e":"<b>True</b>。L4 定義原句。注意 validation 同 verification 唔同。"},
+{"t":"L5","s":"<p>In a UML class diagram, composition means that a part can be shared by several wholes.</p>","a":1,"e":"<b>False</b>。可以被多個 whole 共用嘅係 <b>aggregation</b>（空心菱形）。Composition（實心菱形）：part 只屬一個 whole，同生同死。"},
+{"t":"L5","s":"<p>In a use case diagram, «extend» is used for steps that the base use case always needs in order to complete.</p>","a":1,"e":"<b>False</b>。「一定要」係 <b>«include»</b>；«extend» 係<b>有條件、可選</b>嘅額外行為。"},
+{"t":"L6","s":"<p>In the repository pattern, components communicate directly with each other rather than through the repository.</p>","a":1,"e":"<b>False</b>。Repository pattern：components <b>唔會直接溝通</b>，全部經 repository。"},
+{"t":"L6","s":"<p>A disadvantage of the layered architecture is that performance can suffer because a request is interpreted at multiple layers.</p>","a":0,"e":"<b>True</b>。L6 layered pattern 嘅 disadvantage 原句。"},
+{"t":"L6/L12","s":"<p>In a thin-client model, most of the application processing is carried out on the client.</p>","a":1,"e":"<b>False</b>。Thin client：client 只做 presentation，application processing 同 data 喺 server。Fat client 先至喺 client 做 application processing。"},
+{"t":"L9","s":"<p>Testing can show the presence of errors, but not their absence.</p>","a":0,"e":"<b>True</b>。L9 key point：testing can only reveal the presence of errors, never their absolute absence。"},
+{"t":"L9","s":"<p>A test suite that achieves 100% statement coverage always achieves 100% branch coverage.</p>","a":1,"e":"<b>False</b>。例如 <code>if (x&gt;0) y=1;</code>：只用 x=5 已經行晒所有 statement，但 false branch 冇行過。反過來 branch 覆蓋晒先會連帶 statement 覆蓋晒。"},
+{"t":"L9","s":"<p>Beta testing is carried out by users at the developer's site.</p>","a":1,"e":"<b>False</b>。喺 developer 嗰度係 <b>alpha</b>；beta 係俾用戶喺<b>佢哋自己嘅環境</b>用。"},
+{"t":"L10","s":"<p>Software re-engineering changes the functionality of a legacy system to satisfy new requirements.</p>","a":1,"e":"<b>False</b>。Re-engineering 係改善 maintainability（重組、重寫文件等），<b>唔改 functionality</b>。"},
+{"t":"L10","s":"<p>In a distributed version control system such as Git, each developer's workspace holds a full copy of the repository history.</p>","a":0,"e":"<b>True</b>。所以可以 offline commit、每個 copy 都係 backup。"}
+]</script></div>
+
+<h2 id="mockMC">九、跨課 MC 練習</h2>
+<p>真卷冇 MC，不過 MC 練「揀最啱嗰個」，幫你分清相似概念。有啲係<b>多選題</b>：揀晒所有啱嘅選項，再撳「對答案」。</p>
+<div class="mcq" data-set="M"><script type="application/json">[
+{"t":"L2","s":"<p>Which software process model is MOST suitable for an embedded controller whose hardware interfaces are already fixed and which needs safety certification?</p>","o":["Waterfall model","Pure agile (Scrum without documentation)","Throwaway prototyping only","Code-and-fix"],"a":0,"e":"A 啱：requirements 穩定、要 safety analysis 同詳細文件，正係 L2 講嘅 waterfall 適用情況。B 錯：certification 要文件。C 錯：prototype 只係用嚟了解需求，唔係完整 process。D 錯：冇 process，唔可以用喺 critical system。"},
+{"t":"L3","s":"<p>Which of the following are XP practices that support the agile principle \"embrace change\"? (Select all that apply)</p>","o":["Small releases","Test-first development","Refactoring","Continuous integration","On-site customer"],"a":[0,1,2,3],"e":"L3 slide：Change is embraced through <b>small releases, test-first development, refactoring, continuous integration</b>。E 錯：on-site customer 對應 <b>customer involvement</b>。"},
+{"t":"L4","s":"<p>A requirements engineer checks whether two requirements contradict each other. Which validation check is this?</p>","o":["Validity","Consistency","Completeness","Realism"],"a":1,"e":"B 啱：consistency = 有冇 conflict。A 係反映唔反映用戶真正需要；C 係有冇漏咗 function；D 係 budget 同技術做唔做到。"},
+{"t":"L5","s":"<p>\"A Department has many Employees; an Employee can move to another Department and still exist.\" Which relationship fits best between Department (whole) and Employee (part)?</p>","o":["Composition","Aggregation","Generalization","Realization"],"a":1,"e":"B 啱：part 可以獨立存在，所以係 aggregation（空心菱形）。A 錯：composition 要同生同死。C、D 係 class-level 嘅 is-a／implements 關係，唔係 has-a。"},
+{"t":"L6","s":"<p>An IDE where many tools (editor, compiler, debugger, UML tool) share a large amount of project data. Which pattern fits best?</p>","o":["Pipe and filter","Repository","Client-server","MVC"],"a":1,"e":"B 啱：L6 用 IDE 做 repository 例子，大量資料要長期儲存、多個 tool 共用。A 適合 batch 轉換；C 適合多地點存取共享資料；D 係 UI 同 data 分開。"},
+{"t":"L6","s":"<p>Which are disadvantages of the client-server pattern? (Select all that apply)</p>","o":["Each service is a single point of failure","Performance may be unpredictable because it depends on the network","Data cannot be accessed from different locations","Management problems if servers are owned by different organizations"],"a":[0,1,3],"e":"A、B、D 係 L6 原文。C 錯：client-server 正正係<b>用嚟俾多個地點存取共享資料</b>，係優點唔係缺點。"},
+{"t":"L9","s":"<p>Which testing stage is performed by a separate team on a complete version of the system before it is released?</p>","o":["Unit testing","Release testing","Component testing","Development testing"],"a":1,"e":"B 啱：release testing 由獨立團隊做。A、C 都屬 D（development testing），由開發人員做。"},
+{"t":"L9","s":"<p>In a unit test, the part that decides whether the observed output is correct is called the:</p>","o":["Test driver","Test oracle","Test stub","Test fixture"],"a":1,"e":"B 啱：test oracle 判斷 expected result（2025 Q26(2) 考過）。A 係叫被測 code 嘅程式；C 係代替未寫好嘅下層 module；D 係測試前要準備嘅環境。"},
+{"t":"L10","s":"<p>A legacy system has LOW quality but HIGH business value. According to the assessment matrix, what is usually recommended?</p>","o":["Scrap it","Re-engineer it, or replace it if a suitable system is available","Keep it in operation with normal maintenance","Scrap it completely or maintain it"],"a":1,"e":"B 啱（L10 原文）：business value 高要保留，但 quality 低難改。A 係低質低值；C 係高質高值；D 係高質低值。"},
+{"t":"L11","s":"<p>Which statements correctly compare services with components? (Select all that apply)</p>","o":["Service information is published so that requestors can discover services through a registry","Services communicate by message passing over standard protocols","Applications using services always include their own copy of each service","Services can be shared across organizational boundaries"],"a":[0,1,3],"e":"A、B、D 啱（2023 Q26(1) 嘅比較點）。C 錯：L11 講明 service-oriented system <b>reference external services</b>，唔會自己包一份；「自己包一份」係 component-based 嘅做法。"}
+]</script></div>
+
+<h2 id="mockB">十、模擬卷 Section B（80 分，建議 2.5 小時）</h2>
+<div class="key"><b>一分鐘重點</b><ul>
+<li>結構同 2025 卷一樣（Q21–27），全部係新情境，但套路同真卷一樣。</li>
+<li>先自己寫晒（守字數），再撳「參考答案」對。</li></ul></div>
+
+<div class="practice"><span class="src">Mock Q21 · Software Process · 15 分 · 對應 L2、L3 · <a href="P3-Process-Agile.html">P3</a></span>
+<p class="q">(1) Explain change anticipation and change tolerance, and state which of system prototyping and incremental delivery supports each. (&lt;100 words, 5 points)</p>
+<details class="ans"><summary>參考答案</summary><div><div class="ansbox"><b>答案</b>Change anticipation: the process includes activities that predict possible changes before significant rework is needed, e.g., a prototype shows key features to customers early. Change tolerance: the process is designed so that changes can be made at relatively low cost, normally through incremental development where a change only affects increments not yet built. System prototyping supports change anticipation only; incremental delivery supports both, because users try early increments (anticipation) and later increments can absorb changes cheaply (tolerance).</div>
+<p class="wl">約 85 字 · 記法：prototype = 預早估；increment = 預早估 + 改得平。</p></div></details>
+<p class="q">(2) A company's projects succeed only when certain experienced developers are on the team, and every project follows its own way of working. 1) Which CMMI maturity level is the company most likely at? 2) What must the company achieve to reach level 3? (&lt;80 words, 4 points)</p>
+<details class="ans"><summary>參考答案</summary><div><div class="ansbox"><b>答案</b>1) Level 1, Initial: processes are ad hoc, undocumented and depend on individual heroics, so success is unpredictable. 2) It must first plan, track and control processes at project level (Level 2, Managed), and then standardize processes across the whole organization with a common process framework and training (Level 3, Defined), so that performance is consistent whichever team does the work.</div>
+<p class="wl">約 65 字</p></div></details>
+<p class="q">(3) For each XP practice, name the agile principle it supports: A) small releases B) on-site customer C) sustainable pace D) simple design E) continuous integration. (5 points)</p>
+<details class="ans"><summary>參考答案</summary><div><div class="ansbox"><b>答案</b>A → incremental delivery (也可以答 embrace change)；B → customer involvement；C → people not process；D → maintain simplicity；E → embrace change。</div>
+<p>出處：L3「Support for Agile Principles in XP Practices」。Small releases 喺 lecture 同時支持 incremental delivery 同 embrace change，答 incremental delivery 最穩陣。</p></div></details>
+<p class="q">(4) What is the difference between the product backlog and the sprint backlog? (&lt;40 words, 1 point)</p>
+<details class="ans"><summary>參考答案</summary><div><div class="ansbox"><b>答案</b>The product backlog lists all outstanding work for the whole project and is reprioritized by the product owner; the sprint backlog is the subset selected for the current sprint and is fixed once the sprint starts.</div></div></details>
+</div>
+
+<div class="practice"><span class="src">Mock Q22 · Requirements · 12 分 · 對應 L4 · <a href="P4-Requirements.html">P4</a></span>
+<p class="q">(1) For a food delivery app, write one functional requirement and one non-functional requirement concerning performance. Use "shall" and make both verifiable. (&lt;80 words, 4 points)</p>
+<details class="ans"><summary>參考答案</summary><div><div class="ansbox"><b>答案</b>FR: The app shall allow a logged-in customer to cancel an order free of charge if the restaurant has not yet accepted it, and shall then show the order status as "Cancelled".<br>NFR (performance): The app shall display the restaurant search results within 2 seconds for 95% of searches when up to 5,000 users are online at the same time.</div>
+<p class="wl">記法：FR = 系統「做咩」；NFR = 「做得幾好」，一定要有數字（時間、百分比、負載）先可以 test。</p></div></details>
+<p class="q">(2) A requirements document contains: R1 "The system shall respond fast." R2 "All data shall be stored only on the user's phone." R3 "Users shall be able to view their order history from any device." Identify which validation check each problem fails and explain. (&lt;100 words, 4 points)</p>
+<details class="ans"><summary>參考答案</summary><div><div class="ansbox"><b>答案</b>R1 fails the verifiability check: "fast" has no measurable target, so no test can decide pass or fail; it should state, e.g., a response time limit. R2 and R3 together fail the consistency check: if data is stored only on one phone, order history cannot be viewed from other devices, so the two requirements conflict. The stakeholders must negotiate which one to change.</div></div></details>
+<p class="q">(3) Explain forward and backward traceability in a requirements traceability matrix, and give one reason why the matrix helps when a requirement changes. (&lt;80 words, 4 points)</p>
+<details class="ans"><summary>參考答案</summary><div><div class="ansbox"><b>答案</b>Backward traceability links a requirement to where it came from (e.g., a stakeholder or a business rule). Forward traceability links a requirement to the artifacts that realize it, such as design elements, code modules and test cases. When a requirement changes, forward links show exactly which design, code and tests are affected, supporting impact analysis and controlled change propagation.</div></div></details>
+</div>
+
+<div class="practice"><span class="src">Mock Q23 · Architecture · 12 分 · 對應 L6、L12 · <a href="P5-Architecture.html">P5</a></span>
+<p class="q">(1) A student puts a method <code>showBookingDetails()</code> that prints to the console inside the Model of an MVC system. Is this proper? Why? (&lt;80 words, 3 points)</p>
+<details class="ans"><summary>參考答案</summary><div><div class="ansbox"><b>答案</b>No. In MVC the Model only manages the system data and the operations on that data; presenting data to the user is the View's job. Printing inside the Model mixes presentation with data, so the data can no longer change independently of its representation, and adding another view (e.g., a GUI) would require changing the Model. The Model should return the data and the View should print it.</div>
+<p>同 2023 Q23(3)（printTask）一模一樣嘅套路。</p></div></details>
+<p class="q">(2) A city bike-sharing platform needs: i) access from phones anywhere, ii) adding more servers when demand peaks, iii) many different subsystems (payment, maps, maintenance) to share bike status data. Choose two patterns from MVC, layered, client-server and repository, and justify. (&lt;120 words, 5 points)</p>
+<details class="ans"><summary>參考答案</summary><div><div class="ansbox"><b>答案</b>Client-server and repository. Client-server handles i): phone apps are clients that call services on servers over the network, so users can access the system from anywhere; it also handles ii): because services run on servers, extra server replicas can be added when load is high. Repository handles iii): bike status is kept in one central repository that payment, maps and maintenance subsystems read and update, so they do not need to know each other and the data stays consistent and is backed up in one place.</div></div></details>
+<p class="q">(3) Compare a thin-client and a fat-client client-server design: give one advantage of each. (&lt;80 words, 4 points)</p>
+<details class="ans"><summary>參考答案</summary><div><div class="ansbox"><b>答案</b>Thin client (only presentation on the client): the application logic is on the server, so updating it needs no change on clients and clients can be cheap devices. Fat client (presentation and application processing on the client): the client's processing power is used, which reduces server load and network traffic, giving faster responses for computation-heavy interaction.</div>
+<p>同今年 Asm2 Q2 嘅 Design 2（thin）同 Design 1（fat）。</p></div></details>
+</div>
+
+<div class="practice"><span class="src">Mock Q24 · Class Diagram · 12 分 · 對應 L5、L8 · <a href="P1-UML.html">P1</a></span>
+<p class="q">Design the classes and draw the UML class diagram.</p>
+<div class="card"><p style="font-family:ui-monospace,Menlo,monospace;font-size:13.5px">A cinema chain manages several cinemas. Each cinema has a name and an address and consists of several halls; a hall belongs to exactly one cinema and is identified by a hall number. Each hall has a fixed set of seats, each with a row letter and a seat number. Movies have a title and a duration. A screening shows one movie in one hall at a start time. There are two types of customers: members, who have a membership ID and loyalty points, and guests, who only provide an email. Every customer has a name. A customer makes bookings; each booking has a unique booking number, is for exactly one screening and reserves one or more seats. A customer can cancel a booking, the system can calculate the total price of a booking, and members can redeem points.</p></div>
+<details class="ans"><summary>參考答案（圖 + 逐步）</summary><div>
+<div class="uml"><svg viewBox="0 0 760 560" role="img" aria-label="cinema booking class diagram" style="min-width:760px;max-width:800px"><polyline points="56.8,175.0 55.5,123.0" fill="none" stroke="#15202B" stroke-width="1.4"/><polygon points="55.0,101.0 62.3,111.8 55.5,123.0 48.3,112.2" fill="#15202B" stroke="#15202B" stroke-width="1.4"/><text x="71.4" y="160.6" font-size="12.5" text-anchor="middle" font-family="ui-monospace,Menlo,monospace" paint-order="stroke" stroke="#FFFFFF" stroke-width="4" stroke-linejoin="round" fill="#BF4A14" font-weight="700">1..*</text><text x="70.8" y="136.6" font-size="12.5" text-anchor="middle" font-family="ui-monospace,Menlo,monospace" paint-order="stroke" stroke="#FFFFFF" stroke-width="4" stroke-linejoin="round" fill="#BF4A14" font-weight="700">1</text><polyline points="77.8,340.0 66.9,270.7" fill="none" stroke="#15202B" stroke-width="1.4"/><polygon points="63.5,249.0 72.1,258.8 66.9,270.7 58.3,260.9" fill="#15202B" stroke="#15202B" stroke-width="1.4"/><text x="89.8" y="323.9" font-size="12.5" text-anchor="middle" font-family="ui-monospace,Menlo,monospace" paint-order="stroke" stroke="#FFFFFF" stroke-width="4" stroke-linejoin="round" fill="#BF4A14" font-weight="700">1..*</text><text x="83.3" y="282.3" font-size="12.5" text-anchor="middle" font-family="ui-monospace,Menlo,monospace" paint-order="stroke" stroke="#FFFFFF" stroke-width="4" stroke-linejoin="round" fill="#BF4A14" font-weight="700">1</text><polyline points="290.0,212.0 105.5,212.0" fill="none" stroke="#15202B" stroke-width="1.4"/><text x="272.0" y="201.0" font-size="12.5" text-anchor="middle" font-family="ui-monospace,Menlo,monospace" paint-order="stroke" stroke="#FFFFFF" stroke-width="4" stroke-linejoin="round" fill="#BF4A14" font-weight="700">*</text><text x="123.5" y="201.0" font-size="12.5" text-anchor="middle" font-family="ui-monospace,Menlo,monospace" paint-order="stroke" stroke="#FFFFFF" stroke-width="4" stroke-linejoin="round" fill="#BF4A14" font-weight="700">1</text><polyline points="427.3,175.0 560.0,85.2" fill="none" stroke="#15202B" stroke-width="1.4"/><text x="450.6" y="181.3" font-size="12.5" text-anchor="middle" font-family="ui-monospace,Menlo,monospace" paint-order="stroke" stroke="#FFFFFF" stroke-width="4" stroke-linejoin="round" fill="#BF4A14" font-weight="700">*</text><text x="553.5" y="111.7" font-size="12.5" text-anchor="middle" font-family="ui-monospace,Menlo,monospace" paint-order="stroke" stroke="#FFFFFF" stroke-width="4" stroke-linejoin="round" fill="#BF4A14" font-weight="700">1</text><polyline points="363.6,340.0 370.0,249.0" fill="none" stroke="#15202B" stroke-width="1.4"/><text x="379.8" y="327.1" font-size="12.5" text-anchor="middle" font-family="ui-monospace,Menlo,monospace" paint-order="stroke" stroke="#FFFFFF" stroke-width="4" stroke-linejoin="round" fill="#BF4A14" font-weight="700">*</text><text x="383.7" y="272.0" font-size="12.5" text-anchor="middle" font-family="ui-monospace,Menlo,monospace" paint-order="stroke" stroke="#FFFFFF" stroke-width="4" stroke-linejoin="round" fill="#BF4A14" font-weight="700">1</text><polyline points="290.0,379.2 159.8,383.2" fill="none" stroke="#15202B" stroke-width="1.4"/><text x="271.5" y="368.7" font-size="12.5" text-anchor="middle" font-family="ui-monospace,Menlo,monospace" paint-order="stroke" stroke="#FFFFFF" stroke-width="4" stroke-linejoin="round" fill="#BF4A14" font-weight="700">*</text><text x="177.3" y="371.6" font-size="12.5" text-anchor="middle" font-family="ui-monospace,Menlo,monospace" paint-order="stroke" stroke="#FFFFFF" stroke-width="4" stroke-linejoin="round" fill="#BF4A14" font-weight="700">1..*</text><polyline points="432.0,368.6 560.0,353.4" fill="none" stroke="#15202B" stroke-width="1.4"/><text x="451.6" y="385.4" font-size="12.5" text-anchor="middle" font-family="ui-monospace,Menlo,monospace" paint-order="stroke" stroke="#FFFFFF" stroke-width="4" stroke-linejoin="round" fill="#BF4A14" font-weight="700">*</text><text x="543.9" y="374.5" font-size="12.5" text-anchor="middle" font-family="ui-monospace,Menlo,monospace" paint-order="stroke" stroke="#FFFFFF" stroke-width="4" stroke-linejoin="round" fill="#BF4A14" font-weight="700">1</text><polyline points="560.8,455.0 592.3,403.0" fill="none" stroke="#15202B" stroke-width="1.4"/><polygon points="599.6,391.0 599.2,407.1 585.5,398.8" fill="#FFFFFF" stroke="#15202B" stroke-width="1.4"/><polyline points="679.9,455.0 655.1,403.6" fill="none" stroke="#15202B" stroke-width="1.4"/><polygon points="649.1,391.0 662.3,400.1 647.9,407.1" fill="#FFFFFF" stroke="#15202B" stroke-width="1.4"/><rect x="10.0" y="10.0" width="87.8" height="91.0" fill="#FFFFFF" stroke="#15202B" stroke-width="1.4" rx="2"/><text x="53.9" y="28.0" font-size="13" font-weight="700" text-anchor="middle" font-family="ui-monospace,Menlo,monospace">Cinema</text><line x1="10.0" y1="36.0" x2="97.8" y2="36.0" stroke="#15202B" stroke-width="1"/><text x="18.0" y="51.0" font-size="12.5" font-family="ui-monospace,Menlo,monospace">name</text><text x="18.0" y="68.0" font-size="12.5" font-family="ui-monospace,Menlo,monospace">address</text><line x1="10.0" y1="76.0" x2="97.8" y2="76.0" stroke="#15202B" stroke-width="1"/><text x="18.0" y="91.0" font-size="12.5" font-family="ui-monospace,Menlo,monospace">addHall()</text><rect x="10.0" y="175.0" width="95.5" height="74.0" fill="#FFFFFF" stroke="#15202B" stroke-width="1.4" rx="2"/><text x="57.8" y="193.0" font-size="13" font-weight="700" text-anchor="middle" font-family="ui-monospace,Menlo,monospace">Hall</text><line x1="10.0" y1="201.0" x2="105.5" y2="201.0" stroke="#15202B" stroke-width="1"/><text x="18.0" y="216.0" font-size="12.5" font-family="ui-monospace,Menlo,monospace">hallNo</text><line x1="10.0" y1="224.0" x2="105.5" y2="224.0" stroke="#15202B" stroke-width="1"/><text x="18.0" y="239.0" font-size="12.5" font-family="ui-monospace,Menlo,monospace">getSeats()</text><rect x="10.0" y="340.0" width="149.8" height="91.0" fill="#FFFFFF" stroke="#15202B" stroke-width="1.4" rx="2"/><text x="84.9" y="358.0" font-size="13" font-weight="700" text-anchor="middle" font-family="ui-monospace,Menlo,monospace">Seat</text><line x1="10.0" y1="366.0" x2="159.8" y2="366.0" stroke="#15202B" stroke-width="1"/><text x="18.0" y="381.0" font-size="12.5" font-family="ui-monospace,Menlo,monospace">row</text><text x="18.0" y="398.0" font-size="12.5" font-family="ui-monospace,Menlo,monospace">number</text><line x1="10.0" y1="406.0" x2="159.8" y2="406.0" stroke="#15202B" stroke-width="1"/><text x="18.0" y="421.0" font-size="12.5" font-family="ui-monospace,Menlo,monospace">isFree(screening)</text><rect x="560.0" y="10.0" width="87.8" height="91.0" fill="#FFFFFF" stroke="#15202B" stroke-width="1.4" rx="2"/><text x="603.9" y="28.0" font-size="13" font-weight="700" text-anchor="middle" font-family="ui-monospace,Menlo,monospace">Movie</text><line x1="560.0" y1="36.0" x2="647.8" y2="36.0" stroke="#15202B" stroke-width="1"/><text x="568.0" y="51.0" font-size="12.5" font-family="ui-monospace,Menlo,monospace">title</text><text x="568.0" y="68.0" font-size="12.5" font-family="ui-monospace,Menlo,monospace">duration</text><line x1="560.0" y1="76.0" x2="647.8" y2="76.0" stroke="#15202B" stroke-width="1"/><text x="568.0" y="91.0" font-size="12.5" font-family="ui-monospace,Menlo,monospace">getInfo()</text><rect x="290.0" y="175.0" width="165.2" height="74.0" fill="#FFFFFF" stroke="#15202B" stroke-width="1.4" rx="2"/><text x="372.6" y="193.0" font-size="13" font-weight="700" text-anchor="middle" font-family="ui-monospace,Menlo,monospace">Screening</text><line x1="290.0" y1="201.0" x2="455.2" y2="201.0" stroke="#15202B" stroke-width="1"/><text x="298.0" y="216.0" font-size="12.5" font-family="ui-monospace,Menlo,monospace">startTime</text><line x1="290.0" y1="224.0" x2="455.2" y2="224.0" stroke="#15202B" stroke-width="1"/><text x="298.0" y="239.0" font-size="12.5" font-family="ui-monospace,Menlo,monospace">getAvailableSeats()</text><rect x="290.0" y="340.0" width="142.0" height="74.0" fill="#FFFFFF" stroke="#15202B" stroke-width="1.4" rx="2"/><text x="361.0" y="358.0" font-size="13" font-weight="700" text-anchor="middle" font-family="ui-monospace,Menlo,monospace">Booking</text><line x1="290.0" y1="366.0" x2="432.0" y2="366.0" stroke="#15202B" stroke-width="1"/><text x="298.0" y="381.0" font-size="12.5" font-family="ui-monospace,Menlo,monospace">bookingNo</text><line x1="290.0" y1="389.0" x2="432.0" y2="389.0" stroke="#15202B" stroke-width="1"/><text x="298.0" y="404.0" font-size="12.5" font-family="ui-monospace,Menlo,monospace">calculateTotal()</text><rect x="560.0" y="300.0" width="134.2" height="91.0" fill="#E2E6F8" stroke="#3D4BAA" stroke-width="1.4" rx="2"/><text x="627.1" y="318.0" font-size="13" font-weight="700" text-anchor="middle" font-family="ui-monospace,Menlo,monospace" font-style="italic">Customer</text><line x1="560.0" y1="326.0" x2="694.2" y2="326.0" stroke="#3D4BAA" stroke-width="1"/><text x="568.0" y="341.0" font-size="12.5" font-family="ui-monospace,Menlo,monospace">name</text><line x1="560.0" y1="349.0" x2="694.2" y2="349.0" stroke="#3D4BAA" stroke-width="1"/><text x="568.0" y="364.0" font-size="12.5" font-family="ui-monospace,Menlo,monospace">makeBooking()</text><text x="568.0" y="381.0" font-size="12.5" font-family="ui-monospace,Menlo,monospace">cancelBooking()</text><rect x="470.0" y="455.0" width="126.5" height="91.0" fill="#D9EFEE" stroke="#0B7472" stroke-width="1.4" rx="2"/><text x="533.2" y="473.0" font-size="13" font-weight="700" text-anchor="middle" font-family="ui-monospace,Menlo,monospace">Member</text><line x1="470.0" y1="481.0" x2="596.5" y2="481.0" stroke="#0B7472" stroke-width="1"/><text x="478.0" y="496.0" font-size="12.5" font-family="ui-monospace,Menlo,monospace">memberID</text><text x="478.0" y="513.0" font-size="12.5" font-family="ui-monospace,Menlo,monospace">points</text><line x1="470.0" y1="521.0" x2="596.5" y2="521.0" stroke="#0B7472" stroke-width="1"/><text x="478.0" y="536.0" font-size="12.5" font-family="ui-monospace,Menlo,monospace">redeemPoints()</text><rect x="650.0" y="455.0" width="95.5" height="74.0" fill="#D9EFEE" stroke="#0B7472" stroke-width="1.4" rx="2"/><text x="697.8" y="473.0" font-size="13" font-weight="700" text-anchor="middle" font-family="ui-monospace,Menlo,monospace">Guest</text><line x1="650.0" y1="481.0" x2="745.5" y2="481.0" stroke="#0B7472" stroke-width="1"/><text x="658.0" y="496.0" font-size="12.5" font-family="ui-monospace,Menlo,monospace">email</text><line x1="650.0" y1="504.0" x2="745.5" y2="504.0" stroke="#0B7472" stroke-width="1"/><text x="658.0" y="519.0" font-size="12.5" font-family="ui-monospace,Menlo,monospace">register()</text></svg></div><div class="wl scrollhint">手機睇：圖可以左右捲 ⇆</div>
+<ol class="steps">
+<li><b>名詞 → class</b>：cinema、hall、seat、movie、screening、customer、member、guest、booking。「name、address、hall number」呢類只係<b>描述</b>嘅名詞 → attribute。</li>
+<li><b>「two types of customers」→ inheritance</b>：Member、Guest 繼承 Customer；共有嘅 name 放喺 Customer，各自嘅放子類。Customer 冇自己嘅實例，所以寫斜體（abstract）。</li>
+<li><b>「consists of」+「belongs to exactly one」→ composition</b>：Cinema ◆— Hall，Hall ◆— Seat。Hall 冇咗 cinema 就冇意義。</li>
+<li><b>其他關係 → association + multiplicity</b>：一場 screening 一套戲一個 hall（1），一套戲可以有好多場（*）；一個 booking 一場 screening、1..* 個 seat；一個 customer 好多 booking。</li>
+<li><b>動詞 → operation，放喺「最識做」嗰個 class</b>：calculateTotal() 放 Booking（佢知道有咩 seat）；redeemPoints() 放 Member；makeBooking()、cancelBooking() 放 Customer。</li></ol>
+<p class="memo"><b>評分重點</b>class 名 + attribute + operation 齊；inheritance 方向（三角形喺 parent）；composition 菱形喺 whole 嗰邊；每條線兩端都有 multiplicity。</p></div></details>
+</div>
+
+<div class="practice"><span class="src">Mock Q25 · Sequence Diagram · 9 分 · 對應 L5、L8 · <a href="P1-UML.html">P1</a></span>
+<p class="q">Identify the actors and draw a sequence diagram for the scenario.</p>
+<div class="card"><p style="font-family:ui-monospace,Menlo,monospace;font-size:13.5px">A customer inserts a card into the ATM and enters a PIN. The ATM sends the card number and PIN to the bank server, which verifies them against the account database. If the PIN is valid, the customer enters an amount and the ATM asks the bank server to withdraw it; the server reads the balance from the account database. If the balance is sufficient, the server updates the balance and returns success; the ATM dispenses the cash and gives a receipt. Otherwise the ATM shows "insufficient funds". If the PIN is invalid, the ATM shows an error. Finally the ATM ejects the card.</p></div>
+<details class="ans"><summary>參考答案（圖 + 逐步）</summary><div>
+<div class="uml"><svg viewBox="0 0 675 864" role="img" aria-label="ATM withdrawal sequence diagram" style="min-width:640px;max-width:715px"><rect x="15" y="298" width="635" height="480" fill="none" stroke="#8F6200" stroke-width="1.3"/><line x1="15" y1="730" x2="650" y2="730" stroke="#8F6200" stroke-width="1.2" stroke-dasharray="6 4"/><rect x="30" y="466" width="605" height="254" fill="none" stroke="#8F6200" stroke-width="1.3"/><line x1="30" y1="638" x2="635" y2="638" stroke="#8F6200" stroke-width="1.2" stroke-dasharray="6 4"/><g stroke="#BF4A14" stroke-width="1.5" fill="none"><circle cx="60" cy="20" r="6" fill="#FAE6DA"/><line x1="60" y1="26" x2="60" y2="38"/><line x1="51" y1="30" x2="69" y2="30"/><line x1="60" y1="38" x2="53" y2="47"/><line x1="60" y1="38" x2="67" y2="47"/></g><text x="60" y="61" font-size="12.5" text-anchor="middle" font-weight="700" font-family="ui-monospace,Menlo,monospace">Customer</text><line x1="60" y1="66" x2="60" y2="856" stroke="#566273" stroke-width="1.2" stroke-dasharray="5 5"/><rect x="190.0" y="14" width="70.0" height="34" fill="#FFFFFF" stroke="#15202B" stroke-width="1.4" rx="3"/><text x="225" y="36" font-size="12.5" text-anchor="middle" font-weight="700" font-family="ui-monospace,Menlo,monospace" text-decoration="underline">:ATM</text><line x1="225" y1="48" x2="225" y2="856" stroke="#566273" stroke-width="1.2" stroke-dasharray="5 5"/><rect x="339.4" y="14" width="101.2" height="34" fill="#FFFFFF" stroke="#15202B" stroke-width="1.4" rx="3"/><text x="390" y="36" font-size="12.5" text-anchor="middle" font-weight="700" font-family="ui-monospace,Menlo,monospace" text-decoration="underline">:BankServer</text><line x1="390" y1="48" x2="390" y2="856" stroke="#566273" stroke-width="1.2" stroke-dasharray="5 5"/><rect x="508.2" y="14" width="93.5" height="34" fill="#F6EBCB" stroke="#8F6200" stroke-width="1.4" rx="3"/><text x="555" y="36" font-size="12.5" text-anchor="middle" font-weight="700" font-family="ui-monospace,Menlo,monospace" text-decoration="underline">:AccountDB</text><line x1="555" y1="48" x2="555" y2="856" stroke="#566273" stroke-width="1.2" stroke-dasharray="5 5"/><line x1="65" y1="98" x2="220.0" y2="98" stroke="#15202B" stroke-width="1.4"/><polygon points="220.0,98.0 210.0,93.0 210.0,103.0" fill="#15202B" stroke="#15202B" stroke-width="1.4"/><text x="142.5" y="92" font-size="12" text-anchor="middle" font-family="ui-monospace,Menlo,monospace" paint-order="stroke" stroke="#FFFFFF" stroke-width="4" stroke-linejoin="round">insertCard()</text><line x1="65" y1="132" x2="220.0" y2="132" stroke="#15202B" stroke-width="1.4"/><polygon points="220.0,132.0 210.0,127.0 210.0,137.0" fill="#15202B" stroke="#15202B" stroke-width="1.4"/><text x="142.5" y="126" font-size="12" text-anchor="middle" font-family="ui-monospace,Menlo,monospace" paint-order="stroke" stroke="#FFFFFF" stroke-width="4" stroke-linejoin="round">enterPIN(pin)</text><line x1="230" y1="166" x2="385.0" y2="166" stroke="#15202B" stroke-width="1.4"/><polygon points="385.0,166.0 375.0,161.0 375.0,171.0" fill="#15202B" stroke="#15202B" stroke-width="1.4"/><text x="307.5" y="160" font-size="12" text-anchor="middle" font-family="ui-monospace,Menlo,monospace" paint-order="stroke" stroke="#FFFFFF" stroke-width="4" stroke-linejoin="round">verify(cardNo, pin)</text><line x1="395" y1="200" x2="550.0" y2="200" stroke="#15202B" stroke-width="1.4"/><polygon points="550.0,200.0 540.0,195.0 540.0,205.0" fill="#15202B" stroke="#15202B" stroke-width="1.4"/><text x="472.5" y="194" font-size="12" text-anchor="middle" font-family="ui-monospace,Menlo,monospace" paint-order="stroke" stroke="#FFFFFF" stroke-width="4" stroke-linejoin="round">getAccount(cardNo)</text><line x1="550" y1="234" x2="395.0" y2="234" stroke="#15202B" stroke-width="1.4" stroke-dasharray="6 4"/><polyline points="404.0,229 395.0,234 404.0,239" fill="none" stroke="#15202B" stroke-width="1.4"/><text x="472.5" y="228" font-size="12" text-anchor="middle" font-family="ui-monospace,Menlo,monospace" paint-order="stroke" stroke="#FFFFFF" stroke-width="4" stroke-linejoin="round" fill="#566273">account</text><line x1="385" y1="268" x2="230.0" y2="268" stroke="#15202B" stroke-width="1.4" stroke-dasharray="6 4"/><polyline points="239.0,263 230.0,268 239.0,273" fill="none" stroke="#15202B" stroke-width="1.4"/><text x="307.5" y="262" font-size="12" text-anchor="middle" font-family="ui-monospace,Menlo,monospace" paint-order="stroke" stroke="#FFFFFF" stroke-width="4" stroke-linejoin="round" fill="#566273">valid / invalid</text><line x1="65" y1="334" x2="220.0" y2="334" stroke="#15202B" stroke-width="1.4"/><polygon points="220.0,334.0 210.0,329.0 210.0,339.0" fill="#15202B" stroke="#15202B" stroke-width="1.4"/><text x="142.5" y="328" font-size="12" text-anchor="middle" font-family="ui-monospace,Menlo,monospace" paint-order="stroke" stroke="#FFFFFF" stroke-width="4" stroke-linejoin="round">enterAmount(amt)</text><line x1="230" y1="368" x2="385.0" y2="368" stroke="#15202B" stroke-width="1.4"/><polygon points="385.0,368.0 375.0,363.0 375.0,373.0" fill="#15202B" stroke="#15202B" stroke-width="1.4"/><text x="307.5" y="362" font-size="12" text-anchor="middle" font-family="ui-monospace,Menlo,monospace" paint-order="stroke" stroke="#FFFFFF" stroke-width="4" stroke-linejoin="round">withdraw(cardNo, amt)</text><line x1="395" y1="402" x2="550.0" y2="402" stroke="#15202B" stroke-width="1.4"/><polygon points="550.0,402.0 540.0,397.0 540.0,407.0" fill="#15202B" stroke="#15202B" stroke-width="1.4"/><text x="472.5" y="396" font-size="12" text-anchor="middle" font-family="ui-monospace,Menlo,monospace" paint-order="stroke" stroke="#FFFFFF" stroke-width="4" stroke-linejoin="round">getBalance(cardNo)</text><line x1="550" y1="436" x2="395.0" y2="436" stroke="#15202B" stroke-width="1.4" stroke-dasharray="6 4"/><polyline points="404.0,431 395.0,436 404.0,441" fill="none" stroke="#15202B" stroke-width="1.4"/><text x="472.5" y="430" font-size="12" text-anchor="middle" font-family="ui-monospace,Menlo,monospace" paint-order="stroke" stroke="#FFFFFF" stroke-width="4" stroke-linejoin="round" fill="#566273">balance</text><line x1="395" y1="502" x2="550.0" y2="502" stroke="#15202B" stroke-width="1.4"/><polygon points="550.0,502.0 540.0,497.0 540.0,507.0" fill="#15202B" stroke="#15202B" stroke-width="1.4"/><text x="472.5" y="496" font-size="12" text-anchor="middle" font-family="ui-monospace,Menlo,monospace" paint-order="stroke" stroke="#FFFFFF" stroke-width="4" stroke-linejoin="round">updateBalance(cardNo, -amt)</text><line x1="385" y1="536" x2="230.0" y2="536" stroke="#15202B" stroke-width="1.4" stroke-dasharray="6 4"/><polyline points="239.0,531 230.0,536 239.0,541" fill="none" stroke="#15202B" stroke-width="1.4"/><text x="307.5" y="530" font-size="12" text-anchor="middle" font-family="ui-monospace,Menlo,monospace" paint-order="stroke" stroke="#FFFFFF" stroke-width="4" stroke-linejoin="round" fill="#566273">success</text><polyline points="230,570 265,570 265,590 237,590" fill="none" stroke="#15202B" stroke-width="1.4"/><polygon points="230.0,590.0 239.0,585.0 239.0,595.0" fill="#15202B" stroke="#15202B" stroke-width="1.4"/><text x="271" y="584" font-size="12" font-family="ui-monospace,Menlo,monospace" paint-order="stroke" stroke="#FFFFFF" stroke-width="4" stroke-linejoin="round">dispenseCash(amt)</text><line x1="220" y1="614" x2="65.0" y2="614" stroke="#15202B" stroke-width="1.4" stroke-dasharray="6 4"/><polyline points="74.0,609 65.0,614 74.0,619" fill="none" stroke="#15202B" stroke-width="1.4"/><text x="142.5" y="608" font-size="12" text-anchor="middle" font-family="ui-monospace,Menlo,monospace" paint-order="stroke" stroke="#FFFFFF" stroke-width="4" stroke-linejoin="round" fill="#566273">cash, receipt</text><line x1="385" y1="672" x2="230.0" y2="672" stroke="#15202B" stroke-width="1.4" stroke-dasharray="6 4"/><polyline points="239.0,667 230.0,672 239.0,677" fill="none" stroke="#15202B" stroke-width="1.4"/><text x="307.5" y="666" font-size="12" text-anchor="middle" font-family="ui-monospace,Menlo,monospace" paint-order="stroke" stroke="#FFFFFF" stroke-width="4" stroke-linejoin="round" fill="#566273">insufficientFunds</text><line x1="220" y1="706" x2="65.0" y2="706" stroke="#15202B" stroke-width="1.4"/><polygon points="65.0,706.0 75.0,701.0 75.0,711.0" fill="#15202B" stroke="#15202B" stroke-width="1.4"/><text x="142.5" y="700" font-size="12" text-anchor="middle" font-family="ui-monospace,Menlo,monospace" paint-order="stroke" stroke="#FFFFFF" stroke-width="4" stroke-linejoin="round">showError(&quot;insufficient&quot;)</text><line x1="220" y1="764" x2="65.0" y2="764" stroke="#15202B" stroke-width="1.4"/><polygon points="65.0,764.0 75.0,759.0 75.0,769.0" fill="#15202B" stroke="#15202B" stroke-width="1.4"/><text x="142.5" y="758" font-size="12" text-anchor="middle" font-family="ui-monospace,Menlo,monospace" paint-order="stroke" stroke="#FFFFFF" stroke-width="4" stroke-linejoin="round">showError(&quot;invalid PIN&quot;)</text><line x1="220" y1="812" x2="65.0" y2="812" stroke="#15202B" stroke-width="1.4"/><polygon points="65.0,812.0 75.0,807.0 75.0,817.0" fill="#15202B" stroke="#15202B" stroke-width="1.4"/><text x="142.5" y="806" font-size="12" text-anchor="middle" font-family="ui-monospace,Menlo,monospace" paint-order="stroke" stroke="#FFFFFF" stroke-width="4" stroke-linejoin="round">ejectCard()</text><path d="M15 298 h38 v10 l-8 8 h-30 z" fill="#F6EBCB" stroke="#8F6200" stroke-width="1.3"/><text x="20" y="311" font-size="12" font-weight="700" font-family="ui-monospace,Menlo,monospace" fill="#8F6200">alt</text><text x="59" y="311" font-size="12" font-family="ui-monospace,Menlo,monospace" paint-order="stroke" stroke="#FFFFFF" stroke-width="4" stroke-linejoin="round" fill="#8F6200">[PIN valid]</text><text x="21" y="743" font-size="12" font-family="ui-monospace,Menlo,monospace" paint-order="stroke" stroke="#FFFFFF" stroke-width="4" stroke-linejoin="round" fill="#8F6200">[else]</text><path d="M30 466 h38 v10 l-8 8 h-30 z" fill="#F6EBCB" stroke="#8F6200" stroke-width="1.3"/><text x="35" y="479" font-size="12" font-weight="700" font-family="ui-monospace,Menlo,monospace" fill="#8F6200">alt</text><text x="74" y="479" font-size="12" font-family="ui-monospace,Menlo,monospace" paint-order="stroke" stroke="#FFFFFF" stroke-width="4" stroke-linejoin="round" fill="#8F6200">[balance &gt;= amt]</text><text x="36" y="651" font-size="12" font-family="ui-monospace,Menlo,monospace" paint-order="stroke" stroke="#FFFFFF" stroke-width="4" stroke-linejoin="round" fill="#8F6200">[else]</text></svg></div><div class="wl scrollhint">手機睇：圖可以左右捲 ⇆</div>
+<ol class="steps">
+<li><b>搵 participant</b>：Customer（actor，人）；:ATM、:BankServer（系統內 object）；:AccountDB（外部 database，都可以當 actor）。由左到右按「訊息流向」排。</li>
+<li><b>逐句變 message</b>：主語 = 箭咀起點，動詞 = message 名，受詞 = 參數。例如「ATM sends card number and PIN to the bank server」→ ATM → BankServer：verify(cardNo, pin)。</li>
+<li><b>有回覆就畫虛線 return</b>：account、valid/invalid、balance、success。</li>
+<li><b>「If…otherwise」→ alt frame</b>，用 [guard] 寫條件，[else] 分隔。兩層 if 就兩層 alt（可以 nest）。</li>
+<li><b>「Finally」→ 放喺所有 frame 之外</b>：ejectCard() 無論如何都會發生。</li></ol></div></details>
+</div>
+
+<div class="practice fill"><span class="src">Mock Q26 · Software Testing · 12 分 · 對應 L9 · <a href="P2-Testing.html">P2</a></span>
+<p class="q">(1) Verification vs validation: state the question each one answers. (&lt;40 words, 2 points)</p>
+<details class="ans"><summary>參考答案</summary><div><div class="ansbox"><b>答案</b>Verification: "Are we building the product right?" — does the software conform to its specification. Validation: "Are we building the right product?" — does the software meet the customer's real needs.</div></div></details>
+<p class="q">(2) Apply partition testing to method <code>grade</code> so that every possible test has a test in T with the same branch coverage. Fill the table: for each test give the inputs, expected result and the value of each if condition (T／F，冇行到就填 -). (7 points)</p>
+<pre><code>1 String grade(int score, boolean late) {
+2   if (score &lt; 0 || score &gt; 100) return "INVALID";
+3   if (late) score = score - 10;
+4   if (score &gt;= 80) return "A";
+5   else if (score &gt;= 50) return "P";
+6   return "F";
+7 }</code></pre>
+<p>提示：答案有 7 行。每行嘅 branch 組合唔同。（下面 input 已經俾咗，填 expected result 同 C2–C5。）</p>
+<div class="tw"><table class="pt nostack"><tr><th>score</th><th>late</th><th>Expected</th><th>C2</th><th>C3</th><th>C4</th><th>C5</th></tr>
+<tr><td>-3</td><td>false</td><td class="ex"><input class="blank" data-ans="INVALID"></td><td><input class="blank" data-ans="T§true"></td><td><input class="blank" data-ans="-§--"></td><td><input class="blank" data-ans="-§--"></td><td><input class="blank" data-ans="-§--"></td></tr>
+<tr><td>90</td><td>false</td><td class="ex"><input class="blank" data-ans="A"></td><td><input class="blank" data-ans="F§false"></td><td><input class="blank" data-ans="F§false"></td><td><input class="blank" data-ans="T§true"></td><td><input class="blank" data-ans="-§--"></td></tr>
+<tr><td>65</td><td>false</td><td class="ex"><input class="blank" data-ans="P"></td><td><input class="blank" data-ans="F§false"></td><td><input class="blank" data-ans="F§false"></td><td><input class="blank" data-ans="F§false"></td><td><input class="blank" data-ans="T§true"></td></tr>
+<tr><td>30</td><td>false</td><td class="ex"><input class="blank" data-ans="F"></td><td><input class="blank" data-ans="F§false"></td><td><input class="blank" data-ans="F§false"></td><td><input class="blank" data-ans="F§false"></td><td><input class="blank" data-ans="F§false"></td></tr>
+<tr><td>95</td><td>true</td><td class="ex"><input class="blank" data-ans="A"></td><td><input class="blank" data-ans="F§false"></td><td><input class="blank" data-ans="T§true"></td><td><input class="blank" data-ans="T§true"></td><td><input class="blank" data-ans="-§--"></td></tr>
+<tr><td>70</td><td>true</td><td class="ex"><input class="blank" data-ans="P"></td><td><input class="blank" data-ans="F§false"></td><td><input class="blank" data-ans="T§true"></td><td><input class="blank" data-ans="F§false"></td><td><input class="blank" data-ans="T§true"></td></tr>
+<tr><td>55</td><td>true</td><td class="ex"><input class="blank" data-ans="F"></td><td><input class="blank" data-ans="F§false"></td><td><input class="blank" data-ans="T§true"></td><td><input class="blank" data-ans="F§false"></td><td><input class="blank" data-ans="F§false"></td></tr></table></div>
+<div class="fillbar"><button class="btn pri" data-check>對答案</button><button class="btn" data-show>顯示答案</button><button class="btn" data-clear>清除</button><span class="fillmsg"></span></div>
+<details class="ans"><summary>點樣諗（逐步）</summary><div>
+<ol class="steps">
+<li><b>C2 true</b>：score 唔合法即刻 return，後面全部冇行 → 1 個 class。</li>
+<li><b>C2 false 之後</b>：C3（late）可以 T 或 F → 2 個可能。</li>
+<li><b>每個 C3 之後</b>：C4 true（return A）；或者 C4 false 再睇 C5 true（P）／false（F）→ 3 個可能。</li>
+<li>總數 = 1 + 2 × 3 = <b>7</b>。逐個檢查做唔做到：late 時要記得 score 先減 10，例如 95 → 85 → A；70 → 60 → P；55 → 45 → F，全部做得到。</li>
+<li>已用 Java 實際跑過 −5 到 105 全部 input：剛好 7 種 branch 組合，同上表一致。</li></ol>
+<p class="tip"><b>記法</b>T 嘅數目 = 由第一個 if 開始畫「決策樹」，數有幾多條<b>做得到</b>嘅葉。</p></div></details>
+<p class="q">(3) Why is beta testing needed even after thorough alpha testing? (&lt;50 words, 3 points)</p>
+<details class="ans"><summary>參考答案</summary><div><div class="ansbox"><b>答案</b>Alpha testing happens at the developer's site, so it cannot reproduce the variety of real environments, hardware, data and usage patterns. Beta testing lets real users use the product in their own environment, revealing problems that only appear there.</div></div></details>
+</div>
+
+<div class="practice"><span class="src">Mock Q27 · Software Evolution · 8 分 · 對應 L10 · <a href="P6-Evolution-Reuse.html">P6</a></span>
+<p class="q">(1) A bank's 25-year-old COBOL system is critical to daily business, but it has no up-to-date documentation and only two staff understand it. Recommend an evolving strategy and justify it using the two assessment factors. (&lt;80 words, 4 points)</p>
+<details class="ans"><summary>參考答案</summary><div><div class="ansbox"><b>答案</b>The two factors are business value and system quality. The system has high business value (it is critical to daily operations) but low quality (outdated language, no documentation, few people can maintain it). For high-value, low-quality systems the recommended strategy is to re-engineer it to improve maintainability, or replace it if a suitable off-the-shelf system is available. Scrapping it is not an option.</div></div></details>
+<p class="q">(2) Give two advantages of distributed version control over centralized version control. (&lt;80 words, 4 points)</p>
+<details class="ans"><summary>參考答案</summary><div><div class="ansbox"><b>答案</b>1) Backup: every developer's machine holds a full copy of the repository, so if the main server is lost the repository can be restored from any copy. 2) Offline work and cheap branching: developers can commit, branch and view history locally without a network connection, and merge later, which suits open-source projects with many independent contributors.</div></div></details>
+</div>
+
+<h2 id="memo">十一、必背清單（代替 formula sheet）</h2>
+<div class="key"><b>一分鐘重點</b><ul>
+<li>呢科冇公式，但有好多<b>「幾多個 + 次序」</b>要背：真卷成日叫你排序或者配對。</li>
+<li>下面每個清單都標咗出處同考過嘅年份。</li></ul></div>
+<div class="tw"><table class="stack"><tr><th>清單</th><th>內容（按次序）</th><th>考過／出處</th></tr>
+<tr><td>4 個 process activities</td><td>Specification → Development → Verification &amp; Validation → Evolution</td><td>L2</td></tr>
+<tr><td>Waterfall 5 個 phase</td><td>Requirements analysis &amp; definition → System &amp; software design → Implementation &amp; unit testing → Integration &amp; system testing → Operation &amp; maintenance</td><td>L2；2025 Q21(1)</td></tr>
+<tr><td>CMMI 5 個 maturity level</td><td>1 Initial → 2 Managed → 3 Defined → 4 Quantitatively Managed → 5 Optimizing</td><td>L2；2023 Q21</td></tr>
+<tr><td>5 個 agile principles</td><td>Customer involvement、Incremental delivery、People not process、Embrace change、Maintain simplicity</td><td>L3；2024 Q21(2)</td></tr>
+<tr><td>Agile Manifesto 4 句</td><td>Individuals &amp; interactions &gt; processes &amp; tools；Working software &gt; documentation；Customer collaboration &gt; contract negotiation；Responding to change &gt; following a plan</td><td>L3</td></tr>
+<tr><td>3 個 RE generic activities</td><td>Elicitation → Specification → Validation（spiral，會重複）</td><td>L4；2025 Q22(2)</td></tr>
+<tr><td>4 個 elicitation stages</td><td>Discovery &amp; understanding → Classification &amp; organization → Prioritization &amp; negotiation → Documentation</td><td>L4；2022 Q22、2025 Q22(3)、Asm1 Q4</td></tr>
+<tr><td>5 個 validation checks</td><td>Validity、Consistency、Completeness、Realism、Verifiability</td><td>L4；2024 Q22(3)</td></tr>
+<tr><td>6 個 architectural patterns</td><td>MVC、Layered、Client-server、Repository、Pipe and filter、Event-driven</td><td>L6；2025 Q23</td></tr>
+<tr><td>Layered 4 層（上 → 下）</td><td>Presentation（UI）→ Application（use cases／business logic）→ Domain（business rules／domain objects）→ Persistence（database）</td><td>2024 Q23(1)</td></tr>
+<tr><td>3 個 testing stages</td><td>Development testing（unit → component → system）→ Release testing → User testing（alpha、beta、acceptance）</td><td>L9</td></tr>
+<tr><td>Legacy 4 個策略</td><td>低質低值 → Scrap；低質高值 → Re-engineer（或有合適系統就 replace）；高質低值 → Scrap 或者照 maintain；高質高值 → 正常 maintain</td><td>L10；2025 Q27(2)</td></tr></table></div>
+<p>Coverage 計法（考 coverage 數字題時用）：</p>
+<div class="fx">$$\text{Statement coverage} = \frac{\text{statements executed}}{\text{total statements}} \times 100\%\qquad \text{Branch coverage} = \frac{\text{branch outcomes exercised}}{\text{total branch outcomes}} \times 100\%$$</div>
+<p>一個 <code>if</code> 有 2 個 outcome（true、false）；所以 3 個 if 共 6 個 branch outcome。</p>
+
+<h2 id="trap">十二、易錯位總表</h2>
+<div class="key"><b>一分鐘重點</b><ul>
+<li>T/F 題最愛「調轉兩個相似概念」。下面每一對都要分得清。</li></ul></div>
+<div class="tw"><table class="stack"><tr><th>容易調亂</th><th>分法</th><th>記法</th></tr>
+<tr><td>Aggregation vs Composition</td><td>Aggregation：part 可以獨立存在、可以屬多個 whole（空心◇）。Composition：part 只屬一個 whole、同生同死（實心◆）</td><td>「實心 = 實實在在屬於你」</td></tr>
+<tr><td>«include» vs «extend»</td><td>include：base 一定要用；extend：有條件先加</td><td>include = 必食；extend = 加配</td></tr>
+<tr><td>Product backlog vs Sprint backlog</td><td>Product：成個 project，product owner 隨時重排；Sprint：今個 sprint 揀咗嘅，sprint 中唔加新嘢</td><td>大清單 vs 今期清單</td></tr>
+<tr><td>Verification vs Validation</td><td>Verification：build the product right（啱 spec）；Validation：build the right product（啱用戶需要）</td><td>V<b>e</b>rification 睇 sp<b>e</b>c</td></tr>
+<tr><td>Alpha vs Beta testing</td><td>Alpha：喺 developer 度；Beta：喺用戶自己環境</td><td>α 喺屋企、β 出街</td></tr>
+<tr><td>Black-box vs White-box</td><td>Black：由 spec 出 test，唔睇 code；White：睇 code，量 coverage</td><td>白盒睇得穿</td></tr>
+<tr><td>Prototyping vs Incremental delivery</td><td>Prototyping：只係 change anticipation；Incremental delivery：anticipation + tolerance</td><td>increment 兩樣都得</td></tr>
+<tr><td>Repository vs Blackboard</td><td>Repository 係被動，components 自己去攞；Blackboard 會主動通知 components 有新資料</td><td>黑板會「叫」你</td></tr>
+<tr><td>Thin vs Fat client</td><td>Thin：client 只做 presentation；Fat：client 做埋 application processing</td><td>瘦 = 做得少</td></tr>
+<tr><td>Refactoring vs Re-engineering</td><td>Refactoring：開發期間持續、預防性；Re-engineering：對 legacy system，改善 maintainability，唔改功能</td><td>兩樣都唔改功能</td></tr>
+<tr><td>User vs System requirements</td><td>User：寫俾客睇，自然語言、抽象；System：寫俾開發者，詳細、可測試</td><td>客睇 vs 工程師睇</td></tr>
+<tr><td>Capability vs Maturity (CMMI)</td><td>Capability：單一 process 有幾穩定（0–5）；Maturity：成個機構（1–5）</td><td>process vs 公司</td></tr></table></div>
+<footer>COMP3211 Software Engineering Final 溫習包 · 考試 2026-12-05</footer></main><script>
+(function(){
+var PAGE=document.body.dataset.page;
+function ld(k,d){try{var v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}}
+function sv(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
+// section done checkboxes
+document.querySelectorAll('h2[id]').forEach(function(h){
+  var key='done:'+PAGE+':'+h.id;var l=document.createElement('label');l.className='done';
+  var c=document.createElement('input');c.type='checkbox';c.checked=!!ld(key,false);
+  c.onchange=function(){sv(key,c.checked)};l.appendChild(c);l.appendChild(document.createTextNode('呢部分溫完'));
+  h.insertAdjacentElement('afterend',l);
+});
+// MCQ / TF / multi-select
+function same(x,y){if(Array.isArray(y)){return Array.isArray(x)&&x.slice().sort().join()==y.slice().sort().join()}return x===y}
+document.querySelectorAll('.mcq').forEach(function(box){
+  var id=box.dataset.set, data=JSON.parse(box.querySelector('script').textContent);
+  var key='mcq:'+PAGE+':'+id, st=ld(key,{});
+  var bar=document.createElement('div');bar.className='bar';
+  var sc=document.createElement('span');var rs=document.createElement('button');rs.textContent='重做呢套';
+  bar.appendChild(sc);bar.appendChild(rs);box.appendChild(bar);
+  function score(){var a=0,c=0;data.forEach(function(q,i){if(st[i]!==undefined){a++;if(same(st[i],q.a))c++}});
+    sc.textContent='答咗 '+a+'/'+data.length+' · 啱 '+c;sv(key,st);sv('mcqsum:'+PAGE+':'+id,{a:a,c:c,n:data.length})}
+  data.forEach(function(q,i){
+    var tf=!q.o, opts=q.o||['True','False'], multi=Array.isArray(q.a), L=tf?'TF':'ABCDEFG';
+    var kind=tf?'T/F':(multi?'多選：揀晒所有啱嘅':'MC');
+    var d=document.createElement('div');d.className='mq';
+    d.innerHTML='<div class="num">'+id+(i+1)+' · '+kind+(q.t?' · '+q.t:'')+'</div><div class="stem">'+q.s+'</div>';
+    var btns=[], sel=[];
+    opts.forEach(function(o,j){var b=document.createElement('button');b.className='opt';
+      b.innerHTML='<span>'+L[j]+'</span><span>'+o+'</span>';
+      b.onclick=function(){if(st[i]!==undefined)return;
+        if(multi){var k=sel.indexOf(j);if(k<0)sel.push(j);else sel.splice(k,1);b.classList.toggle('sel')}
+        else{st[i]=j;show();score()}};
+      btns.push(b);d.appendChild(b)});
+    var chk=null;if(multi){chk=document.createElement('button');chk.className='btn pri';chk.textContent='對答案';
+      chk.onclick=function(){if(!sel.length)return;st[i]=sel.slice();show();score()};d.appendChild(chk)}
+    var ex=document.createElement('div');ex.className='exp';ex.hidden=true;d.appendChild(ex);
+    function lab(a){return Array.isArray(a)?a.map(function(x){return L[x]}).sort().join('、'):L[a]}
+    function show(){if(st[i]===undefined){sel=[];btns.forEach(function(b){b.disabled=false;b.className='opt'});if(chk)chk.hidden=false;ex.hidden=true;return}
+      var mine=st[i];if(chk)chk.hidden=true;
+      btns.forEach(function(b,j){var inA=multi?q.a.indexOf(j)>=0:j===q.a, picked=multi?mine.indexOf(j)>=0:j===mine;
+        b.disabled=true;b.className='opt'+(inA?' right':(picked?' wrong':''))+(multi&&inA&&!picked?' miss':'')});
+      ex.hidden=false;ex.innerHTML=(same(mine,q.a)?'<span class="v" style="color:var(--ok)">答啱！</span> ':'<span class="v" style="color:var(--bad)">答錯，正確答案係 '+lab(q.a)+'。</span> ')+q.e}
+    d._show=show;show();box.appendChild(d);
+  });
+  rs.onclick=function(){st={};box.querySelectorAll('.mq').forEach(function(d){d._show()});score()};
+  score();
+});
+
+function norm(s){return s.replace(/[“”"]/g,"'").replace(/[‘’]/g,"'").replace(/\s+/g,'').toLowerCase()}
+document.querySelectorAll('input.blank').forEach(function(inp){var alts=inp.dataset.ans.split('§');var w=Math.max.apply(null,alts.map(function(a){return a.length}));inp.style.width=(Math.max(w,3)+2)+'ch';inp.addEventListener('input',function(){inp.classList.remove('ok','bad','shown')})});
+document.querySelectorAll('.fill').forEach(function(box){var inputs=box.querySelectorAll('input.blank');var msg=box.querySelector('.fillmsg');
+ box.querySelector('[data-check]').addEventListener('click',function(){var r=0;inputs.forEach(function(inp){var v=norm(inp.value);var ok=inp.dataset.ans.split('§').some(function(a){return norm(a)===v});inp.classList.remove('ok','bad','shown');inp.classList.add(ok?'ok':'bad');if(ok)r++});msg.textContent='答啱 '+r+' / '+inputs.length+(r===inputs.length?'，全對！':'：紅色格再諗下，或者撳「顯示答案」。')});
+ box.querySelector('[data-show]').addEventListener('click',function(){inputs.forEach(function(inp){inp.value=inp.dataset.ans.split('§')[0];inp.classList.remove('ok','bad');inp.classList.add('shown')});msg.textContent='已填入答案（虛線格）。'});
+ box.querySelector('[data-clear]').addEventListener('click',function(){inputs.forEach(function(inp){inp.value='';inp.classList.remove('ok','bad','shown')});msg.textContent=''})});
+
+
+
+document.querySelectorAll('.tw > table:not(.stack)').forEach(function(t){if(t.closest('.dp')||t.classList.contains('nostack'))return;
+ var hr=t.querySelector('tr');if(!hr)return;var nh=hr.querySelectorAll('th').length;if(nh<3)return;
+ var cells=t.querySelectorAll('td'),L=0;cells.forEach(function(c){L+=c.textContent.trim().length});
+ if(cells.length&&L/cells.length>14)t.classList.add('stack')});
+document.querySelectorAll('table.stack').forEach(function(t){var hs=[].map.call(t.querySelectorAll('tr:first-child th'),function(h){return h.textContent});
+ t.querySelectorAll('tr').forEach(function(r,i){if(i===0)return;[].forEach.call(r.children,function(c,j){if(hs[j])c.setAttribute('data-label',hs[j])})})});
+
+// progress panel on index
+var pp=document.getElementById('progress');
+if(pp){var pages=JSON.parse(pp.dataset.pages);var html='';
+  pages.forEach(function(p){var n=0,m=0,a=0,c=0;
+    for(var i=0;i<localStorage.length;i++){var k=localStorage.key(i);
+      if(k.indexOf('done:'+p[0]+':')===0&&ld(k,false))n++;
+      if(k.indexOf('mcqsum:'+p[0]+':')===0){var s=ld(k,{});a+=s.a||0;c+=s.c||0;m+=s.n||0}}
+    html+='<div class="row"><a href="'+p[0]+'">'+p[1]+'</a><span>'+(m||n?'溫完 '+n+' 部分 · MCQ '+a+'/'+m+'（啱 '+c+'）':'未開始')+'</span></div>'});
+  pp.innerHTML=html}
+})();
+</script><script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script><script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js" onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'\(',right:'\)',display:false}],ignoredClasses:['mcq','uml'],throwOnError:false})"></script></body></html>

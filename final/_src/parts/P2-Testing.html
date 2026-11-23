@@ -1,0 +1,615 @@
+<h1>P2 · Software Testing</h1>
+<p class="sub">必考，每年 11–15 分 · 對應 L9 Software Testing、L3（TDD）、Asm2 Q3 · Partition testing 表 4 次出現</p>
+<ul class="toc">
+<li><a href="#exam">一、點考</a></li><li><a href="#notes">二、筆記：由零講起</a></li>
+<li><a href="#demo">三、完整示範：2025 Q26(3)</a></li><li><a href="#past">四、Past paper 全答</a></li>
+<li><a href="#drill">五、Drill</a></li><li><a href="#fill">六、互動填表</a></li>
+<li><a href="#mcq">七、T/F + MC</a></li><li><a href="#short">八、短答題</a></li><li><a href="#faq">九、常見疑問</a></li></ul>
+
+<h2 id="exam">一、點考</h2>
+<div class="key"><b>一分鐘重點</b><ul>
+<li><b>Partition testing 填表</b>（4–7 分）：2022、2024、2025 同 Asm2 都有，定義一字不改。識「決策樹」方法就穩拎。</li>
+<li>其餘係<b>概念短答</b>：V&amp;V 嘅「successful test」、test oracle、TDD 步驟、alpha vs beta、black vs white box、testing vs inspection、coverage。</li>
+<li>所有 partition 表答案已經用 Java 窮舉 input 實際跑過。</li></ul></div>
+<div class="tw"><table class="stack"><tr><th>卷</th><th>題目</th><th>分數</th></tr>
+<tr><td>2025 Q26</td><td>(1) verification／validation 各一個 testing 例子，比較「successful test」(4) (2) test oracle；waterfall 幾時開始諗 system test；testing 驗證唔到嘅 quality property (3) (3) calculateDiscount partition 表 (4)</td><td>11</td></tr>
+<tr><td>2024 Q25</td><td>(1) TDD 主要活動同點組織 (5) (2) nextDate partition 表 (7) (3) alpha vs beta；點解 beta 必要 (3)</td><td>15</td></tr>
+<tr><td>2023 Q25</td><td>(1) testing 對比 inspection 嘅 2 個優點 2 個缺點 (4) (2) canFormTriangle：100% statement／branch coverage 嘅 test (6) (3) black vs white box；開發團隊做唔做到 black-box；black-box 用唔用到 coverage (4)</td><td>14</td></tr>
+<tr><td>2022 Q26 = Asm2 Q3</td><td>removeLDLetters partition 表（有 while + for loop）</td><td>12</td></tr></table></div>
+<h3>Partition testing 表答題步驟（必識）</h3>
+<ol class="steps">
+<li><b>標出每個 if／loop 條件嘅行號</b>：表頭 C1、C4… 就係呢啲行。</li>
+<li><b>由第一個條件開始畫決策樹</b>：每個條件分 T／F；遇到 return／throw 就停（後面嘅條件填 <code>--</code>）。</li>
+<li><b>刪走做唔到嘅葉</b>：例如「amount ≤ 100」同「amount &gt; 500」唔可能同時成立。</li>
+<li><b>Loop 條件</b>：記錄成個 test 入面出現過嘅值集合，例如 <code>true,false</code>；loop 一次都冇行就係 <code>false</code>。</li>
+<li><b>每片葉揀一個具體 input</b>，用 code 逐行行一次計 expected result。</li>
+<li><b>寫表</b>：每行 input、expected、每個 C 欄（T／F／T,F／--）。行數 = 做得到嘅葉數。</li></ol>
+
+<h2 id="notes">二、筆記：由零講起</h2>
+<div class="key"><b>一分鐘重點</b><ul>
+<li>Testing 兩個目標：<b>validation testing</b>（證明符合 requirement）同 <b>defect testing</b>（搵 bug）。Testing 只能證明有錯，<b>唔能證明冇錯</b>。</li>
+<li>三個 stage：<b>development testing</b>（unit → component → system）、<b>release testing</b>（獨立團隊）、<b>user testing</b>（alpha、beta、acceptance）。</li>
+<li>Black-box 由 spec 出 test；white-box 睇 code，量 coverage（statement、branch、path）。</li>
+<li>Partition testing：同一組 input 程式反應一樣，每組揀一個；加 boundary value analysis。</li></ul></div>
+
+<div class="concept">
+<h3>1. Testing 嘅兩個目標：validation testing vs defect testing</h3>
+<span class="lab">一句講完</span>
+<p>Testing = 用 input 執行程式，檢查結果。目標一：<b>證明軟件符合 requirement</b>（validation testing）；目標二：<b>搵出軟件行為錯嘅情況</b>（defect testing）。</p>
+<span class="lab why">點解要分</span>
+<p>兩種 test 對「成功」嘅定義相反，2025 Q26(1) 就係考呢點：</p>
+<div class="tw"><table class="stack"><tr><th></th><th>Validation testing</th><th>Defect testing</th></tr>
+<tr><td>Test case 點揀</td><td>反映系統<b>正常用法</b></td><td>刻意揀<b>古怪</b>、容易出錯嘅 input</td></tr>
+<tr><td>Successful test</td><td>系統<b>按預期運作</b></td><td>令系統<b>出錯</b>、暴露 defect</td></tr>
+<tr><td>例子</td><td>Release testing、acceptance testing</td><td>Unit testing、development 期間嘅 system testing</td></tr></table></div>
+<span class="lab pic">圖解：Input-output model</span>
+<figure class="fig"><svg viewBox="0 0 360 200" role="img" aria-label="input output testing model" style="max-width:380px">
+<defs><marker id="t1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#15202B"/></marker></defs>
+<rect class="hl" x="10" y="20" width="110" height="60" rx="8"/><text x="65" y="45" text-anchor="middle" font-size="13" font-weight="700">Input test data</text><text x="65" y="64" text-anchor="middle" font-size="11.5">當中有 Ie：</text><text x="65" y="77" text-anchor="middle" font-size="11.5">會出錯嘅 input</text>
+<rect class="bx" x="135" y="30" width="90" height="40" rx="8"/><text x="180" y="55" text-anchor="middle" font-size="13" font-weight="700">System</text>
+<rect class="ac" x="240" y="20" width="110" height="60" rx="8"/><text x="295" y="45" text-anchor="middle" font-size="13" font-weight="700">Output results</text><text x="295" y="64" text-anchor="middle" font-size="11.5">當中有 Oe：</text><text x="295" y="77" text-anchor="middle" font-size="11.5">有問題嘅 output</text>
+<g class="ln"><line x1="120" y1="50" x2="133" y2="50" marker-end="url(#t1)"/><line x1="225" y1="50" x2="238" y2="50" marker-end="url(#t1)"/></g>
+<text x="180" y="115" text-anchor="middle" font-size="12.5">Defect testing：專登搵落 Ie 嘅 input</text>
+<text x="180" y="137" text-anchor="middle" font-size="12.5">Validation testing：用正常 input，期望全部正確</text>
+<text x="180" y="170" text-anchor="middle" font-size="12.5" font-weight="700" fill="#BF4A14">Testing 只能顯示有錯，唔能顯示冇錯</text>
+</svg><figcaption>同一個 system，兩種揀 input 嘅方式</figcaption></figure>
+<span class="lab eg">例子</span>
+<p>測試 calculateDiscount：validation test 用「premium 會員買 $200」，期望 0.15，結果啱 = 成功。Defect test 用「amount = -0.0001」、「amount = 500.0（剛好 boundary）」專登撩 bug；如果令程式回錯數 = 呢個 test 成功（搵到 bug）。</p>
+<span class="lab trap">易錯</span>
+<p>Defect testing 嘅「successful」係<b>搵到 bug</b>，唔係「全部 pass」。另外「100% coverage = 冇 bug」係錯（coverage fallacy）。</p>
+</div>
+
+<div class="concept">
+<h3>2. Verification vs validation；static vs dynamic</h3>
+<span class="lab">一句講完</span>
+<p><b>Verification</b>：「Are we building the product right?」— 軟件啱唔啱 <b>specification</b>。<b>Validation</b>：「Are we building the right product?」— 軟件係唔係客<b>真正想要</b>嘅。</p>
+<span class="lab why">點解要兩樣都做</span>
+<p>Spec 本身可能寫錯：完全符合 spec（verification 過）但係客唔啱用（validation 唔過）。V&amp;V 有兩種做法：</p>
+<ul><li><b>Static</b>（唔使行 code）：inspection、walkthrough、static analysis，可以檢查 requirement、design、code 任何文件。</li>
+<li><b>Dynamic</b>（行 code）：testing。</li></ul>
+<span class="lab pic">圖解</span>
+<figure class="fig"><svg viewBox="0 0 360 210" role="img" aria-label="verification and validation" style="max-width:380px">
+<defs><marker id="t2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#15202B"/></marker></defs>
+<rect class="hl" x="10" y="10" width="100" height="40" rx="8"/><text x="60" y="35" text-anchor="middle" font-size="13" font-weight="700">客嘅需要</text>
+<rect class="bx" x="130" y="10" width="100" height="40" rx="8"/><text x="180" y="35" text-anchor="middle" font-size="13" font-weight="700">Specification</text>
+<rect class="ac" x="250" y="10" width="100" height="40" rx="8"/><text x="300" y="35" text-anchor="middle" font-size="13" font-weight="700">Software</text>
+<g class="ln"><line x1="110" y1="30" x2="128" y2="30" marker-end="url(#t2)"/><line x1="230" y1="30" x2="248" y2="30" marker-end="url(#t2)"/></g>
+<path class="dash" d="M300 52 C 300 85, 180 85, 180 54" marker-end="url(#t2)"/><text x="240" y="98" text-anchor="middle" font-size="12.5" font-weight="700">Verification</text><text x="240" y="114" text-anchor="middle" font-size="11.5">啱唔啱 spec？</text>
+<path class="dash" d="M300 52 C 300 170, 60 170, 60 54" marker-end="url(#t2)"/><text x="180" y="150" text-anchor="middle" font-size="12.5" font-weight="700">Validation</text><text x="180" y="166" text-anchor="middle" font-size="11.5">係咪客真正想要？</text>
+<text x="180" y="200" text-anchor="middle" font-size="11.5" fill="#566273">記法：verification 對 sp<tspan font-weight="700">e</tspan>c；validation 對 user</text>
+</svg><figcaption>Verification 同 spec 比；validation 同客嘅真正需要比</figcaption></figure>
+<span class="lab eg">例子：2023 Q25(1) testing vs inspection</span>
+<div class="tw"><table class="stack"><tr><th></th><th>Testing（dynamic）</th><th>Inspection（static）</th></tr>
+<tr><td>Testing 嘅優點</td><td>可以檢查 non-functional emergent property（performance、usability）；檢查真實運行時 component 之間嘅互動；可以自動化、重複做（regression）</td><td>—</td></tr>
+<tr><td>Testing 嘅缺點</td><td>一個錯可以遮住另一個錯（error masking）；要有可執行嘅 code，未完成嘅版本要寫 test harness；檢查唔到 maintainability、標準遵守呢類質素</td><td>L9：可以用喺任何文件；唔使理錯誤之間嘅互相影響；可以考慮更廣嘅質素屬性</td></tr></table></div>
+<span class="lab trap">易錯</span>
+<p>V&amp;V 嘅 V 唔係同一樣嘢。考 T/F 成日將兩句問題調轉。Inspection 唔能取代 testing：佢檢查唔到 performance 呢類運行時屬性。</p>
+</div>
+
+<div class="concept">
+<h3>3. Testing 三個 stage</h3>
+<span class="lab">一句講完</span>
+<p><b>Development testing</b>（開發團隊做，分 unit → component → system）→ <b>release testing</b>（獨立團隊測完整版本）→ <b>user testing</b>（用戶參與）。</p>
+<span class="lab why">點解要分層</span>
+<p>越早搵到 bug 越平（L1：late fix 要改 code、改文件、再 test、做 regression）。細單位先測，組合後再測介面，最後測成個系統同真實環境。</p>
+<span class="lab pic">圖解</span>
+<figure class="fig"><svg viewBox="0 0 360 300" role="img" aria-label="testing stages" style="max-width:380px">
+<defs><marker id="t3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#15202B"/></marker></defs>
+<rect x="5" y="5" width="350" height="160" rx="10" fill="none" stroke="#0B7472" stroke-dasharray="5 4"/><text x="14" y="24" font-size="13" font-weight="700" fill="#0B7472">Development testing（開發團隊）</text>
+<rect class="hl" x="20" y="36" width="320" height="34" rx="8"/><text x="30" y="58" font-size="12.5"><tspan font-weight="700">Unit</tspan>：單一 method／class</text>
+<rect class="hl" x="20" y="80" width="320" height="34" rx="8"/><text x="30" y="102" font-size="12.5"><tspan font-weight="700">Component</tspan>：幾個 unit 組合，測 interface</text>
+<rect class="hl" x="20" y="124" width="320" height="34" rx="8"/><text x="30" y="146" font-size="12.5"><tspan font-weight="700">System</tspan>：成個系統整合，集體進行</text>
+<rect class="bx" x="20" y="180" width="320" height="44" rx="8"/><text x="30" y="199" font-size="12.5"><tspan font-weight="700">Release testing</tspan>：獨立團隊，black-box，</text><text x="30" y="216" font-size="12.5">證明夠好可以俾外面用（validation）</text>
+<rect class="ac" x="20" y="240" width="320" height="52" rx="8"/><text x="30" y="260" font-size="12.5"><tspan font-weight="700">User testing</tspan>：alpha（developer 度）、</text><text x="30" y="278" font-size="12.5">beta（用戶環境）、acceptance（客決定收唔收）</text>
+<g class="ln"><line x1="180" y1="165" x2="180" y2="178" marker-end="url(#t3)"/><line x1="180" y1="224" x2="180" y2="238" marker-end="url(#t3)"/></g>
+</svg><figcaption>Test pyramid：好多快嘅 unit test、少啲 component test、好少慢嘅 system／UI test</figcaption></figure>
+<span class="lab eg">例子：PIM 項目</span>
+<ol class="steps"><li>Unit：測 <code>Task.isOverdue()</code>。</li><li>Component：測 model package 嘅 interface（search 同 update 一齊用）。</li><li>System：用 command line 由頭到尾行一個 user story。</li><li>Release：另一組同學淨係睇 SRS 出 test。</li><li>User：俾真用戶喺自己部機試（beta）。</li></ol>
+<span class="lab trap">易錯</span>
+<p>System testing 同 release testing 都測完整系統，但 <b>system testing 由開發團隊做、目標係搵 bug（defect testing）</b>；<b>release testing 由獨立團隊做、目標係證明夠好（validation testing）</b>。</p>
+</div>
+
+<div class="concept">
+<h3>4. Black-box vs white-box testing</h3>
+<span class="lab">一句講完</span>
+<p><b>Black-box</b>：唔睇 code，由 requirement／spec 出 test。<b>White-box</b>（structural）：用 code 內部結構出 test，量度 code coverage。</p>
+<span class="lab why">點解兩樣都要</span>
+<p>Black-box 檢查「應該做嘅有冇做」（包括漏咗嘅功能，white-box 睇唔到漏咗嘅 code）；white-box 檢查「寫咗嘅 code 有冇行過」（搵 dead code、未測嘅 branch）。</p>
+<span class="lab pic">圖解</span>
+<figure class="fig"><svg viewBox="0 0 360 170" role="img" aria-label="black box vs white box" style="max-width:380px">
+<rect x="20" y="40" width="130" height="90" rx="8" fill="#15202B"/><text x="85" y="90" text-anchor="middle" font-size="13" fill="#fff">睇唔到入面</text>
+<text x="85" y="28" text-anchor="middle" font-size="13.5" font-weight="700">Black-box</text><text x="85" y="152" text-anchor="middle" font-size="12">test 來源：spec</text>
+<rect x="210" y="40" width="130" height="90" rx="8" fill="#FFFFFF" stroke="#15202B" stroke-width="1.4"/>
+<g font-family="ui-monospace,Menlo,monospace" font-size="11"><text x="218" y="62">if (x &gt; 0)</text><text x="230" y="80">y = 1;</text><text x="218" y="98">else</text><text x="230" y="116">y = 2;</text></g>
+<text x="275" y="28" text-anchor="middle" font-size="13.5" font-weight="700">White-box</text><text x="275" y="152" text-anchor="middle" font-size="12">test 來源：code 結構</text>
+</svg><figcaption>Release testing 通常係 black-box；unit testing 常用 white-box</figcaption></figure>
+<span class="lab eg">例子：2023 Q25(3)</span>
+<ol class="steps"><li><b>本質分別</b>：test 係咪由 code 內部結構推出嚟。</li>
+<li><b>開發團隊做唔做到 black-box？</b>做到。Black-box 只係話「設計 test 時唔用 code 知識」，邊個做都得（例如開發團隊嘅 system testing 用 requirement 出 test）。</li>
+<li><b>Black-box 用唔用到 coverage？</b>用到。Coverage 係行 test 時用工具量度執行咗幾多 code，同 test 點設計無關；可以用嚟衡量 black-box test suite 嘅質素（例如發現冇 test 行過嘅 branch）。</li></ol>
+<span class="lab trap">易錯</span>
+<p>「Black-box 一定要外人做」係錯；只係唔用內部知識。「White-box test 夠晒」都錯：漏咗冇寫嘅功能，coverage 都會係 100%。</p>
+</div>
+
+<div class="concept">
+<h3>5. Code coverage：statement、branch、path</h3>
+<span class="lab">一句講完</span>
+<p>Coverage 量度 test suite 行過幾多 code：<b>statement</b>（每句行過最少一次）、<b>branch</b>（每個 if／loop 嘅 true 同 false 都出現過）、<b>path</b>（每條執行路線都行過）。</p>
+$$\text{Statement coverage} = \frac{\#\text{statements executed}}{\#\text{statements}}\times 100\%$$
+$$\text{Branch coverage} = \frac{\#\text{branch outcomes exercised}}{\#\text{branch outcomes}}\times 100\%$$
+<span class="lab why">點解 branch 比 statement 強</span>
+<p>冇 else 嘅 if：一個令條件 true 嘅 test 已經行晒所有 statement，但 false 嗰邊從未試過。100% branch coverage 一定包含 100% statement coverage（假設冇死 code），反過來唔成立。Path coverage 再強，但 loop 令 path 數量爆炸。</p>
+<span class="lab pic">圖解：2023 Q25(2) canFormTriangle</span>
+<pre><code>1 boolean canFormTriangle(double x, double y, double z){
+2   boolean result = false;
+3   if (x &gt; 0 &amp;&amp; y &gt; 0 &amp;&amp; z &gt; 0)
+4     if (x + y &gt; z &amp;&amp; x + z &gt; y &amp;&amp; y + z &gt; x)
+5       result = true;
+6   return result;
+7 }</code></pre>
+<figure class="fig"><svg viewBox="0 0 360 200" role="img" aria-label="triangle branches" style="max-width:380px">
+<defs><marker id="t5" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#15202B"/></marker></defs>
+<rect class="hl" x="110" y="8" width="140" height="30" rx="15"/><text x="180" y="28" text-anchor="middle" font-size="12.5" font-weight="700">C3: 三邊 &gt; 0？</text>
+<rect class="hl" x="95" y="78" width="170" height="30" rx="15"/><text x="180" y="98" text-anchor="middle" font-size="12.5" font-weight="700">C4: 兩邊和 &gt; 第三邊？</text>
+<rect class="ac" x="200" y="150" width="140" height="34" rx="8"/><text x="270" y="171" text-anchor="middle" font-size="12">(3,4,5) → true</text>
+<rect class="bx" x="70" y="150" width="120" height="34" rx="8"/><text x="130" y="171" text-anchor="middle" font-size="12">(1,2,3) → false</text>
+<rect class="bx" x="5" y="3" width="80" height="40" rx="8"/><text x="45" y="20" text-anchor="middle" font-size="12">(0,1,1)</text><text x="45" y="36" text-anchor="middle" font-size="12">→ false</text>
+<g class="ln"><line x1="180" y1="38" x2="180" y2="76" marker-end="url(#t5)"/><line x1="110" y1="23" x2="88" y2="23" marker-end="url(#t5)"/><line x1="200" y1="108" x2="250" y2="148" marker-end="url(#t5)"/><line x1="160" y1="108" x2="140" y2="148" marker-end="url(#t5)"/></g>
+<g font-size="11.5" font-weight="700"><text x="186" y="62" fill="#17733A">T</text><text x="96" y="17" fill="#B42318">F</text><text x="232" y="128" fill="#17733A">T</text><text x="136" y="130" fill="#B42318">F</text></g>
+</svg><figcaption>Statement coverage：(3,4,5) 一個 test 已經行晒第 2–6 行。Branch coverage：要 3 個 test，令 C3、C4 都出現 T 同 F</figcaption></figure>
+<span class="lab eg">例子：答案（Java 跑過）</span>
+<div class="tw"><table><tr><th>目標</th><th>x</th><th>y</th><th>z</th><th>return</th></tr>
+<tr><td>100% statement</td><td>3</td><td>4</td><td>5</td><td>true</td></tr>
+<tr><td rowspan="3">100% branch</td><td>3</td><td>4</td><td>5</td><td>true</td></tr>
+<tr><td>1</td><td>2</td><td>3</td><td>false</td></tr>
+<tr><td>0</td><td>1</td><td>1</td><td>false</td></tr></table></div>
+<span class="lab trap">易錯</span>
+<p><b>Coverage fallacy</b>（L9）：100% coverage 只代表 code 行過，唔代表 0 defects。(1,2,3) 係「兩邊和 = 第三邊」嘅 boundary，揀佢仲可以順便檢查 <code>&gt;</code> 定 <code>&gt;=</code>。</p>
+</div>
+
+<div class="concept">
+<h3>6. Equivalence partitioning + boundary value analysis</h3>
+<span class="lab">一句講完</span>
+<p>將 input 分成<b>等價類（partition）</b>：同一組入面程式反應一樣，所以每組揀一個代表就夠；再喺 partition 嘅<b>邊界</b>加 test，因為 bug 最常喺邊界（off-by-one）。</p>
+<span class="lab why">點解要咁做</span>
+<p>窮舉所有 input 冇可能；隨便揀又會漏。Partition 保證每種行為都測到，BVA 補充最易錯嘅位置（例如用 <code>&lt;</code> 代替 <code>&lt;=</code>）。</p>
+<span class="lab pic">圖解：有效範圍 1–100</span>
+<figure class="fig"><svg viewBox="0 0 360 150" role="img" aria-label="boundary value analysis" style="max-width:380px">
+<line x1="15" y1="70" x2="345" y2="70" stroke="#15202B" stroke-width="1.6"/>
+<rect x="15" y="55" width="70" height="30" fill="#FADFDB"/><rect x="85" y="55" width="190" height="30" fill="#DCF1E3"/><rect x="275" y="55" width="70" height="30" fill="#FADFDB"/>
+<text x="50" y="45" text-anchor="middle" font-size="12" fill="#B42318">invalid</text><text x="180" y="45" text-anchor="middle" font-size="12" fill="#17733A">valid 1–100</text><text x="310" y="45" text-anchor="middle" font-size="12" fill="#B42318">invalid</text>
+<g font-size="12.5" text-anchor="middle" font-weight="700"><text x="72" y="110">0</text><text x="98" y="110">1</text><text x="124" y="110">2</text><text x="236" y="110">99</text><text x="262" y="110">100</text><text x="290" y="110">101</text></g>
+<g stroke="#BF4A14" stroke-width="2"><line x1="72" y1="88" x2="72" y2="96"/><line x1="98" y1="88" x2="98" y2="96"/><line x1="124" y1="88" x2="124" y2="96"/><line x1="236" y1="88" x2="236" y2="96"/><line x1="262" y1="88" x2="262" y2="96"/><line x1="290" y1="88" x2="290" y2="96"/></g>
+<text x="180" y="138" text-anchor="middle" font-size="12">just outside（0、101）· on（1、100）· just inside（2、99）</text>
+</svg><figcaption>L9：每個 partition 揀一個 + 邊界兩邊各測</figcaption></figure>
+<span class="lab eg">例子：L9「接受 4–10 個五位數、而且 &gt; 10,000」</span>
+<ol class="steps"><li>數量 partition：少過 4（例如 3）、4–10（例如 7）、多過 10（例如 11）；邊界 3、4、10、11。</li>
+<li>數值 partition：&lt; 10000（例如 9999）、10000–99999（例如 50000）、&gt; 99999（例如 100000）；邊界 9999、10000、99999、100000。</li></ol>
+<span class="lab trap">易錯</span>
+<p>Partition 唔止 valid 嗰組，<b>invalid 嘅 partition 都要測</b>（例如負數、空 list）。L9 sequence 指引：測單一元素、長度 0、唔同長度，同埋第一、中間、最後一個元素。</p>
+</div>
+
+<div class="concept">
+<h3>7. 考試版 partition testing：用 branch coverage 分組</h3>
+<span class="lab">一句講完</span>
+<p>真卷將「同一 partition」定義為「<b>same branch coverage</b>」：行過嘅 if／loop 一樣，而且每個條件取過嘅值（T、F 或 T,F）一樣。所以 partition 數 = 決策樹入面<b>做得到</b>嘅葉數。</p>
+<span class="lab why">點解咁定義</span>
+<p>咁樣分組係客觀、可以逐行驗證嘅：兩個 test 行同一條路、每個條件結果一樣，程式對佢哋嘅處理就一樣。</p>
+<span class="lab pic">圖解：calculateDiscount（2025）決策樹</span>
+<figure class="fig"><svg viewBox="0 0 360 308" role="img" aria-label="decision tree of calculateDiscount" style="max-width:380px"><line class="ln" x1="52" y1="96.25" x2="266" y2="22"/><text x="159.0" y="56.125" font-size="11.5" font-weight="700" fill="#17733A" text-anchor="middle">T</text><line class="ln" x1="52" y1="96.25" x2="66" y2="170.5"/><text x="59.0" y="130.375" font-size="11.5" font-weight="700" fill="#B42318" text-anchor="middle">F</text><line class="ln" x1="116" y1="170.5" x2="132" y2="104.5"/><text x="124.0" y="134.5" font-size="11.5" font-weight="700" fill="#17733A" text-anchor="middle">T</text><line class="ln" x1="116" y1="170.5" x2="132" y2="236.5"/><text x="124.0" y="200.5" font-size="11.5" font-weight="700" fill="#B42318" text-anchor="middle">F</text><line class="ln" x1="182" y1="104.5" x2="196" y2="71.5"/><text x="189.0" y="85.0" font-size="11.5" font-weight="700" fill="#B42318" text-anchor="middle">F</text><line class="ln" x1="182" y1="104.5" x2="196" y2="137.5"/><text x="189.0" y="118.0" font-size="11.5" font-weight="700" fill="#17733A" text-anchor="middle">T</text><line class="ln" x1="182" y1="236.5" x2="196" y2="203.5"/><text x="189.0" y="217.0" font-size="11.5" font-weight="700" fill="#17733A" text-anchor="middle">T</text><line class="ln" x1="182" y1="236.5" x2="196" y2="269.5"/><text x="189.0" y="250.0" font-size="11.5" font-weight="700" fill="#B42318" text-anchor="middle">F</text><line class="ln" x1="246" y1="71.5" x2="266" y2="55"/><text x="256.0" y="60.25" font-size="11.5" font-weight="700" fill="#B42318" text-anchor="middle">F</text><line class="ln" x1="246" y1="71.5" x2="266" y2="88"/><text x="256.0" y="76.75" font-size="11.5" font-weight="700" fill="#17733A" text-anchor="middle">T</text><line class="ln" x1="246" y1="137.5" x2="266" y2="121"/><text x="256.0" y="126.25" font-size="11.5" font-weight="700" fill="#B42318" text-anchor="middle">F</text><line class="ln" x1="246" y1="137.5" x2="266" y2="154"/><text x="256.0" y="142.75" font-size="11.5" font-weight="700" fill="#17733A" text-anchor="middle">T</text><line class="ln" x1="246" y1="203.5" x2="266" y2="187"/><text x="256.0" y="192.25" font-size="11.5" font-weight="700" fill="#B42318" text-anchor="middle">F</text><line class="ln" x1="246" y1="203.5" x2="266" y2="220"/><text x="256.0" y="208.75" font-size="11.5" font-weight="700" fill="#17733A" text-anchor="middle">T</text><line class="ln" x1="246" y1="269.5" x2="266" y2="253"/><text x="256.0" y="258.25" font-size="11.5" font-weight="700" fill="#B42318" text-anchor="middle">F</text><line class="ln" x1="246" y1="269.5" x2="266" y2="286"/><text x="256.0" y="274.75" font-size="11.5" font-weight="700" fill="#17733A" text-anchor="middle">T</text><rect class="hl" x="4" y="84.25" width="48" height="24" rx="12"/><text x="28" y="101.25" text-anchor="middle" font-size="12.5" font-weight="700">C1</text><rect class="hl" x="68" y="158.5" width="48" height="24" rx="12"/><text x="92" y="175.5" text-anchor="middle" font-size="12.5" font-weight="700">C4</text><rect class="hl" x="134" y="92.5" width="48" height="24" rx="12"/><text x="158" y="109.5" text-anchor="middle" font-size="12.5" font-weight="700">C5</text><rect class="hl" x="134" y="224.5" width="48" height="24" rx="12"/><text x="158" y="241.5" text-anchor="middle" font-size="12.5" font-weight="700">C8</text><rect class="hl" x="198" y="59.5" width="48" height="24" rx="12"/><text x="222" y="76.5" text-anchor="middle" font-size="12.5" font-weight="700">C10</text><rect class="hl" x="198" y="125.5" width="48" height="24" rx="12"/><text x="222" y="142.5" text-anchor="middle" font-size="12.5" font-weight="700">C10</text><rect class="hl" x="198" y="191.5" width="48" height="24" rx="12"/><text x="222" y="208.5" text-anchor="middle" font-size="12.5" font-weight="700">C10</text><rect class="hl" x="198" y="257.5" width="48" height="24" rx="12"/><text x="222" y="274.5" text-anchor="middle" font-size="12.5" font-weight="700">C10</text><rect class="ac" x="268" y="10" width="76" height="24" rx="6"/><text x="306" y="27" text-anchor="middle" font-size="12.5">Exception</text><rect class="ac" x="268" y="43" width="76" height="24" rx="6"/><text x="306" y="60" text-anchor="middle" font-size="12.5">0.10</text><rect class="bx" x="268" y="76" width="76" height="24" rx="6" stroke-dasharray="4 3"/><text x="306" y="93" text-anchor="middle" font-size="12.5" fill="#566273">做唔到 ✗</text><rect class="ac" x="268" y="109" width="76" height="24" rx="6"/><text x="306" y="126" text-anchor="middle" font-size="12.5">0.15</text><rect class="ac" x="268" y="142" width="76" height="24" rx="6"/><text x="306" y="159" text-anchor="middle" font-size="12.5">0.20</text><rect class="ac" x="268" y="175" width="76" height="24" rx="6"/><text x="306" y="192" text-anchor="middle" font-size="12.5">0.05</text><rect class="ac" x="268" y="208" width="76" height="24" rx="6"/><text x="306" y="225" text-anchor="middle" font-size="12.5">0.20</text><rect class="ac" x="268" y="241" width="76" height="24" rx="6"/><text x="306" y="258" text-anchor="middle" font-size="12.5">0.0</text><rect class="ac" x="268" y="274" width="76" height="24" rx="6"/><text x="306" y="291" text-anchor="middle" font-size="12.5">0.20</text></svg><figcaption>由左到右：每個 if 分 T（綠）／F（紅）。9 個葉入面 1 個做唔到（premium、amount ≤ 100 又 &gt; 500），所以 T 有 8 個 test</figcaption></figure>
+
+<span class="lab eg">例子：數 class 嘅方法</span>
+<ol class="steps"><li>C1（amount &lt; 0）：T → 即刻 throw，1 片葉。</li>
+<li>C1 F → C4（isPremium）：T 去 C5，F 去 C8。</li>
+<li>C5、C8 每個分 T／F，之後<b>全部</b>都會去 C10（第 10 行唔喺 if-else 入面），所以每條再分 T／F：2 × 2 × 2 = 8 片葉。</li>
+<li>刪走做唔到嘅：premium + amount ≤ 100（C5 F）+ amount &gt; 500（C10 T）矛盾 → 剩 7。</li>
+<li>加返 C1 T：<b>總共 8 個 test</b>（Java 窮舉確認）。</li></ol>
+<span class="lab trap">易錯</span>
+<p>冇行到嘅條件寫 <code>--</code>，唔好寫 F。例如 isPremium = true 時第 8 行 <code>else if (isStudent)</code> 根本冇 evaluate。Loop 條件要寫<b>整個 test 期間</b>出現過嘅值集合（通常係 <code>true,false</code>）。</p>
+</div>
+
+<div class="concept">
+<h3>8. Test case 有咩；幾時開始設計 system test</h3>
+<span class="lab">一句講完</span>
+<p>一個 test case 要有：<b>input data</b>、<b>test steps</b>、<b>test oracle</b>（判斷 output 啱唔啱嘅機制／預期結果）。</p>
+<span class="lab why">點解要 oracle</span>
+<p>冇 oracle 就唔知 test pass 定 fail。Oracle 可以係 spec 寫嘅預期值、舊版本嘅結果、人手計嘅答案，或者一條規則（例如「output 一定排好序」）。</p>
+<span class="lab pic">圖解：V-model（test 喺開發早期已經可以設計）</span>
+<figure class="fig"><svg viewBox="0 0 360 215" role="img" aria-label="V model" style="max-width:380px">
+<g font-size="12" text-anchor="middle">
+<rect class="hl" x="5" y="10" width="140" height="32" rx="6"/><text x="75" y="31">Requirements</text>
+<rect class="hl" x="20" y="60" width="140" height="32" rx="6"/><text x="90" y="81">System design</text>
+<rect class="hl" x="35" y="110" width="140" height="32" rx="6"/><text x="105" y="131">Detailed design</text>
+<rect class="bx" x="120" y="170" width="120" height="32" rx="6"/><text x="180" y="191">Coding</text>
+<rect class="ac" x="215" y="10" width="140" height="32" rx="6"/><text x="285" y="31">System test</text>
+<rect class="ac" x="200" y="60" width="140" height="32" rx="6"/><text x="270" y="81">Integration test</text>
+<rect class="ac" x="185" y="110" width="140" height="32" rx="6"/><text x="255" y="131">Unit test</text></g>
+<g class="dash"><line x1="145" y1="26" x2="213" y2="26"/><line x1="160" y1="76" x2="198" y2="76"/><line x1="175" y1="126" x2="183" y2="126"/></g>
+<g class="ln"><line x1="105" y1="142" x2="140" y2="170"/><line x1="220" y1="170" x2="255" y2="142"/></g>
+<text x="180" y="56" text-anchor="middle" font-size="11" fill="#566273">設計 test</text>
+</svg><figcaption>虛線：左邊每一步完成，就可以設計右邊對應嘅 test（例如 requirement 定咗就可以設計 system test）</figcaption></figure>
+<span class="lab eg">例子：2025 Q26(2)</span>
+<ol class="steps"><li>Test oracle：判斷 test 結果啱唔啱嘅依據，例如 spec 寫明 premium 買 $200 應該得 0.15。</li>
+<li>Waterfall 中 system-level test：<b>requirements analysis and definition 完成之後</b>就可以開始設計，因為 system test 由 requirement 推出嚟。</li>
+<li>Testing 驗證唔到嘅 quality property：例如 <b>maintainability</b>（要靠 review／inspection 評估），或者「冇 defect」（testing 只能證明有錯）。</li></ol>
+<span class="lab trap">易錯</span>
+<p>「要等 implementation 完先可以諗 system test」係錯：諗（devise）test 同執行 test 係兩件事。</p>
+</div>
+
+<div class="concept">
+<h3>9. Unit、component（interface）同 system testing</h3>
+<span class="lab">一句講完</span>
+<p>Unit：測單一 method／class（object class testing 要覆蓋所有 attribute、operation、state）；Component：測組合後嘅 <b>interface</b>；System：整合所有 component 測成個系統。</p>
+<span class="lab why">點解 interface 要獨立測</span>
+<p>每個 unit 單獨 OK，組合起嚟仍然會因為誤解介面而出錯。L9 列出 3 種 interface error：<b>interface misunderstanding</b>、<b>interface misuse</b>、<b>timing errors</b>。</p>
+<span class="lab pic">圖解：4 種 interface</span>
+<div class="tw"><table class="stack"><tr><th>Interface 類型</th><th>測咩</th><th>指引</th></tr>
+<tr><td>Message passing</td><td>啱嘅 message 有冇以啱嘅方式到達</td><td>用 stress testing</td></tr>
+<tr><td>Procedural</td><td>被 call 嘅 operation 有冇守 contract</td><td>設計令 component 失敗嘅 test</td></tr>
+<tr><td>Parameter</td><td>傳／收嘅 data 啱唔啱</td><td>參數用範圍兩端；pointer 用 null</td></tr>
+<tr><td>Shared memory</td><td>並發用戶睇到嘅 state 一致唔一致</td><td>改變 component 啟動次序</td></tr></table></div>
+<span class="lab eg">例子</span>
+<p>System testing policy（因為窮舉冇可能）：所有經 menu 用到嘅功能都要測；同一個 menu 嘅功能組合要測；有用戶輸入嘅功能，正確同錯誤 input 都要測。</p>
+<span class="lab trap">易錯</span>
+<p>Inheritance 令 object class testing 更難（要測嘅資訊唔集中喺一個 class）。System testing 係<b>集體</b>過程（collective），唔似 unit testing 個人做。</p>
+</div>
+
+<div class="concept">
+<h3>10. Regression testing 同 test automation（CI/CD）</h3>
+<span class="lab">一句講完</span>
+<p><b>Regression testing</b>：改完 code 之後再行舊 test，確保冇整爛之前 work 嘅嘢。因為人手做太慢，所以要<b>自動化</b>（JUnit、PyTest、Selenium），由 CI/CD pipeline 每次 push 自動行。</p>
+<span class="lab why">點解</span>
+<p>系統越大，改一處影響另一處嘅機會越高。自動化令每次改動都有成套 test 即時檢查，test 失敗就拒絕呢次改動。</p>
+<span class="lab pic">流程圖</span>
+<figure class="fig"><svg viewBox="0 0 360 120" role="img" aria-label="CI pipeline" style="max-width:380px">
+<defs><marker id="t10" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#15202B"/></marker></defs>
+<g font-size="12.5" text-anchor="middle"><rect class="hl" x="5" y="20" width="76" height="40" rx="8"/><text x="43" y="45">push</text>
+<rect class="bx" x="96" y="20" width="76" height="40" rx="8"/><text x="134" y="45">build</text>
+<rect class="bx" x="187" y="20" width="76" height="40" rx="8"/><text x="225" y="45">run tests</text>
+<rect class="ac" x="278" y="5" width="76" height="30" rx="8"/><text x="316" y="25">pass→合併</text>
+<rect class="bx" x="278" y="48" width="76" height="30" rx="8"/><text x="316" y="68">fail→拒絕</text></g>
+<g class="ln"><line x1="81" y1="40" x2="94" y2="40" marker-end="url(#t10)"/><line x1="172" y1="40" x2="185" y2="40" marker-end="url(#t10)"/><line x1="263" y1="35" x2="276" y2="22" marker-end="url(#t10)"/><line x1="263" y1="45" x2="276" y2="62" marker-end="url(#t10)"/></g>
+<text x="180" y="105" text-anchor="middle" font-size="12">每次 commit 都行晒所有 test（XP：build 要 test 全過先接受）</text>
+</svg><figcaption>Regression test 一定要先「成功」先 commit</figcaption></figure>
+<span class="lab eg">例子</span>
+<p>PIM 項目：加咗「search by tag」，CI 自動行返全部 test，發現 delete 壞咗，呢次 push 被拒絕，問題喺到達用戶之前搵到。</p>
+<span class="lab trap">易錯</span>
+<p>Regression testing 唔係「測新功能」，係<b>測舊功能有冇被新改動整壞</b>。</p>
+</div>
+
+<div class="concept">
+<h3>11. Test-driven development（TDD，L3）</h3>
+<span class="lab">一句講完</span>
+<p>TDD：<b>先寫一個會 fail 嘅自動 test，再寫剛好夠令佢 pass 嘅 code，然後 refactor</b>，保持所有 test 綠色；逐細步重複。</p>
+<span class="lab why">點解要咁做</span>
+<p>先寫 test 避免「test-lag」（test 追唔上 code）；寫 test 嘅同時就定義咗 interface 同行為 spec；每次加功能都自動行晒舊 test，即刻知道有冇整壞嘢。</p>
+<span class="lab pic">圖解：TDD 循環</span>
+<figure class="fig"><svg viewBox="0 0 360 250" role="img" aria-label="TDD cycle" style="max-width:380px">
+<defs><marker id="t11" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#15202B"/></marker></defs>
+<g font-size="12.5" text-anchor="middle">
+<rect class="hl" x="100" y="5" width="160" height="40" rx="8"/><text x="180" y="22" font-weight="700">① 揀一小步功能</text><text x="180" y="38" font-size="11.5">identify increment</text>
+<rect class="ac" x="215" y="80" width="140" height="40" rx="8"/><text x="285" y="97" font-weight="700">② 寫 test（Red）</text><text x="285" y="113" font-size="11.5">行一次：應該 fail</text>
+<rect class="hl" x="100" y="155" width="160" height="40" rx="8"/><text x="180" y="172" font-weight="700">③ 寫 code（Green）</text><text x="180" y="188" font-size="11.5">剛好夠 pass，行晒所有 test</text>
+<rect class="bx" x="5" y="80" width="140" height="40" rx="8"/><text x="75" y="97" font-weight="700">④ Refactor</text><text x="75" y="113" font-size="11.5">test 保持全綠</text></g>
+<g class="ln"><path d="M260 30 C 300 35, 300 55, 290 78" marker-end="url(#t11)"/><path d="M285 120 C 285 150, 270 170, 262 172" marker-end="url(#t11)"/><path d="M100 172 C 70 165, 70 145, 72 122" marker-end="url(#t11)"/><path d="M75 80 C 75 50, 80 35, 98 28" marker-end="url(#t11)"/></g>
+<text x="180" y="228" text-anchor="middle" font-size="12">全部 pass → 下一小步；fail → 繼續改 code</text>
+</svg><figcaption>Red → Green → Refactor，重複直到所有功能完成</figcaption></figure>
+<span class="lab eg">例子：2024 Q25(1) 答案要點</span>
+<ol class="steps"><li>Identify 一小步新功能（通常幾行 code 就做到）。</li><li>為佢寫一個自動化 test。</li><li>連同所有舊 test 一齊行：新 test 會 fail（因為未實作）。</li><li>實作功能，重新行所有 test，直到全部 pass；需要時 refactor。</li><li>全部 pass 之後先開始下一小步；整個開發就係呢個循環不斷重複（incremental）。</li></ol>
+<span class="lab trap">易錯</span>
+<p>TDD 嘅問題（L3）：programmer 可能 test 寫得唔完整、偷工減料；有啲 test（例如複雜 end-to-end）好難逐步寫；好難判斷 test set 夠唔夠完整。</p>
+</div>
+
+<div class="concept">
+<h3>12. Release testing：requirements-based、scenario、performance</h3>
+<span class="lab">一句講完</span>
+<p>Release testing 測一個準備俾開發團隊以外使用嘅版本，目標係<b>說服 supplier 佢夠好</b>。通常係 black-box，由 spec 出 test，由<b>冇參與開發</b>嘅獨立團隊做。</p>
+<span class="lab why">三種做法</span>
+<ul><li><b>Requirements-based</b>：每條 requirement 設計一個或多個 test（例如 Mentcare：病人對某藥敏感，開藥一定要出警告）。</li>
+<li><b>Scenario testing</b>：用典型使用情境（例如護士 George 家訪）一次過測好多功能。</li>
+<li><b>Performance testing</b>：逐步加 load 直到表現唔可接受；<b>stress testing</b> 刻意超載，睇系統點樣失敗。</li></ul>
+<span class="lab pic">圖解：performance vs stress</span>
+<figure class="fig"><svg viewBox="0 0 360 170" role="img" aria-label="load testing" style="max-width:380px">
+<line x1="40" y1="140" x2="345" y2="140" stroke="#15202B"/><line x1="40" y1="140" x2="40" y2="15" stroke="#15202B"/>
+<text x="190" y="162" text-anchor="middle" font-size="12">load（同時用戶數）→</text><text x="18" y="80" font-size="12" transform="rotate(-90 18 80)" text-anchor="middle">response time</text>
+<path d="M40 130 C 150 125, 200 110, 240 70 S 300 20, 330 15" fill="none" stroke="#0B7472" stroke-width="2"/>
+<line x1="40" y1="70" x2="345" y2="70" stroke="#B42318" stroke-dasharray="5 4"/><text x="300" y="64" font-size="11.5" fill="#B42318">唔可接受</text>
+<rect x="240" y="20" width="105" height="120" fill="#FADFDB" opacity=".5"/><text x="292" y="125" text-anchor="middle" font-size="11.5" fill="#B42318">stress 區</text>
+<text x="130" y="110" font-size="11.5" fill="#0B7472">performance test 逐步加</text>
+</svg><figcaption>Performance test 搵出幾時變慢；stress test 睇超載時點樣失敗</figcaption></figure>
+<span class="lab eg">例子</span>
+<p>Release testing 同 system testing 分別：system testing（開發期間）係 defect testing；release testing 係 validation testing，檢查系統符合 requirement、夠好俾外面用。</p>
+<span class="lab trap">易錯</span>
+<p>Release testing 屬於 system testing 嘅一種，但<b>唔係</b>由開發人員自己做。</p>
+</div>
+
+<div class="concept">
+<h3>13. User testing：alpha、beta、acceptance</h3>
+<span class="lab">一句講完</span>
+<p>即使 system test 同 release test 做足，user testing 都係<b>必要</b>：用戶工作環境對 reliability、performance、usability、robustness 影響好大，而且喺開發環境<b>複製唔到</b>。</p>
+<span class="lab why">三種</span>
+<div class="tw"><table class="stack"><tr><th></th><th>Alpha</th><th>Beta</th><th>Acceptance</th></tr>
+<tr><td>喺邊</td><td>Developer 嘅地方，用戶同開發團隊一齊</td><td>用戶自己嘅環境</td><td>客嘅環境</td></tr>
+<tr><td>用喺</td><td>Software product 或 custom software</td><td>好多唔同環境用嘅 product</td><td>Custom system（客決定收唔收貨）</td></tr>
+<tr><td>目的</td><td>早期用戶反饋</td><td>暴露真實環境先出現嘅問題</td><td>決定系統可唔可以接收同部署</td></tr></table></div>
+<span class="lab pic">圖解</span>
+<figure class="fig"><svg viewBox="0 0 360 140" role="img" aria-label="alpha beta acceptance" style="max-width:380px">
+<rect class="hl" x="5" y="20" width="110" height="80" rx="10"/><text x="60" y="45" text-anchor="middle" font-size="13.5" font-weight="700">α Alpha</text><text x="60" y="66" text-anchor="middle" font-size="11.5">喺開發商</text><text x="60" y="82" text-anchor="middle" font-size="11.5">一齊測</text>
+<rect class="ac" x="125" y="20" width="110" height="80" rx="10"/><text x="180" y="45" text-anchor="middle" font-size="13.5" font-weight="700">β Beta</text><text x="180" y="66" text-anchor="middle" font-size="11.5">放出去</text><text x="180" y="82" text-anchor="middle" font-size="11.5">用戶環境試</text>
+<rect class="bx" x="245" y="20" width="110" height="80" rx="10"/><text x="300" y="45" text-anchor="middle" font-size="13.5" font-weight="700">Acceptance</text><text x="300" y="66" text-anchor="middle" font-size="11.5">客決定</text><text x="300" y="82" text-anchor="middle" font-size="11.5">收唔收貨</text>
+<text x="180" y="125" text-anchor="middle" font-size="12">Agile：用戶喺團隊入面，冇獨立 acceptance testing</text>
+</svg><figcaption>記法：α 喺屋企、β 出街</figcaption></figure>
+<span class="lab eg">例子：2024 Q25(3)</span>
+<p>最重要分別：alpha 喺 developer 嘅地方同開發團隊一齊做；beta 由用戶喺自己環境做。Beta 必要：真實環境（硬件、數據、用法）嘅影響喺 developer 度複製唔到，好多問題只喺嗰度先出現。</p>
+<span class="lab trap">易錯</span>
+<p>Agile 冇獨立 acceptance testing，但問題係嵌入團隊嘅用戶唔一定<b>典型</b>，代表唔到所有 stakeholder。</p>
+</div>
+
+<div class="concept">
+<h3>14. Static testing 同幾時停止 testing</h3>
+<span class="lab">一句講完</span>
+<p><b>Static testing</b>：唔行 code，檢查 code／requirement／design（inspection、walkthrough、自動 static analysis）。因為窮舉冇可能，要用<b>指標</b>決定幾時停 test。</p>
+<span class="lab why">點解</span>
+<p>Static testing 可以喺有 code 之前用，亦唔受錯誤互相遮蓋影響；「幾時停」要有客觀 exit criteria，唔可以靠感覺。</p>
+<span class="lab pic">圖解：defect discovery rate</span>
+<figure class="fig"><svg viewBox="0 0 360 160" role="img" aria-label="defect discovery rate" style="max-width:380px">
+<line x1="40" y1="130" x2="345" y2="130" stroke="#15202B"/><line x1="40" y1="130" x2="40" y2="15" stroke="#15202B"/>
+<text x="190" y="152" text-anchor="middle" font-size="12">時間 →</text><text x="18" y="75" font-size="12" transform="rotate(-90 18 75)" text-anchor="middle">每週新 bug</text>
+<path d="M40 120 C 80 20, 120 20, 170 70 S 260 120, 340 122" fill="none" stroke="#BF4A14" stroke-width="2"/>
+<rect x="255" y="20" width="90" height="110" fill="#DCF1E3" opacity=".6"/><text x="300" y="40" text-anchor="middle" font-size="12" fill="#17733A">曲線變平</text><text x="300" y="56" text-anchor="middle" font-size="12" fill="#17733A">→ 可以考慮停</text>
+</svg><figcaption>其他指標：defect density（每 KLOC 嘅 bug）、test pass rate、coverage 門檻、risk-based（剩低嘅 bug 都係低嚴重度）</figcaption></figure>
+<span class="lab eg">例子</span>
+<div class="tw"><table><tr><th>Static 方法</th><th>做法</th></tr>
+<tr><td>Inspection</td><td>正式、團隊、跟 checklist</td></tr><tr><td>Walkthrough</td><td>作者講解 code，同事搵邏輯錯</td></tr><tr><td>Static analysis</td><td>工具掃 syntax、未初始化變數、保安漏洞、coding standard</td></tr></table></div>
+<span class="lab trap">易錯</span>
+<p>Static testing 都係 V&amp;V 嘅一部分，唔需要執行程式。</p>
+</div>
+
+<h2 id="demo">三、完整示範：2025 Q26(3) calculateDiscount（4 分）</h2>
+<div class="key"><b>一分鐘重點</b><ul><li>5 個條件 C1、C4、C5、C8、C10 → 決策樹 9 片葉 → 刪 1 片做唔到 → <b>8 個 test</b>。</li></ul></div>
+<pre><code> 1 if (purchaseAmount &lt; 0)
+ 2     throw new IllegalArgumentException("Purchase amount cannot be negative.");
+ 3 double discount = 0.0;
+ 4 if (isPremium) {
+ 5     if (purchaseAmount &gt; 100.0) {
+ 6         discount = 0.15;
+ 7     } else { discount = 0.10; }
+ 8 } else if (isStudent)
+ 9     discount = 0.05;
+10 if (purchaseAmount &gt; 500.0)
+11     discount = Math.max(discount, 0.20);
+12 return discount;</code></pre>
+<ol class="steps">
+<li><b>標條件</b>：C1（amount &lt; 0）、C4（isPremium）、C5（amount &gt; 100）、C8（isStudent）、C10（amount &gt; 500）。</li>
+<li><b>結構</b>：C1 T 即刻 throw。C4 T → C5；C4 F → C8。C5／C8 之後一定去 C10。</li>
+<li><b>組合</b>：premium 分支 C5 × C10 = 4；非 premium 分支 C8 × C10 = 4；共 8，加 C1 T = 9。</li>
+<li><b>刪做唔到</b>：C5 F（amount ≤ 100）同 C10 T（amount &gt; 500）矛盾 → 剩 8。</li>
+<li><b>揀 input、計 expected</b>（下表；Java 跑過）。注意 Math.max：amount &gt; 500 時，即使 premium 0.15 都會變 0.20。</li></ol>
+<div class="tw"><table class="pt nostack"><tr><th>isPremium</th><th>isStudent</th><th>amount</th><th>Expected</th><th>C1</th><th>C4</th><th>C5</th><th>C8</th><th>C10</th></tr>
+<tr><td>true</td><td>true</td><td>-10</td><td>Exception</td><td>T</td><td>--</td><td>--</td><td>--</td><td>--</td></tr>
+<tr><td>true</td><td>false</td><td>50</td><td>0.10</td><td>F</td><td>T</td><td>F</td><td>--</td><td>F</td></tr>
+<tr><td>true</td><td>false</td><td>200</td><td>0.15</td><td>F</td><td>T</td><td>T</td><td>--</td><td>F</td></tr>
+<tr><td>true</td><td>false</td><td>600</td><td>0.20</td><td>F</td><td>T</td><td>T</td><td>--</td><td>T</td></tr>
+<tr><td>false</td><td>true</td><td>50</td><td>0.05</td><td>F</td><td>F</td><td>--</td><td>T</td><td>F</td></tr>
+<tr><td>false</td><td>true</td><td>600</td><td>0.20</td><td>F</td><td>F</td><td>--</td><td>T</td><td>T</td></tr>
+<tr><td>false</td><td>false</td><td>50</td><td>0.0</td><td>F</td><td>F</td><td>--</td><td>F</td><td>F</td></tr>
+<tr><td>false</td><td>false</td><td>600</td><td>0.20</td><td>F</td><td>F</td><td>--</td><td>F</td><td>T</td></tr></table></div>
+<p class="memo"><b>考試見到「same branch coverage」就畫決策樹</b>：行數 = 做得到嘅葉數；冇 evaluate 嘅格寫 <code>--</code>。</p>
+
+<h2 id="past">四、Past paper 全答</h2>
+<div class="key"><b>一分鐘重點</b><ul><li>3 份 partition 表（2022／Asm2、2024、2025）同 2023 coverage 題全部 Java 驗證過；概念題按 L9／L3 寫，守字數。</li></ul></div>
+
+<div class="practice"><span class="src">2025 Q26 · Software Testing · 11 分 · L9</span>
+<p class="q">(1) Describe two example testing activities, one in software verification and the other in software validation, and compare the concept of "successful test" in the two examples. (&lt;100 words, 4 points)</p>
+<details class="ans"><summary>參考答案</summary><div><div class="ansbox"><b>答案</b>Verification example: during development, unit testing a method against its specification with deliberately unusual inputs (defect testing). Validation example: release or acceptance testing in which the system is exercised with test cases reflecting its expected use and requirements. In defect testing, a successful test is one that makes the system behave incorrectly and so exposes a defect. In validation testing, a successful test is one that shows the system operates as intended and meets its requirements.</div><p class="wl">約 80 字 · 出處：L9「Validation and Defect Testing」</p></div></details>
+<p class="q">(2) i) What is a test oracle? ii) In the waterfall model, when can system-level test cases be devised? iii) Name a quality property that cannot be verified via testing. (&lt;100 words, 3 points)</p>
+<details class="ans"><summary>參考答案</summary><div><div class="ansbox"><b>答案</b>i) A test oracle is the mechanism or source (e.g., the specification or a known correct result) used to decide whether the output of a test is correct. ii) As soon as the requirements analysis and definition phase is complete, because system tests are derived from the requirements. iii) Maintainability (it must be assessed by reviews and inspections rather than by executing tests).</div></div></details>
+<p class="q">(3) calculateDiscount partition 表（4 points）</p>
+<p>完整答案同推導見上面 <a href="#demo">三、完整示範</a>（8 行）。</p></div>
+
+<div class="practice"><span class="src">2024 Q25 · Software Testing · 15 分 · L9、L3</span>
+<p class="q">(1) Explain the major activities in test-driven development and how they are organized. (&lt;150 words, 5 points)</p>
+<details class="ans"><summary>參考答案</summary><div><div class="ansbox"><b>答案</b>TDD interleaves testing and coding in small increments. First, identify a small increment of functionality that can be implemented in a few lines of code. Second, write an automated test for this functionality before writing the code. Third, run this test together with all existing tests; the new test fails because the functionality is not yet implemented. Fourth, implement the functionality with just enough code and re-run all tests until they pass, refactoring the code while keeping all tests passing. Once all tests run successfully, move on to the next increment. The cycle repeats until all functionality is developed, so the tests also serve as a regression test suite and as a specification of behaviour.</div><p class="wl">約 125 字 · 出處：L3 TDD、XP principles 表</p></div></details>
+<p class="q">(2) nextDate partition 表（7 points）</p>
+<pre><code> 1 String nextDate(int day, int month, int year){
+ 2   if(year&lt;=0||month&lt;1||month&gt;12) return null;
+ 3   int daysInMonth = 0;
+ 4   if(month==1||month==3||month==5||month==7||month==8||month==10||month==12)
+ 5     daysInMonth = 31;
+ 6   else if(month==4 || month==6 || month==9 || month==11)
+ 7     daysInMonth = 30;
+ 8   else // month == 2
+ 9     if((year%4==0 &amp;&amp; year%100!=0) || (year%400==0)) daysInMonth = 29;
+10     else daysInMonth = 28;
+11   if(day &lt; 1 || day &gt; daysInMonth) return null;
+12   if(day == 31 &amp;&amp; month == 12) return "1" + "/" + "1" + "/" + (year + 1);
+13   if(day == daysInMonth) return "1" + "/" + (month + 1) + "/" + year;
+14   return (day + 1) + "/" + month + "/" + year;
+15 }</code></pre>
+<details class="ans"><summary>參考答案（14 行，Java 窮舉驗證）</summary><div>
+<ol class="steps"><li>C2 T → null（1 片葉）。</li>
+<li>C2 F 之後，月份分 3 組：31 日月（C4 T）、30 日月（C4 F, C6 T）、2 月（C4 F, C6 F, 再分 C9 閏年 T／F）→ 4 種 daysInMonth 情況。</li>
+<li>每種情況：C11 T（日子唔合法）→ null；C11 F → C12 → C13。</li>
+<li>C12 T 只可能喺 31 日月（12 月）；所以 31 日月有 4 片葉（C11 T；C12 T；C13 T；C13 F），其他 3 種情況各 3 片（C11 T；C13 T；C13 F）。</li>
+<li>總數 = 1 + 4 + 3 + 3 + 3 = <b>14</b>。</li></ol>
+<div class="tw"><table class="pt nostack"><tr><th>day</th><th>month</th><th>year</th><th>Expected</th><th>C2</th><th>C4</th><th>C6</th><th>C9</th><th>C11</th><th>C12</th><th>C13</th></tr>
+<tr><td>1</td><td>1</td><td>-1</td><td>null</td><td>T</td><td>--</td><td>--</td><td>--</td><td>--</td><td>--</td><td>--</td></tr>
+<tr><td>0</td><td>1</td><td>2024</td><td>null</td><td>F</td><td>T</td><td>--</td><td>--</td><td>T</td><td>--</td><td>--</td></tr>
+<tr><td>15</td><td>1</td><td>2024</td><td>16/1/2024</td><td>F</td><td>T</td><td>--</td><td>--</td><td>F</td><td>F</td><td>F</td></tr>
+<tr><td>31</td><td>1</td><td>2024</td><td>1/2/2024</td><td>F</td><td>T</td><td>--</td><td>--</td><td>F</td><td>F</td><td>T</td></tr>
+<tr><td>31</td><td>12</td><td>2024</td><td>1/1/2025</td><td>F</td><td>T</td><td>--</td><td>--</td><td>F</td><td>T</td><td>--</td></tr>
+<tr><td>0</td><td>4</td><td>2024</td><td>null</td><td>F</td><td>F</td><td>T</td><td>--</td><td>T</td><td>--</td><td>--</td></tr>
+<tr><td>15</td><td>4</td><td>2024</td><td>16/4/2024</td><td>F</td><td>F</td><td>T</td><td>--</td><td>F</td><td>F</td><td>F</td></tr>
+<tr><td>30</td><td>4</td><td>2024</td><td>1/5/2024</td><td>F</td><td>F</td><td>T</td><td>--</td><td>F</td><td>F</td><td>T</td></tr>
+<tr><td>0</td><td>2</td><td>2024</td><td>null</td><td>F</td><td>F</td><td>F</td><td>T</td><td>T</td><td>--</td><td>--</td></tr>
+<tr><td>15</td><td>2</td><td>2024</td><td>16/2/2024</td><td>F</td><td>F</td><td>F</td><td>T</td><td>F</td><td>F</td><td>F</td></tr>
+<tr><td>29</td><td>2</td><td>2024</td><td>1/3/2024</td><td>F</td><td>F</td><td>F</td><td>T</td><td>F</td><td>F</td><td>T</td></tr>
+<tr><td>0</td><td>2</td><td>2023</td><td>null</td><td>F</td><td>F</td><td>F</td><td>F</td><td>T</td><td>--</td><td>--</td></tr>
+<tr><td>15</td><td>2</td><td>2023</td><td>16/2/2023</td><td>F</td><td>F</td><td>F</td><td>F</td><td>F</td><td>F</td><td>F</td></tr>
+<tr><td>28</td><td>2</td><td>2023</td><td>1/3/2023</td><td>F</td><td>F</td><td>F</td><td>F</td><td>F</td><td>F</td><td>T</td></tr></table></div>
+<p class="tip"><b>易漏</b>C12 T 嗰行（31/12）同埋 2 月嘅閏年／非閏年兩組，最多人漏。C2 有 <code>||</code>：year ≤ 0 或者 month 錯，都係同一個 class（只睇整個條件嘅值）。</p></div></details>
+<p class="q">(3) Explain 1) the most important difference between alpha and beta testing and 2) why beta testing is indispensable. (&lt;100 words, 3 points)</p>
+<details class="ans"><summary>參考答案</summary><div><div class="ansbox"><b>答案</b>1) Alpha testing is carried out by users together with the development team at the developer's site, while beta testing is carried out by users in their own environments after a release is made available to them. 2) The users' working environment strongly affects a system's reliability, performance, usability and robustness, and it cannot be replicated in a development environment; beta testing exposes problems that only appear in these real and varied settings.</div></div></details></div>
+
+<div class="practice"><span class="src">2023 Q25 · Software Testing · 14 分 · L9</span>
+<p class="q">(1) Name two advantages and two disadvantages of testing over inspection. (&lt;100 words, 4 points)</p>
+<details class="ans"><summary>參考答案</summary><div><div class="ansbox"><b>答案</b>Advantages: 1) testing checks the actual run-time behaviour, including interactions between components and emergent non-functional properties such as performance and usability, which inspection cannot assess; 2) tests can be automated and re-run cheaply as regression tests. Disadvantages: 1) errors can mask other errors, so one failure may hide further defects, whereas inspection is not concerned with interactions between errors; 2) testing needs executable code, so incomplete versions need extra test harnesses, and it cannot assess broader qualities such as maintainability or standards compliance.</div></div></details>
+<p class="q">(2) canFormTriangle：100% statement coverage 同 100% branch coverage 各一組 test（6 points）</p>
+<p>答案見 <a href="#notes">概念卡 5</a>：statement 用 (3,4,5)；branch 用 (3,4,5)、(1,2,3)、(0,1,1)。</p>
+<p class="q">(3) Black-box vs white-box；開發團隊做唔做到 black-box；black-box 用唔用到 coverage。(&lt;100 words, 4 points)</p>
+<details class="ans"><summary>參考答案</summary><div><div class="ansbox"><b>答案</b>i) White-box tests are derived from the internal structure of the code, while black-box tests are derived only from the specification without using knowledge of the code. ii) Yes; black-box only restricts how tests are designed, so developers can derive tests from the requirements, e.g., in system testing. iii) Yes; coverage is measured by tools while tests execute, independent of how the tests were designed, so it can show which code the black-box tests have not exercised.</div></div></details></div>
+
+<div class="practice"><span class="src">2022 Q26 = Asm2 Q3 · removeLDLetters · 12 分 · L9</span>
+<pre><code> 1 public static String removeLDLetters(String str){
+ 2   int i = 0;
+ 3   while (i &lt; str.length()){
+ 4     char curCh = str.charAt(i);
+ 5     boolean isLD = false;
+ 6     for (int j = i+1; j&lt;str.length();j++){
+ 7       char ch = str.charAt(j);
+ 8       if(curCh == ch) {
+ 9         isLD = true;
+10         break;
+11       }
+12     }
+13     if(isLD){
+14       i = i+1;
+15     }else{
+16       break;
+17     }
+18   }
+19   return str.substring(i);
+20 }</code></pre>
+<details class="ans"><summary>參考答案（5 行，Java 窮舉 a/b/c 長度 0–6 全部字串驗證）</summary><div>
+<div class="tw"><table class="pt nostack"><tr><th>Input</th><th>Expected</th><th>C3</th><th>C6</th><th>C8</th><th>C13</th></tr>
+<tr><td>""</td><td>""</td><td>F</td><td>--</td><td>--</td><td>--</td></tr>
+<tr><td>"a"</td><td>"a"</td><td>T</td><td>F</td><td>--</td><td>F</td></tr>
+<tr><td>"ab"</td><td>"ab"</td><td>T</td><td>T,F</td><td>F</td><td>F</td></tr>
+<tr><td>"aa"</td><td>"a"</td><td>T</td><td>T,F</td><td>T</td><td>T,F</td></tr>
+<tr><td>"aab"</td><td>"ab"</td><td>T</td><td>T,F</td><td>T,F</td><td>T,F</td></tr></table></div>
+<ol class="steps"><li><b>空字串</b>：while 條件一開始就 false，乜都冇行。</li>
+<li><b>非空字串</b>：while 一定係 T；而且<b>永遠唔會因為 C3 false 離開</b>（最後一個字母右邊冇嘢，一定唔係 LD，所以一定經 break 離開）。所以 C3 只有 T，冇 T,F。</li>
+<li><b>"a"</b>：for 一開始 j=1 已經唔 &lt; 1 → C6 只有 F，C8 冇行；isLD false → C13 F。</li>
+<li><b>"ab"</b>：for 行一次 C8 F，之後 C6 F；C13 F。</li>
+<li><b>"aa"</b>：第一個 a 即刻 match（C8 T，break），C13 T；第二個 a 冇右邊（C6 F），C13 F。C8 只出現過 T。</li>
+<li><b>"aab"</b>：第一個 a：C8 T；第二個 a：比較 b 時 C8 F → C8 有 T,F；C13 T,F。</li>
+<li>其他組合做唔到，例如 C8 有 T 但 C13 只有 T：最後一個處理嘅字母一定 C13 F。</li></ol>
+<p class="memo"><b>記法</b>Loop 類題：分「空」、「一個元素」、「有元素但從冇 match」、「每次比較都即刻 match」、「有 match 亦有唔 match」。</p></div></details></div>
+
+<h2 id="drill">五、Drill：變化題（全部 Java 跑過）</h2>
+<div class="practice"><span class="src">Drill 1 · 冇 loop</span>
+<pre><code>1 int fee(int age, boolean student) {
+2   if (age &lt; 0) return -1;
+3   if (age &lt; 12 || age &gt;= 65) return 0;
+4   if (student) return 5;
+5   return 10;
+6 }</code></pre>
+<p class="q">需要幾多個 test？寫晒出嚟。</p>
+<details class="ans"><summary>答案</summary><div><div class="tw"><table class="pt nostack"><tr><th>age</th><th>student</th><th>Expected</th><th>C2</th><th>C3</th><th>C4</th></tr>
+<tr><td>-2</td><td>true</td><td>-1</td><td>T</td><td>--</td><td>--</td></tr><tr><td>5</td><td>true</td><td>0</td><td>F</td><td>T</td><td>--</td></tr>
+<tr><td>20</td><td>true</td><td>5</td><td>F</td><td>F</td><td>T</td></tr><tr><td>20</td><td>false</td><td>10</td><td>F</td><td>F</td><td>F</td></tr></table></div>
+<p>4 個。連續 return 嘅結構：n 個 if 就 n + 1 片葉。</p></div></details></div>
+<div class="practice"><span class="src">Drill 2 · for loop</span>
+<pre><code>1 int countNeg(int[] a) {
+2   int n = 0;
+3   for (int i = 0; i &lt; a.length; i++)
+4     if (a[i] &lt; 0) n++;
+5   return n;
+6 }</code></pre>
+<p class="q">需要幾多個 test？</p>
+<details class="ans"><summary>答案</summary><div><div class="tw"><table class="pt nostack"><tr><th>a</th><th>Expected</th><th>C3</th><th>C4</th></tr>
+<tr><td>{}</td><td>0</td><td>F</td><td>--</td></tr><tr><td>{1}</td><td>0</td><td>T,F</td><td>F</td></tr>
+<tr><td>{-1}</td><td>1</td><td>T,F</td><td>T</td></tr><tr><td>{1,-1}</td><td>1</td><td>T,F</td><td>T,F</td></tr></table></div>
+<p>4 個。Loop 條件 C3 只要行過一次就係 T,F（最後一定 F 離開）。C4 嘅值集合可以係 {F}、{T}、{T,F}。</p></div></details></div>
+<div class="practice"><span class="src">Drill 3 · Coverage 計數</span>
+<pre><code>1 int abs2(int x){
+2   int r = x;
+3   if (x &lt; 0) r = -x;
+4   return r;
+5 }</code></pre>
+<p class="q">(a) 最少幾多個 test 先有 100% statement coverage？(b) 100% branch coverage？(c) 只用 x = 5，statement coverage 同 branch coverage 係幾多？</p>
+<details class="ans"><summary>答案</summary><div><p>(a) 1 個（x = -3）。(b) 2 個（x = -3、x = 5）。(c) 成個 method 有 4 句 statement：<code>r = x</code>、<code>if (x &lt; 0)</code>、<code>r = -x</code>、<code>return r</code>。x = 5 冇行 <code>r = -x</code>，行咗 3 句 → \(3/4 = 75\%\)。Branch outcome 有 2 個（T、F），只行咗 F → \(1/2 = 50\%\)。</p></div></details></div>
+<div class="practice"><span class="src">Drill 4 · BVA</span>
+<p class="q">一個 password 長度要 8–20 個字元。用 equivalence partitioning + BVA 列出 test 長度。</p>
+<details class="ans"><summary>答案</summary><div><p>Partition：&lt; 8（invalid，例如 4）、8–20（valid，例如 12）、&gt; 20（invalid，例如 25）。BVA：7、8、9、19、20、21。合共例如 {4, 7, 8, 9, 12, 19, 20, 21, 25}，再加長度 0（空字串）。</p></div></details></div>
+
+<h2 id="fill">六、互動填表（同真卷格式）</h2>
+<p>填 Expected 同每個 C 欄：<code>T</code>、<code>F</code>、<code>T,F</code> 或 <code>-</code>（冇 evaluate）。英文 true／false 都接受。</p>
+<div class="practice fill"><span class="src">Fill A · 2025 calculateDiscount（input 已俾）</span>
+<div class="tw"><table class="pt nostack"><tr><th>Prem</th><th>Stu</th><th>amt</th><th>Expected</th><th>C1</th><th>C4</th><th>C5</th><th>C8</th><th>C10</th></tr>
+<tr><td>T</td><td>T</td><td>-10</td><td class="ex"><input class="blank" data-ans="Exception"></td><td><input class="blank" data-ans="T§true"></td><td><input class="blank" data-ans="-§--"></td><td><input class="blank" data-ans="-§--"></td><td><input class="blank" data-ans="-§--"></td><td><input class="blank" data-ans="-§--"></td></tr>
+<tr><td>T</td><td>F</td><td>50</td><td class="ex"><input class="blank" data-ans="0.1§0.10"></td><td><input class="blank" data-ans="F§false"></td><td><input class="blank" data-ans="T§true"></td><td><input class="blank" data-ans="F§false"></td><td><input class="blank" data-ans="-§--"></td><td><input class="blank" data-ans="F§false"></td></tr>
+<tr><td>T</td><td>F</td><td>200</td><td class="ex"><input class="blank" data-ans="0.15"></td><td><input class="blank" data-ans="F§false"></td><td><input class="blank" data-ans="T§true"></td><td><input class="blank" data-ans="T§true"></td><td><input class="blank" data-ans="-§--"></td><td><input class="blank" data-ans="F§false"></td></tr>
+<tr><td>T</td><td>F</td><td>600</td><td class="ex"><input class="blank" data-ans="0.2§0.20"></td><td><input class="blank" data-ans="F§false"></td><td><input class="blank" data-ans="T§true"></td><td><input class="blank" data-ans="T§true"></td><td><input class="blank" data-ans="-§--"></td><td><input class="blank" data-ans="T§true"></td></tr>
+<tr><td>F</td><td>T</td><td>50</td><td class="ex"><input class="blank" data-ans="0.05"></td><td><input class="blank" data-ans="F§false"></td><td><input class="blank" data-ans="F§false"></td><td><input class="blank" data-ans="-§--"></td><td><input class="blank" data-ans="T§true"></td><td><input class="blank" data-ans="F§false"></td></tr>
+<tr><td>F</td><td>T</td><td>600</td><td class="ex"><input class="blank" data-ans="0.2§0.20"></td><td><input class="blank" data-ans="F§false"></td><td><input class="blank" data-ans="F§false"></td><td><input class="blank" data-ans="-§--"></td><td><input class="blank" data-ans="T§true"></td><td><input class="blank" data-ans="T§true"></td></tr>
+<tr><td>F</td><td>F</td><td>50</td><td class="ex"><input class="blank" data-ans="0.0§0"></td><td><input class="blank" data-ans="F§false"></td><td><input class="blank" data-ans="F§false"></td><td><input class="blank" data-ans="-§--"></td><td><input class="blank" data-ans="F§false"></td><td><input class="blank" data-ans="F§false"></td></tr>
+<tr><td>F</td><td>F</td><td>600</td><td class="ex"><input class="blank" data-ans="0.2§0.20"></td><td><input class="blank" data-ans="F§false"></td><td><input class="blank" data-ans="F§false"></td><td><input class="blank" data-ans="-§--"></td><td><input class="blank" data-ans="F§false"></td><td><input class="blank" data-ans="T§true"></td></tr></table></div>
+<div class="fillbar"><button class="btn pri" data-check>對答案</button><button class="btn" data-show>顯示答案</button><button class="btn" data-clear>清除</button><span class="fillmsg"></span></div></div>
+<div class="practice fill"><span class="src">Fill B · 2022／Asm2 removeLDLetters（自己揀 input 都得，下面已俾代表）</span>
+<div class="tw"><table class="pt nostack"><tr><th>Input</th><th>Expected</th><th>C3</th><th>C6</th><th>C8</th><th>C13</th></tr>
+<tr><td>""</td><td class="ex"><input class="blank" data-ans="&quot;&quot;§''§empty"></td><td><input class="blank" data-ans="F§false"></td><td><input class="blank" data-ans="-§--"></td><td><input class="blank" data-ans="-§--"></td><td><input class="blank" data-ans="-§--"></td></tr>
+<tr><td>"a"</td><td class="ex"><input class="blank" data-ans="&quot;a&quot;§a§'a'"></td><td><input class="blank" data-ans="T§true"></td><td><input class="blank" data-ans="F§false"></td><td><input class="blank" data-ans="-§--"></td><td><input class="blank" data-ans="F§false"></td></tr>
+<tr><td>"ab"</td><td class="ex"><input class="blank" data-ans="&quot;ab&quot;§ab§'ab'"></td><td><input class="blank" data-ans="T§true"></td><td><input class="blank" data-ans="T,F§F,T§true,false§false,true"></td><td><input class="blank" data-ans="F§false"></td><td><input class="blank" data-ans="F§false"></td></tr>
+<tr><td>"aa"</td><td class="ex"><input class="blank" data-ans="&quot;a&quot;§a§'a'"></td><td><input class="blank" data-ans="T§true"></td><td><input class="blank" data-ans="T,F§F,T§true,false§false,true"></td><td><input class="blank" data-ans="T§true"></td><td><input class="blank" data-ans="T,F§F,T§true,false§false,true"></td></tr>
+<tr><td>"aab"</td><td class="ex"><input class="blank" data-ans="&quot;ab&quot;§ab§'ab'"></td><td><input class="blank" data-ans="T§true"></td><td><input class="blank" data-ans="T,F§F,T§true,false§false,true"></td><td><input class="blank" data-ans="T,F§F,T§true,false§false,true"></td><td><input class="blank" data-ans="T,F§F,T§true,false§false,true"></td></tr></table></div>
+<div class="fillbar"><button class="btn pri" data-check>對答案</button><button class="btn" data-show>顯示答案</button><button class="btn" data-clear>清除</button><span class="fillmsg"></span></div></div>
+
+<h2 id="mcq">七、T/F + MC</h2>
+<h3>T/F（22 題）</h3>
+<div class="mcq" data-set="T"><script type="application/json">[
+{"t":"L9","s":"<p>Testing can demonstrate that a program contains no defects.</p>","a":1,"e":"<b>False</b>。Testing can reveal the presence of errors but NOT their absence。"},
+{"t":"L9","s":"<p>In defect testing, a successful test is one that makes the system perform incorrectly and exposes a defect.</p>","a":0,"e":"<b>True</b>。L9 原句。"},
+{"t":"L9","s":"<p>In validation testing, test cases are deliberately obscure and need not reflect normal use of the system.</p>","a":1,"e":"<b>False</b>。呢個係 <b>defect testing</b> 嘅特徵；validation testing 用反映正常使用嘅 test case。"},
+{"t":"L9","s":"<p>Release testing is performed by a separate team that has not been involved in the system development.</p>","a":0,"e":"<b>True</b>。"},
+{"t":"L9","s":"<p>Component testing focuses on testing component interfaces.</p>","a":0,"e":"<b>True</b>。Unit 測功能，component 測 interface，system 測符合 requirement。"},
+{"t":"L9","s":"<p>System testing is an individual rather than a collective process.</p>","a":1,"e":"<b>False</b>。L9：system testing 係 <b>collective</b> process。"},
+{"t":"L9","s":"<p>Branch coverage requires every if condition in the code to evaluate to both true and false.</p>","a":0,"e":"<b>True</b>。L9：Are all if/else conditions evaluated to both True and False?"},
+{"t":"L9","s":"<p>Achieving 100% code coverage guarantees that the software has zero defects.</p>","a":1,"e":"<b>False</b>。Coverage fallacy：只代表 code 行過。"},
+{"t":"L9","s":"<p>Boundary value analysis is based on the observation that errors are commonly found at the boundaries of equivalence partitions.</p>","a":0,"e":"<b>True</b>。例如 1–100 測 0、1、2、99、100、101。"},
+{"t":"L9","s":"<p>For an input valid between 1 and 100, BVA suggests testing 0 and 101 as just-outside values.</p>","a":0,"e":"<b>True</b>。"},
+{"t":"L9","s":"<p>Release testing is usually a white-box process in which tests are derived from the source code.</p>","a":1,"e":"<b>False</b>。Release testing 通常係 <b>black-box</b>，由 specification 出 test。"},
+{"t":"L9","s":"<p>Regression testing checks that changes to the system have not broken previously working code.</p>","a":0,"e":"<b>True</b>。"},
+{"t":"L9","s":"<p>Stress testing deliberately overloads the system to test its failure behaviour.</p>","a":0,"e":"<b>True</b>。Stress testing 係 performance testing 嘅一種。"},
+{"t":"L9","s":"<p>Beta testing is mostly used for software products that are used in many different settings.</p>","a":0,"e":"<b>True</b>。"},
+{"t":"L9","s":"<p>Acceptance testing is an inherent part of developing generic software products sold to many customers.</p>","a":1,"e":"<b>False</b>。Acceptance testing 係 <b>custom systems</b> 開發嘅一部分（客決定收唔收貨）。"},
+{"t":"L9","s":"<p>In agile methods, there is usually a separate acceptance testing process after development.</p>","a":1,"e":"<b>False</b>。Agile：user 喺團隊入面，冇獨立 acceptance testing。"},
+{"t":"L9","s":"<p>Static testing evaluates software artefacts such as code or requirements without executing them.</p>","a":0,"e":"<b>True</b>。Inspection、walkthrough、static analysis。"},
+{"t":"L9","s":"<p>An inspection is an informal review in which the author explains the code to peers.</p>","a":1,"e":"<b>False</b>。作者講解係 <b>walkthrough</b>；inspection 係正式、團隊、跟 checklist。"},
+{"t":"L9","s":"<p>When the defect discovery rate curve flattens, the system is stabilizing.</p>","a":0,"e":"<b>True</b>。係決定幾時停 test 嘅指標之一。"},
+{"t":"L3","s":"<p>In test-driven development, tests are written after the code to avoid wasted effort.</p>","a":1,"e":"<b>False</b>。TDD 係<b>先寫 test</b>，避免 test-lag。"},
+{"t":"L3","s":"<p>In TDD, writing tests first implicitly defines both an interface and a specification of behaviour.</p>","a":0,"e":"<b>True</b>。L3 原句。"},
+{"t":"L9","s":"<p>Inheritance makes it easier to design object class tests because the information to be tested is localized.</p>","a":1,"e":"<b>False</b>。剛剛相反：inheritance 令要測嘅資訊<b>唔集中</b>，更難設計 test。"}
+]</script></div>
+<h3>MC（8 題，含多選）</h3>
+<div class="mcq" data-set="M"><script type="application/json">[
+{"t":"L9","s":"<p>Which pair correctly matches the testing stage with who performs it?</p>","o":["Unit testing — independent release team","Release testing — a separate team not involved in development","Beta testing — developers at their own site","Component testing — end users"],"a":1,"e":"B 啱。A：unit 係開發人員；C：beta 係用戶喺自己環境；D：component 係開發團隊。"},
+{"t":"L9","s":"<p>Which are interface error types listed in L9? (Select all that apply)</p>","o":["Interface misunderstanding","Interface misuse","Timing errors","Boundary errors"],"a":[0,1,2],"e":"L9 列出 3 種：misunderstanding、misuse、timing errors。D 係 BVA 處理嘅輸入邊界問題，唔係 interface error 分類。"},
+{"t":"L9","s":"<p>A method has three independent if-statements, each without else. What is the minimum number of tests for 100% branch coverage?</p>","o":["1","2","3","8"],"a":1,"e":"B：一個 test 令三個都 true、另一個令三個都 false，就覆蓋晒 6 個 branch outcome（假設條件互相獨立）。D 係 path coverage 數量。"},
+{"t":"L9","s":"<p>Which statement about coverage is TRUE?</p>","o":["100% statement coverage implies 100% branch coverage","100% branch coverage implies 100% statement coverage (no dead code)","Path coverage is weaker than branch coverage","Coverage is only meaningful for black-box testing"],"a":1,"e":"B 啱。A 反轉咗；C：path 最強；D：coverage 係 white-box 概念（但可以量度任何 test suite）。"},
+{"t":"L9","s":"<p>A nurse-visit scenario is used to test login, scheduling, record download, encryption and drug look-up together. This is:</p>","o":["Requirements-based testing","Scenario testing","Stress testing","Unit testing"],"a":1,"e":"B：用典型情境（Mentcare George）一次測好多功能。"},
+{"t":"L9","s":"<p>Which are valid exit criteria for deciding when to stop testing? (Select all that apply)</p>","o":["Defect discovery rate has flattened","Predefined coverage thresholds are achieved","Remaining defects are of low severity (risk-based)","All possible inputs have been tested"],"a":[0,1,2],"e":"A、B、C 係 L9 列出嘅。D 冇可能：exhaustive testing is impossible。"},
+{"t":"L3","s":"<p>Which is a problem with test-driven development mentioned in L3?</p>","o":["Tests are written too late","Programmers may take shortcuts and write incomplete tests","It cannot be automated","It prevents refactoring"],"a":1,"e":"B 啱。其他問題：有啲 test 好難逐步寫（例如 E2E）；難判斷 test set 夠唔夠完整。A：TDD 先寫 test；C：TDD 依賴自動化；D：TDD 鼓勵 refactor。"},
+{"t":"L9","s":"<p>For removeLDLetters with input \"abcabdc\", what is returned and what values does the condition on line 13 take?</p>","o":["\"abdc\"; true,false","\"abcabdc\"; false","\"dc\"; true","\"abdc\"; true"],"a":0,"e":"A：a、b、c 都喺右邊再出現 → 刪走，i 停喺第二個 a；第二個 a 右邊冇 a，C13 F 然後 break。所以 C13 = true,false，回傳 \"abdc\"（Java 驗證）。"}
+]</script></div>
+
+<h2 id="short">八、短答題</h2>
+<p class="q">1. Distinguish unit, component and system testing. (&lt;80 words)</p>
+<details class="ans"><summary>參考答案</summary><div><div class="ansbox"><b>答案</b>Unit testing tests individual program units, such as methods or object classes, in isolation, focusing on their functionality. Component testing integrates several units into a composite component and focuses on testing the component's interface. System testing integrates all components and tests the system as a whole, focusing on compliance with the requirements; it is a collective rather than individual process.</div></div></details>
+<p class="q">2. What is regression testing and why is test automation important for it? (&lt;60 words)</p>
+<details class="ans"><summary>參考答案</summary><div><div class="ansbox"><b>答案</b>Regression testing re-runs existing tests after a change to check that previously working code has not been broken. Running them manually after every change is slow and expensive, so automated test scripts (e.g., JUnit) are run by a CI pipeline on every commit, and failing changes are rejected before reaching users.</div></div></details>
+<p class="q">3. Explain equivalence partitioning and boundary value analysis using an input field that accepts ages 18–65. (&lt;80 words)</p>
+<details class="ans"><summary>參考答案</summary><div><div class="ansbox"><b>答案</b>Equivalence partitioning groups inputs the program treats the same way: below 18 (invalid), 18–65 (valid) and above 65 (invalid); one representative is tested from each, e.g., 10, 40, 70. Boundary value analysis adds tests at the partition edges, where off-by-one errors are common: 17, 18, 19, 64, 65 and 66.</div></div></details>
+<p class="q">4. Why is release testing a form of validation testing while system testing during development is defect testing? (&lt;60 words)</p>
+<details class="ans"><summary>參考答案</summary><div><div class="ansbox"><b>答案</b>System testing during development aims to discover bugs, so tests are designed to expose defects. Release testing aims to convince the supplier that the system meets its requirements and is good enough for external use, so tests derived from the specification check that the system behaves as intended.</div></div></details>
+
+<h2 id="faq">九、常見疑問</h2>
+<dl class="faq">
+<dt>Q：Partition 表要寫幾多行？表格空行數有冇提示？</dt><dd>冇提示（題目講明）。行數 = 決策樹入面<b>做得到</b>嘅葉數。寫多咗重複 class 或者漏咗都會扣分。</dd>
+<dt>Q：一個條件有 <code>||</code>／<code>&amp;&amp;</code>，要唔要拆開每個小條件？</dt><dd>唔使。題目定義嘅係「if condition expression evaluates to」：只睇成個條件嘅結果。</dd>
+<dt>Q：冇行到嘅格寫咩？</dt><dd>寫 <code>--</code>（真卷範例就係咁寫）。唔好留空，亦唔好寫 F。</dd>
+<dt>Q：Loop 條件點寫？</dt><dd>寫成個 test 期間出現過嘅所有值：一次都冇入 loop 寫 <code>false</code>；有入 loop 而最後因為條件 false 離開寫 <code>true,false</code>；如果用 break 離開而條件從未 false，就只寫 <code>true</code>（removeLDLetters 嘅 while 就係咁）。</dd>
+<dt>Q：Expected result 要點寫？</dt><dd>逐行行一次 code 計出嚟，寫準確值（例如 <code>0.20</code>、<code>"1/3/2024"</code>、<code>null</code>、<code>Exception</code>）。</dd>
+<dt>Q：Verification 同 validation 點記？</dt><dd>Verification：build the product <b>right</b>（對 spec）；Validation：build the <b>right product</b>（對客）。</dd>
+<dt>Q：Alpha 同 acceptance testing 有咩分別？</dt><dd>Alpha 喺 developer 度同開發團隊一齊做，用喺 product 或 custom software；acceptance 係 custom system 嘅客用自己數據測，決定收唔收貨。</dd>
+</dl>

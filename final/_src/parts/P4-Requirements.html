@@ -1,0 +1,447 @@
+<h1>P4 · Requirements Engineering</h1>
+<p class="sub">必考，Q22 每年 10–12 分 · 對應 L4 Requirements Engineering、L2（moving target）、Asm1 Q3、Q4</p>
+<ul class="toc">
+<li><a href="#exam">一、點考</a></li><li><a href="#notes">二、筆記：由零講起</a></li>
+<li><a href="#demo">三、完整示範：2022 Q22 = Asm1 Q4</a></li><li><a href="#past">四、Past paper 全答</a></li>
+<li><a href="#drill">五、Drill</a></li><li><a href="#fill">六、互動填充</a></li>
+<li><a href="#mcq">七、T/F + MC</a></li><li><a href="#short">八、短答題</a></li><li><a href="#faq">九、常見疑問</a></li></ul>
+
+<h2 id="exam">一、點考</h2>
+<div class="key"><b>一分鐘重點</b><ul>
+<li>Q22 每年都有，題型 4 種：<b>寫 FR／NFR</b>（用 shall、要可驗證）、<b>elicitation 4 個 stage</b>（「Tom」情境搵錯）、<b>validation 5 個 check</b>、<b>F/NF 嘅界線同衝突</b>。</li>
+<li>「Tom」情境出咗 2 次（2022 圖書館、2024 醫院），今年 Asm1 Q4 又出：一定要識搵佢做錯咩。</li></ul></div>
+<div class="tw"><table class="stack"><tr><th>卷</th><th>題目</th><th>分數</th></tr>
+<tr><td>2025 Q22</td><td>(1) F vs NF + PowerPoint 嘅一條 FR 同一條 reliability NFR (4) (2) 6 個 activity 歸類做 elicitation／specification／validation (3) (3) 4 個 elicitation stage 排序 (2) (4) moving target 問題 + 2 個應對方法 (3)</td><td>12</td></tr>
+<tr><td>2024 Q22</td><td>(1) Tom 用是非題訪問醫院用戶：錯喺邊、應該點做 (2) (2) observation 點做 + 1 優點 1 缺點 (4) (3) consistency、verifiability、realism、completeness 係咩 (6)</td><td>12</td></tr>
+<tr><td>2023 Q22</td><td>(1) 用例子解釋點解 F/NF 分唔清 (3) (2) 分散式系統 performance 同 maintainability 點解衝突 (3) (3) word processor：一條靠 inspection 驗證、一條靠 testing 驗證嘅 requirement (4)</td><td>10</td></tr>
+<tr><td>2022 Q22 = Asm1 Q4</td><td>Tom 圖書館：4 個 elicitation stage 名、目的、每個 stage 嘅問題</td><td>12（Asm 18）</td></tr>
+<tr><td>Asm1 Q3</td><td>LLM 輔助 UML 工具：「New Diagram」FR + availability NFR</td><td>Asm 8</td></tr></table></div>
+<h3>寫 requirement 嘅步驟</h3>
+<ol class="steps">
+<li><b>判斷類型</b>：系統「做咩」→ FR；「做得幾好／有咩限制」→ NFR。</li>
+<li><b>用 shall</b>（必須）或 should（想要）。主語係 system 或 user：「The system shall…」「Users shall be able to…」。</li>
+<li><b>NFR 一定要有數字</b>：時間、百分比、負載、測量期間（例如「within 2 seconds for 95% of requests with 10,000 concurrent users」）。</li>
+<li><b>加括號 rationale</b>（L4 指引，Asm1 注意事項都有講）。</li>
+<li><b>檢查</b>：一條 requirement 只講一件事；冇電腦術語；可以設計 test 判斷 pass／fail。</li></ol>
+
+<h2 id="notes">二、筆記：由零講起</h2>
+<div class="key"><b>一分鐘重點</b><ul>
+<li>Requirement = 系統要提供嘅服務 + 運作上嘅限制。RE = 發現、分析、記錄、檢查呢啲 requirement 嘅過程。</li>
+<li>3 個 generic activities：<b>elicitation、specification、validation</b>（spiral，交錯重複）。</li>
+<li>Elicitation 4 stage：<b>discovery &amp; understanding → classification &amp; organization → prioritization &amp; negotiation → documentation</b>。</li>
+<li>Validation 5 check：<b>validity、consistency、completeness、realism、verifiability</b>。</li></ul></div>
+
+<div class="concept">
+<h3>1. Requirement 同 requirements engineering</h3>
+<span class="lab">一句講完</span>
+<p><b>Requirements</b> 係系統應該提供嘅<b>服務</b>同運作時嘅<b>限制</b>。<b>RE</b> 係發現、分析、記錄同檢查呢啲服務同限制嘅過程。</p>
+<span class="lab why">點解重要（L4 五點）</span>
+<ol class="steps"><li>令所有人有同一個理解。</li><li>話俾團隊知做咩、喺咩限制下做。</li><li>令成功可以量度、可以 test。</li><li>減少失敗、重做同法律風險。</li><li>做 project 管理嘅基礎。</li></ol>
+<span class="lab pic">圖解：requirement 喺 process 嘅位置</span>
+<figure class="fig"><svg viewBox="0 0 360 130" role="img" aria-label="requirements position" style="max-width:380px">
+<defs><marker id="r1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#15202B"/></marker></defs>
+<g font-size="12" text-anchor="middle"><rect class="hl" x="5" y="30" width="80" height="50" rx="8"/><text x="45" y="52">持份者</text><text x="45" y="68">需要</text>
+<rect class="ac" x="110" y="30" width="110" height="50" rx="8"/><text x="165" y="52" font-weight="700">Requirements</text><text x="165" y="68">document（SRS）</text>
+<rect class="bx" x="245" y="5" width="110" height="34" rx="8"/><text x="300" y="27">design／code</text>
+<rect class="bx" x="245" y="70" width="110" height="34" rx="8"/><text x="300" y="92">test cases</text></g>
+<g class="ln"><line x1="85" y1="55" x2="108" y2="55" marker-end="url(#r1)"/><line x1="220" y1="45" x2="243" y2="25" marker-end="url(#r1)"/><line x1="220" y1="65" x2="243" y2="85" marker-end="url(#r1)"/></g>
+<text x="180" y="122" text-anchor="middle" font-size="11.5" fill="#566273">Requirement 錯 → 後面全部錯（L1：60–70% 嘅錯源自早期）</text>
+</svg><figcaption>SRS 係設計、實作、測試嘅共同依據</figcaption></figure>
+<span class="lab eg">例子</span>
+<p>Agile 唔寫詳細 system requirement，用 incremental RE 同 user story；適合商業系統，但對好多其他系統有問題。大型系統通常有明確嘅 RE 階段，產出 requirements document（L4 用傳統觀點）。</p>
+<span class="lab trap">易錯</span>
+<p>Requirement 講 <b>WHAT</b>，唔講 HOW（設計）。</p>
+</div>
+
+<div class="concept">
+<h3>2. User requirements vs system requirements</h3>
+<span class="lab">一句講完</span>
+<p><b>User requirements</b>：寫俾客／用戶睇嘅高層次陳述（自然語言、user story），講用戶想達成咩。<b>System requirements</b>：寫俾開發者、tester 睇嘅詳細精確描述，要可量度、可測試。</p>
+<span class="lab why">點解要兩種</span>
+<p>唔同持份者需要唔同層次嘅資訊：客要確認方向啱，開發者要知道點樣做先算完成。System requirement 係將 user requirement 細化成可以起嘅 spec。</p>
+<span class="lab pic">圖解：由 user 細化到 system</span>
+<figure class="fig"><svg viewBox="0 0 360 200" role="img" aria-label="user vs system requirement" style="max-width:380px">
+<defs><marker id="r2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#15202B"/></marker></defs>
+<rect class="hl" x="5" y="5" width="350" height="56" rx="8"/><text x="14" y="25" font-size="12.5" font-weight="700">User requirement（客睇）</text><text x="14" y="45" font-size="12">A customer should be able to search for products</text><text x="14" y="58" font-size="12">so they can find what they need quickly.</text>
+<line class="ln" x1="180" y1="61" x2="180" y2="84" marker-end="url(#r2)"/><text x="190" y="78" font-size="11" fill="#566273">refine（細化）</text>
+<rect class="ac" x="5" y="86" width="350" height="104" rx="8"/><text x="14" y="106" font-size="12.5" font-weight="700">System requirement（開發者睇）</text>
+<g font-size="12"><text x="14" y="126">The system shall allow searching by product</text><text x="14" y="142">name, category and price range. Results shall be</text><text x="14" y="158">returned within 2 seconds for up to 10,000</text><text x="14" y="174">products; partial matches shall be supported.</text></g>
+</svg><figcaption>L4 Example 1</figcaption></figure>
+<div class="tw"><table class="stack"><tr><th>方面</th><th>User requirements</th><th>System requirements</th></tr>
+<tr><td>讀者</td><td>客、用戶、product owner</td><td>開發者、architect、tester、PM</td></tr>
+<tr><td>語言</td><td>自然語言、user story、簡單圖</td><td>結構化自然語言、formal model、表格</td></tr>
+<tr><td>細節</td><td>抽象、一般、通常非正式</td><td>詳細、具體、技術</td></tr>
+<tr><td>可驗證性</td><td>通常難直接 test，可能模糊</td><td>應該精確、可量度、可 test</td></tr></table></div>
+<span class="lab eg">例子 2：to-do app</span>
+<p>User：用戶可以標記 task 完成。System：系統應容許用戶揀 task 改 status 做「complete」；task 顯示剔號、移去「Completed」list；改動即時儲存。</p>
+<span class="lab trap">易錯</span>
+<p>「User requirement 唔使可以驗證」唔準確：佢<b>通常難</b>直接 test，但 Asm1 Q3 都要求寫可驗證嘅 user requirement（「Make sure requirements are verifiable」）。</p>
+</div>
+
+<div class="concept">
+<h3>3. Functional vs non-functional requirements</h3>
+<span class="lab">一句講完</span>
+<p><b>FR</b>：系統應提供嘅<b>服務</b>（亦可以講系統唔應該做咩）。<b>NFR</b>：對服務或功能嘅<b>限制</b>（performance、reliability、security…），通常適用於<b>成個系統</b>。</p>
+<span class="lab why">點解 NFR 可能更重要</span>
+<p>NFR 唔達標，成個系統可能冇用（例如飛機控制系統唔夠可靠就唔可以用）。NFR 影響整體 <b>architecture</b> 多過個別 component，而且一條 NFR 可能衍生其他 FR／NFR。</p>
+<span class="lab pic">圖解</span>
+<figure class="fig"><svg viewBox="0 0 360 190" role="img" aria-label="functional vs non-functional" style="max-width:380px">
+<rect class="hl" x="5" y="5" width="170" height="175" rx="10"/><text x="90" y="28" text-anchor="middle" font-size="13.5" font-weight="700">Functional</text><text x="90" y="46" text-anchor="middle" font-size="12">系統「做咩」</text>
+<g font-size="11.5"><text x="14" y="72">• 取消未出貨嘅 order</text><text x="14" y="94">• 改 status 做 Cancelled</text><text x="14" y="116">• 釋放預留存貨</text><text x="14" y="138">• 已收錢就退款</text><text x="14" y="160">• 寄確認 email</text></g>
+<rect class="ac" x="185" y="5" width="170" height="175" rx="10"/><text x="270" y="28" text-anchor="middle" font-size="13.5" font-weight="700">Non-functional</text><text x="270" y="46" text-anchor="middle" font-size="12">「做得幾好／限制」</text>
+<g font-size="11.5"><text x="194" y="72">• Performance ≤ 2 s</text><text x="194" y="94">• Availability 99.9%</text><text x="194" y="116">• Security：TLS、MFA</text><text x="194" y="138">• Usability：SUS ≥ 80</text><text x="194" y="160">• Reliability：MTBF</text></g>
+</svg><figcaption>左邊：L4 取消 order 嘅 FR1–FR5；右邊：L4 metrics 表</figcaption></figure>
+<span class="lab eg">例子：2025 Q22(1) PowerPoint</span>
+<ol class="steps"><li>FR：「The application shall allow the user to insert an image from a local file into the current slide.」</li>
+<li>NFR（reliability）：「The application shall not lose more than 1 minute of the user's edits when it crashes, by auto-saving at least once every 60 seconds.」或者「MTBF ≥ 500 hours of use」。</li></ol>
+<span class="lab trap">易錯</span>
+<p>NFR 冇數字 = 驗證唔到（「should be reliable」唔得分）。FR 都要具體：講清楚觸發條件同結果。</p>
+</div>
+
+<div class="concept">
+<h3>4. 可驗證嘅 NFR：metrics</h3>
+<span class="lab">一句講完</span>
+<p><b>Verifiable NFR</b> 係用某種<b>可以客觀測試嘅量度</b>寫出嚟嘅 NFR。</p>
+<span class="lab why">點解難</span>
+<p>客好難將目標變成可量度嘅 requirement：有啲目標冇簡單 metric（例如 maintainability）；metric 同日常體驗嘅關係唔清楚；驗證成本可能太高。</p>
+<span class="lab pic">圖解：由模糊到可驗證</span>
+<figure class="fig"><svg viewBox="0 0 360 170" role="img" aria-label="verifiable NFR" style="max-width:380px">
+<defs><marker id="r4" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#15202B"/></marker></defs>
+<rect class="bx" x="5" y="5" width="350" height="44" rx="8" stroke="#B42318" stroke-dasharray="5 4"/><text x="14" y="24" font-size="12">✗ The online store should load quickly so</text><text x="14" y="40" font-size="12">customers don't abandon their carts.</text>
+<line class="ln" x1="180" y1="49" x2="180" y2="72" marker-end="url(#r4)"/><text x="190" y="66" font-size="11" fill="#566273">加 metric + 條件</text>
+<rect class="hl" x="5" y="74" width="350" height="62" rx="8"/><text x="14" y="94" font-size="12">✓ The system shall load any product page within</text><text x="14" y="110" font-size="12"><tspan font-weight="700">2 seconds</tspan> for <tspan font-weight="700">95% of requests</tspan> during a peak</text><text x="14" y="126" font-size="12">load of <tspan font-weight="700">10,000 concurrent users</tspan>.</text>
+<text x="180" y="160" text-anchor="middle" font-size="11.5" fill="#566273">三個要素：數值 · 比例 · 條件（負載／時段）</text>
+</svg><figcaption>L4 usability／performance 例子</figcaption></figure>
+<div class="tw"><table class="stack"><tr><th>類別</th><th>典型 metric</th></tr>
+<tr><td>Performance</td><td>95th percentile response ≤ 2 s；throughput ≥ 1,000 req/s</td></tr>
+<tr><td>Availability</td><td>99.9% uptime（≈ 8.76 小時停機／年）；99.99%（≈ 52.6 分鐘／年）</td></tr>
+<tr><td>Reliability</td><td>MTBF ≥ 1,000 小時；failure rate &lt; 0.1%</td></tr>
+<tr><td>Capacity</td><td>最多 50,000 records；10,000 concurrent sessions</td></tr>
+<tr><td>Security</td><td>TLS 1.3、AES-256、MFA；5 次錯登入鎖戶口</td></tr>
+<tr><td>Usability</td><td>完成率 ≥ 90%；error rate &lt; 5%；SUS ≥ 80</td></tr>
+<tr><td>Accessibility</td><td>WCAG 2.2 AA；contrast ≥ 4.5:1</td></tr>
+<tr><td>Compliance／Safety</td><td>PCI DSS、HIPAA；hazard rate &lt; 10⁻⁹／小時</td></tr></table></div>
+<span class="lab eg">例子：availability 計數</span>
+<p>99.9% uptime：一年停機時間 = \( (1-0.999) \times 365 \times 24 = 8.76 \) 小時。Asm1 Q3 官方例子：「Users shall be able to access the application for at least 99.5% of requests during their typical 9 AM–6 PM working hours, measured monthly.」</p>
+<span class="lab trap">易錯</span>
+<p>Availability（用唔用到）同 reliability（幾耐壞一次）唔同。寫 availability 要講量度期間（monthly／yearly）。</p>
+</div>
+
+<div class="concept">
+<h3>5. F/NF 嘅界線唔清楚；NFR 之間嘅衝突</h3>
+<span class="lab">一句講完</span>
+<p>Requirements 互相影響，<b>F/NF 界線唔一定清楚</b>：一條 NFR 可以衍生 FR；而唔同 NFR 之間可能<b>互相衝突</b>，要 trade-off。</p>
+<span class="lab why">例子點解分唔清</span>
+<p>Security 係 NFR，但「限制只有授權用戶可以存取」會衍生 FR：「系統要有 login、要驗證用戶身份」。睇抽象層次唔同，同一個需要可以寫成 NFR 或者一堆 FR。</p>
+<span class="lab pic">圖解：performance vs maintainability（2023 Q22(2)）</span>
+<figure class="fig"><svg viewBox="0 0 360 200" role="img" aria-label="performance vs maintainability" style="max-width:380px">
+<rect class="ac" x="5" y="5" width="165" height="120" rx="10"/><text x="87" y="28" text-anchor="middle" font-size="13" font-weight="700">Performance</text>
+<g font-size="11.5"><text x="14" y="52">大型 component</text><text x="14" y="70">關鍵操作集中</text><text x="14" y="88">減少網絡通訊</text><text x="14" y="106">（少層、少 indirection）</text></g>
+<rect class="hl" x="190" y="5" width="165" height="120" rx="10"/><text x="272" y="28" text-anchor="middle" font-size="13" font-weight="700">Maintainability</text>
+<g font-size="11.5"><text x="199" y="52">細、可替換嘅 component</text><text x="199" y="70">清楚分層、interface</text><text x="199" y="88">數據同 code 分開</text><text x="199" y="106">（多層、多 indirection）</text></g>
+<text x="180" y="72" text-anchor="middle" font-size="18" font-weight="700" fill="#B42318">⇄</text>
+<text x="180" y="150" text-anchor="middle" font-size="12">分散式系統：多 component = 多網絡 call = 慢</text>
+<text x="180" y="170" text-anchor="middle" font-size="12">少 component = 快，但改一處影響好多</text>
+<text x="180" y="192" text-anchor="middle" font-size="11.5" fill="#566273">L6：architecture 要喺兩者之間取捨</text>
+</svg><figcaption>呢個衝突喺 L6「Architecture and Non-Functional Requirements」都有講</figcaption></figure>
+<span class="lab eg">例子：其他常見衝突</span>
+<ul><li>Security（多重驗證、加密）vs usability／performance。</li><li>Availability（多 server 冗餘）vs cost。</li><li>Safety（相關操作集中、少 component）vs performance。</li></ul>
+<span class="lab trap">易錯</span>
+<p>「Requirement document 入面 F 同 NF 一定可以完全分開」係錯（L4：difficult to separate）。</p>
+</div>
+
+<div class="concept">
+<h3>6. RE process：elicitation、specification、validation（spiral）</h3>
+<span class="lab">一句講完</span>
+<p>唔同機構嘅 RE process 差好遠，但都有 3 個 generic activities：<b>elicitation</b>（搵）、<b>specification</b>（寫）、<b>validation</b>（查）。實際上佢哋<b>交錯重複</b>，好似螺旋。</p>
+<span class="lab why">點解係 spiral</span>
+<p>寫低之後檢查，發現漏咗或者矛盾，又要返去問持份者；每轉一圈，requirement 由 business 層次細化到 user 層次再到 system 層次。</p>
+<span class="lab pic">圖解：spiral 入面每個 activity 有咩（2025 Q22(2) 考歸類）</span>
+<figure class="fig"><svg viewBox="0 0 360 290" role="img" aria-label="RE spiral" style="max-width:380px">
+<circle cx="180" cy="160" r="34" fill="none" stroke="#566273" stroke-dasharray="4 3"/><circle cx="180" cy="160" r="62" fill="none" stroke="#566273" stroke-dasharray="4 3"/><circle cx="180" cy="160" r="88" fill="none" stroke="#566273" stroke-dasharray="4 3"/>
+<line x1="180" y1="160" x2="120" y2="90" stroke="#15202B"/><line x1="180" y1="160" x2="240" y2="90" stroke="#15202B"/><line x1="180" y1="160" x2="180" y2="238" stroke="#15202B"/>
+<rect class="hl" x="5" y="5" width="165" height="76" rx="8"/><text x="12" y="23" font-size="12.5" font-weight="700">Elicitation</text><g font-size="11.5"><text x="12" y="40">feasibility study</text><text x="12" y="55">user req. elicitation</text><text x="12" y="70">system req. elicitation</text></g>
+<rect class="ac" x="190" y="5" width="165" height="76" rx="8"/><text x="197" y="23" font-size="12.5" font-weight="700">Specification</text><g font-size="11.5"><text x="197" y="40">business req. spec</text><text x="197" y="55">user req. spec</text><text x="197" y="70">system req. spec &amp; modelling</text></g>
+<rect class="bx" x="100" y="242" width="160" height="42" rx="8"/><text x="108" y="259" font-size="12.5" font-weight="700">Validation</text><text x="108" y="276" font-size="11.5">reviews · prototyping</text>
+<text x="180" y="164" text-anchor="middle" font-size="11" fill="#566273">由內向外</text>
+</svg><figcaption>Sommerville 嘅 spiral view：越外圈越詳細（business → user → system）</figcaption></figure>
+<span class="lab eg">例子：2025 Q22(2) 答案</span>
+<div class="tw"><table><tr><th>Activity</th><th>歸類</th></tr>
+<tr><td>i) system requirements modelling</td><td>b) specification</td></tr>
+<tr><td>ii) business requirements specification</td><td>b) specification</td></tr>
+<tr><td>iii) feasibility study</td><td>a) elicitation</td></tr>
+<tr><td>iv) review</td><td>c) validation</td></tr>
+<tr><td>v) system requirements elicitation</td><td>a) elicitation</td></tr>
+<tr><td>vi) prototyping</td><td>c) validation</td></tr></table></div>
+<span class="lab trap">易錯</span>
+<p>Prototyping 喺 L4 同時係 elicitation 技術（core techniques）同 validation 技術；但喺 spiral 圖入面歸 <b>validation</b>，所以 2025 Q22(2) 答 validation 最穩陣，可以喺答案加一句說明。</p>
+</div>
+
+<div class="concept">
+<h3>7. Requirements elicitation：持份者同 4 個 stage</h3>
+<span class="lab">一句講完</span>
+<p>Elicitation 係技術人員同<b>持份者</b>一齊了解 domain、工作流程、要嘅服務同功能。L4 嘅比喻：「Faster horse」問題（用戶講表面方案唔講根本問題）同 <b>requirements iceberg</b>（講出口嘅只係 10%）。</p>
+<span class="lab why">持份者有邊啲</span>
+<ul><li><b>Primary users</b>：每日真係用嘅人。</li><li><b>Secondary users</b>：唔直接用，但提供資料或依賴佢（供應商、經理）。</li><li><b>Domain experts</b>：識業務規則（價錢、法律、流程、例外）。</li><li><b>Regulatory bodies</b>：政府同法律限制，冇得傾，<b>成日被遺忘</b>。</li><li><b>Opponents</b>：反對個 project 嘅人。</li></ul>
+<span class="lab pic">圖解：elicitation 4 stage spiral</span>
+<figure class="fig"><svg viewBox="0 0 360 270" role="img" aria-label="elicitation stages" style="max-width:380px">
+<defs><marker id="r7" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#15202B"/></marker></defs>
+<g font-size="12" text-anchor="middle">
+<rect class="ac" x="95" y="5" width="170" height="50" rx="10"/><text x="180" y="26" font-weight="700">① Discovery &amp;</text><text x="180" y="44" font-weight="700">understanding</text>
+<rect class="hl" x="195" y="105" width="160" height="50" rx="10"/><text x="275" y="126" font-weight="700">② Classification</text><text x="275" y="144" font-weight="700">&amp; organization</text>
+<rect class="hl" x="95" y="205" width="170" height="50" rx="10"/><text x="180" y="226" font-weight="700">③ Prioritization</text><text x="180" y="244" font-weight="700">&amp; negotiation</text>
+<rect class="hl" x="5" y="105" width="160" height="50" rx="10"/><text x="85" y="126" font-weight="700">④ Documentation</text><text x="85" y="144" font-size="11">寫低，作為下一輪輸入</text></g>
+<g class="ln"><path d="M265 35 C 300 45, 300 75, 290 103" marker-end="url(#r7)"/><path d="M290 155 C 300 190, 290 215, 267 225" marker-end="url(#r7)"/><path d="M95 230 C 60 220, 60 185, 70 157" marker-end="url(#r7)"/><path d="M70 105 C 60 70, 70 40, 93 32" marker-end="url(#r7)"/></g>
+</svg><figcaption>次序：c → a → b → d（2025 Q22(3) 嘅標籤）；會一直轉圈</figcaption></figure>
+<div class="tw"><table class="stack"><tr><th>Stage</th><th>目的（Asm1 官方）</th></tr>
+<tr><td>Discovery &amp; understanding</td><td>同持份者互動，發現佢哋嘅 requirement（domain requirements 同文件都係來源）</td></tr>
+<tr><td>Classification &amp; organization</td><td>將相關 requirement 分組成有條理嘅 cluster</td></tr>
+<tr><td>Prioritization &amp; negotiation</td><td>排優先次序，解決 requirement 之間嘅衝突</td></tr>
+<tr><td>Documentation</td><td>將 requirement 記錄低（正式或非正式）</td></tr></table></div>
+<span class="lab eg">例子：elicitation 嘅挑戰（L4 五點）</span>
+<ol class="steps"><li>持份者唔知自己真正想要咩。</li><li>佢哋用自己嘅術語、帶住隱含知識表達。</li><li>唔同持份者用唔同方式表達唔同 requirement。</li><li>機構同政治因素影響 requirement。</li><li>分析期間 requirement 會變：新持份者出現、商業環境改變。</li></ol>
+<span class="lab trap">易錯</span>
+<p>「Classification」唔係「prioritization」：前者係分組，後者係排先後同解決衝突。</p>
+</div>
+
+<div class="concept">
+<h3>8. Elicitation 技術：interview、observation 等</h3>
+<span class="lab">一句講完</span>
+<p>L4 嘅工具箱：<b>interviews、observation（ethnography）、surveys、prototyping、brainstorming、document analysis</b>。</p>
+<span class="lab why">Interview 點做先啱</span>
+<p><b>Open interview</b>：冇固定稿、問開放式問題，用嚟探索；<b>closed interview</b>：預先定好封閉式問題。大部分 requirement 訪問<b>兩樣混合</b>：開放式探索、封閉式確認。</p>
+<span class="lab pic">圖解：interview vs observation</span>
+<figure class="fig"><svg viewBox="0 0 360 230" role="img" aria-label="interview vs observation" style="max-width:380px">
+<rect class="hl" x="5" y="5" width="170" height="215" rx="10"/><text x="90" y="27" text-anchor="middle" font-size="13" font-weight="700">Interview</text>
+<g font-size="11.5"><text x="14" y="50" font-weight="700" fill="#17733A">✓ 強項</text><text x="14" y="68">深入了解背景同原因</text><text x="14" y="85">可以即場追問</text><text x="14" y="102">建立互信</text>
+<text x="14" y="130" font-weight="700" fill="#B42318">✗ 弱項</text><text x="14" y="148">花時間：做、記、分析</text><text x="14" y="165">受雙方 bias 影響</text></g>
+<rect class="ac" x="185" y="5" width="170" height="215" rx="10"/><text x="270" y="27" text-anchor="middle" font-size="13" font-weight="700">Observation</text>
+<g font-size="11.5"><text x="194" y="50" font-weight="700" fill="#17733A">✓ 強項</text><text x="194" y="68">用戶唔使講解自己工作</text><text x="194" y="85">相對平</text><text x="194" y="102">見到實際做法同社交、</text><text x="194" y="117">機構因素</text>
+<text x="194" y="145" font-weight="700" fill="#B42318">✗ 弱項</text><text x="194" y="163">打擾參與者</text><text x="194" y="180">被觀察時改變做法</text><text x="194" y="197">知識型工作睇唔到</text><text x="194" y="214">搵唔到大範圍／創新需求</text></g>
+</svg><figcaption>2024 Q22(2) 考 observation：點做 + 1 優點 + 1 缺點</figcaption></figure>
+<span class="lab eg">例子：2024 Q22(1) Tom 錯喺邊</span>
+<ol class="steps"><li>Tom 只用一張<b>是非題</b>清單（純 closed interview）。</li><li>結果：受訪者冇機會講自己嘅工作、問題同隱含需要，Tom 只能確認自己已經諗到嘅嘢（iceberg 水面以下全部漏咗），亦冇得追問。</li><li>正確做法：混合開放式問題（探索，例如「你一日點樣處理入院登記？」）同封閉式問題（確認），根據回答追問。</li></ol>
+<span class="lab trap">易錯</span>
+<p>Observation 嘅缺點「participants might change their way of working」同「knowledge-based activities are hard to observe」最常考。</p>
+</div>
+
+<div class="concept">
+<h3>9. Requirements specification：自然語言嘅問題同寫法指引</h3>
+<span class="lab">一句講完</span>
+<p>Specification 係將 user 同 system requirements 寫入 requirements document。寫法：<b>natural language、structured natural language、graphical notations（例如 use case）、mathematical specifications</b>。</p>
+<span class="lab why">自然語言嘅問題</span>
+<div class="tw"><table class="stack"><tr><th>類別</th><th>問題</th></tr>
+<tr><td>意思同理解</td><td>模糊、唔精確、靠上下文、隱含、行內術語</td></tr>
+<tr><td>邏輯同一致</td><td>唔完整、互相矛盾、範圍／時間模糊、混淆 shall／may</td></tr>
+<tr><td>規格同驗證</td><td>冇正式結構、驗證唔到、F 同 NF 混埋</td></tr>
+<tr><td>人同機構</td><td>政治原因隱藏或淡化真正需要</td></tr>
+<tr><td>文件維護</td><td>冗長重複，難讀難改</td></tr></table></div>
+<span class="lab pic">圖解：L4 指引</span>
+<figure class="fig"><svg viewBox="0 0 360 232" role="img" aria-label="writing guidelines" style="max-width:380px">
+<g font-size="12"><g class="hl"><rect x="5" y="5" width="350" height="32" rx="6"/><rect x="5" y="43" width="350" height="32" rx="6"/><rect x="5" y="81" width="350" height="32" rx="6"/><rect x="5" y="119" width="350" height="32" rx="6"/><rect x="5" y="157" width="350" height="32" rx="6"/></g>
+<text x="14" y="26">① 定一個標準格式，所有 requirement 跟住寫</text><text x="14" y="64">② shall = 必須；should = 想要（一致咁用）</text><text x="14" y="102">③ 用粗體／highlight 標出關鍵部分</text><text x="14" y="140">④ 避免電腦術語</text><text x="14" y="178">⑤ 加 rationale：點解需要（寫喺括號）</text></g>
+<text x="180" y="208" text-anchor="middle" font-size="11.5" fill="#566273">例：The system shall measure the blood sugar every</text><text x="180" y="224" text-anchor="middle" font-size="11.5" fill="#566273">10 minutes. (Changes in blood sugar are slow …)</text>
+</svg><figcaption>胰島素泵例子：requirement + 括號 rationale</figcaption></figure>
+<span class="lab eg">例子：Asm1 Q3 官方答案</span>
+<p>FR：「Users shall be able to create a new UML diagram from scratch, choosing from at least the most common UML types (e.g., Class, Sequence, Use Case).」</p>
+<p>Structured natural language：用標準模板（function、description、inputs、source、outputs、action、pre／post-condition…），保留自然語言易明，但減少模糊。Use case：結構化描述 actor 點同系統互動達成目標。</p>
+<span class="lab trap">易錯</span>
+<p>「should」唔係「shall」：考試要求必須功能就用 shall。</p>
+</div>
+
+<div class="concept">
+<h3>10. SRS 結構；requirement vs design</h3>
+<span class="lab">一句講完</span>
+<p><b>SRS</b>（software requirements specification）係開發者應該實作咩嘅<b>官方陳述</b>，包括 user 同 system requirements；有標準（IEEE 830-1998、ISO/IEC/IEEE 29148）。佢<b>唔係設計文件</b>：講 WHAT 唔講 HOW。</p>
+<span class="lab why">點解要標準結構</span>
+<p>令客同開發者都用得：客睇前面嘅 introduction、user requirements；開發者睇 system requirements、models。</p>
+<span class="lab pic">圖解：SRS 章節</span>
+<figure class="fig"><svg viewBox="0 0 360 260" role="img" aria-label="SRS structure" style="max-width:380px">
+<g font-size="12"><g class="hl"><rect x="5" y="5" width="170" height="28" rx="5"/><rect x="5" y="39" width="170" height="28" rx="5"/><rect x="5" y="73" width="170" height="28" rx="5"/><rect x="5" y="107" width="170" height="28" rx="5"/><rect x="5" y="141" width="170" height="28" rx="5"/></g>
+<g class="ac"><rect x="185" y="5" width="170" height="28" rx="5"/><rect x="185" y="39" width="170" height="28" rx="5"/><rect x="185" y="73" width="170" height="28" rx="5"/><rect x="185" y="107" width="170" height="28" rx="5"/><rect x="185" y="141" width="170" height="28" rx="5"/></g>
+<text x="12" y="24">1 Preface</text><text x="12" y="58">2 Introduction</text><text x="12" y="92">3 Glossary</text><text x="12" y="126">4 User requirements</text><text x="12" y="160">5 System architecture</text>
+<text x="192" y="24">6 System requirements</text><text x="192" y="58">7 System models</text><text x="192" y="92">8 System evolution</text><text x="192" y="126">9 Appendices</text><text x="192" y="160">10 Index</text></g>
+<text x="180" y="195" text-anchor="middle" font-size="12">左：客易明（自然語言、user 層次）</text><text x="180" y="213" text-anchor="middle" font-size="12">右：詳細技術資料（system 層次）</text>
+<text x="180" y="240" text-anchor="middle" font-size="11.5" fill="#566273">PIM project 嘅 SRS 唔使 models、evolution、appendix、index</text>
+</svg><figcaption>L4「Structure of a Requirements Specification」</figcaption></figure>
+<span class="lab eg">例子：requirement 同 design 分唔開</span>
+<ol class="steps"><li>要有初步 architecture 先組織得到 spec。</li><li>同現有系統互通會限制設計，同時帶出新 requirement。</li><li>某啲 NFR（例如用 N-version programming 做 reliability）會強制某種 architecture。</li></ol>
+<span class="lab trap">易錯</span>
+<p>SRS 入面有 design 元素<b>係可以接受</b>，條件係 <b>explicit、justified、traceable</b>；偷偷塞入去先係 defect。</p>
+</div>
+
+<div class="concept">
+<h3>11. Requirements validation：5 個 check 同技術</h3>
+<span class="lab">一句講完</span>
+<p>Validation 檢查 requirements 係咪定義咗<b>客真正想要</b>嘅系統，同 elicitation、analysis 有重疊。發現 requirement 錯好緊要：交付後先改，成本好高。</p>
+<span class="lab why">5 個 check（2024 Q22(3) 考 4 個）</span>
+<div class="tw"><table class="stack"><tr><th>Check</th><th>問題</th><th>失敗例子</th></tr>
+<tr><td>Validity</td><td>反映唔反映用戶真正需要？</td><td>做咗客唔需要嘅報表功能</td></tr>
+<tr><td>Consistency</td><td>有冇 requirement 互相矛盾？</td><td>「資料只存喺手機」vs「任何裝置都睇到歷史」</td></tr>
+<tr><td>Completeness</td><td>客要嘅功能齊唔齊？</td><td>有借書冇還書</td></tr>
+<tr><td>Realism</td><td>現有預算同技術做唔做到？</td><td>3 個月內用 2 個人做全港即時交通 AI</td></tr>
+<tr><td>Verifiability</td><td>可唔可以驗證？</td><td>「系統要好用」</td></tr></table></div>
+<span class="lab pic">圖解：3 種技術</span>
+<figure class="fig"><svg viewBox="0 0 360 140" role="img" aria-label="validation techniques" style="max-width:380px">
+<g font-size="12" text-anchor="middle"><rect class="hl" x="5" y="10" width="110" height="80" rx="8"/><text x="60" y="34" font-weight="700">Reviews</text><text x="60" y="54" font-size="11">人手系統分析</text><text x="60" y="70" font-size="11">定期、客 + 承辦商</text>
+<rect class="hl" x="125" y="10" width="110" height="80" rx="8"/><text x="180" y="34" font-weight="700">Prototyping</text><text x="180" y="54" font-size="11">用系統 model</text><text x="180" y="70" font-size="11">檢查 requirement</text>
+<rect class="hl" x="245" y="10" width="110" height="80" rx="8"/><text x="300" y="34" font-weight="700">Test-case</text><text x="300" y="50" font-weight="700">generation</text><text x="300" y="70" font-size="11">寫 test 檢查可驗證性</text></g>
+<text x="180" y="120" text-anchor="middle" font-size="12">好少可以喺 validation 搵晒所有問題</text>
+</svg><figcaption>Test-case generation：寫唔出 test 嘅 requirement 通常有問題</figcaption></figure>
+<span class="lab eg">例子：2024 Q22(3) 參考答案</span>
+<p>a) Consistency：requirements 之間冇矛盾或衝突。b) Verifiability：每條 requirement 都可以用 test 或其他方法客觀檢查係咪達到。c) Realism：喺現有預算、時間同技術下做得到。d) Completeness：客要求嘅所有功能同限制都已經包括。</p>
+<span class="lab trap">易錯</span>
+<p>Requirements validation（檢查 requirement 本身）同 software validation testing（檢查完成咗嘅軟件）唔同。</p>
+</div>
+
+<div class="concept">
+<h3>12. 管理 requirement 改變：traceability matrix 同 moving target</h3>
+<span class="lab">一句講完</span>
+<p><b>Requirements traceability matrix</b> 係一個表，將每條 requirement 連去來源、設計、code、test case 同其他 requirement。<b>Backward</b>：requirement 由邊度嚟；<b>forward</b>：requirement 去咗邊。</p>
+<span class="lab why">點解要</span>
+<ul><li><b>Static correctness</b>：證明系統完整、正確、有驗證、合規。</li><li><b>Dynamic resilience</b>：支援 impact analysis、change propagation、scope control、進度追蹤。</li></ul>
+<span class="lab pic">圖解</span>
+<figure class="fig"><svg viewBox="0 0 360 150" role="img" aria-label="traceability" style="max-width:380px">
+<defs><marker id="r12" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#15202B"/></marker></defs>
+<g font-size="12" text-anchor="middle"><rect class="bx" x="5" y="50" width="80" height="40" rx="8"/><text x="45" y="74">Source</text>
+<rect class="ac" x="120" y="50" width="80" height="40" rx="8"/><text x="160" y="74" font-weight="700">FR-01</text>
+<rect class="hl" x="245" y="5" width="110" height="32" rx="6"/><text x="300" y="26">Design element</text>
+<rect class="hl" x="245" y="54" width="110" height="32" rx="6"/><text x="300" y="75">Code module</text>
+<rect class="hl" x="245" y="103" width="110" height="32" rx="6"/><text x="300" y="124">Test case</text></g>
+<g class="ln"><line x1="120" y1="70" x2="87" y2="70" marker-end="url(#r12)"/><line x1="200" y1="62" x2="243" y2="22" marker-end="url(#r12)"/><line x1="200" y1="70" x2="243" y2="70" marker-end="url(#r12)"/><line x1="200" y1="78" x2="243" y2="118" marker-end="url(#r12)"/></g>
+<text x="100" y="40" text-anchor="middle" font-size="11" fill="#566273">backward</text><text x="222" y="145" text-anchor="middle" font-size="11" fill="#566273">forward</text>
+</svg><figcaption>FR-01 一改，forward links 即刻話你知要改邊啲 design、code、test</figcaption></figure>
+<span class="lab eg">例子：moving target（2025 Q22(4)）</span>
+<p>Moving target：開發期間 requirement 不斷改變，系統要追住一個郁緊嘅目標，而且<b>冇根治方法</b>（L2）。兩個通用方法：<b>change anticipation</b>（例如用 prototype 預早發現要改咩）同 <b>change tolerance</b>（例如 incremental development，令改動只影響未做嘅 increment，成本低）。</p>
+<span class="lab trap">易錯</span>
+<p>Moving target 冇 solution，只可以<b>減低</b>改變成本；答「凍結 requirement 就解決到」會失分。</p>
+</div>
+
+<h2 id="demo">三、完整示範：2022 Q22 = Asm1 Q4（Tom 圖書館，12 分）</h2>
+<div class="key"><b>一分鐘重點</b><ul><li>先背 4 個 stage 名 → 每個 stage 一句目的 → 喺情境搵對應嘅錯。官方 solution 有，以下跟住寫。</li></ul></div>
+<div class="card"><p style="font-family:ui-monospace,Menlo,monospace;font-size:13.5px">A large local public library with 20 librarians and 30 other staff members recently outsourced the development of a new computer-based book management system… Tom randomly picked 5 librarians and 5 frequent users of the library and had an interview with each of them. In each interview, Tom asked preselected questions and had open discussions with the interviewee, but he waited until all the interviews were completed to write down all the information he gathered from the interviews. Afterward, he compiled a long, flat list of requirements from the information, and the company started making plans based on those requirements.</p></div>
+<h3>Step 1：情境逐句對 stage</h3>
+<div class="tw"><table class="stack"><tr><th>情境句子</th><th>對應 stage</th><th>問題</th></tr>
+<tr><td>randomly picked 5 librarians and 5 frequent users</td><td>Discovery &amp; understanding</td><td>持份者唔夠：冇其他 30 個職員、管理層、偶爾用戶、IT 部、監管機構</td></tr>
+<tr><td>a long, flat list of requirements</td><td>Classification &amp; organization</td><td>冇分組、冇結構</td></tr>
+<tr><td>（冇提過排優先、解決衝突）；只訪問少數人</td><td>Prioritization &amp; negotiation</td><td>冇排優先；持份者之間冇協商</td></tr>
+<tr><td>waited until all interviews were completed to write down</td><td>Documentation</td><td>冇即時記錄，資料會唔準確、漏咗</td></tr></table></div>
+<h3>Step 2：答案</h3>
+<div class="ansbox"><b>(1) 四個 stage（0.5 分 × 4）</b>Requirements discovery and understanding; requirements classification and organization; requirements prioritization and negotiation; requirements documentation.</div>
+<div class="ansbox"><b>(2) 目的（&lt;100 words）</b>Discovery and understanding: interact with stakeholders to discover their requirements. Classification and organization: group related requirements into coherent clusters. Prioritization and negotiation: prioritize requirements and resolve requirement conflicts. Documentation: document the requirements as input to the next round of the spiral.</div>
+<div class="ansbox"><b>(3) 每個 stage 嘅問題（&lt;100 words）</b>Discovery: too few stakeholders were involved; other staff, managers and less frequent users were not interviewed, so requirements may be missing. Classification: the requirements were compiled into a long, flat list without being grouped into coherent clusters. Prioritization and negotiation: no prioritization was done, and conflicts between stakeholders were not negotiated, especially as only a few people were consulted. Documentation: information was written down only after all interviews, so details may have been forgotten or recorded inaccurately.</div>
+<p class="memo"><b>考試見到「Tom」就諗 elicitation 4 stage</b>：discovery 揾邊個問、classification 有冇分組、prioritization 有冇排先後同傾掂衝突、documentation 有冇即時記。</p>
+
+<h2 id="past">四、Past paper 全答</h2>
+<div class="practice"><span class="src">2025 Q22 · 12 分 · L4、L2</span>
+<p class="q">(1) Explain the differences between FR and NFR. Give one FR and one reliability NFR for a desktop presentation application. (&lt;100 words, 4 points)</p>
+<details class="ans"><summary>參考答案</summary><div><div class="ansbox"><b>答案</b>Functional requirements state the services the system should provide, i.e., what it should do in particular situations. Non-functional requirements are constraints on those services, such as performance or reliability, and often apply to the system as a whole. FR: The application shall allow the user to insert an image from a local file into the current slide. NFR (reliability): The application shall automatically save the open presentation at least every 60 seconds, so that no more than 1 minute of edits is lost when it crashes.</div></div></details>
+<p class="q">(2) Map activities to a) elicitation b) specification c) validation. (3 points)</p>
+<details class="ans"><summary>參考答案</summary><div><div class="ansbox"><b>答案</b>i) b　ii) b　iii) a　iv) c　v) a　vi) c</div><p>出處：L4 spiral view。Prototyping 同時係 elicitation 技術，但 spiral 圖將佢放喺 validation。</p></div></details>
+<p class="q">(3) Sort the four elicitation stages. (2 points)</p>
+<details class="ans"><summary>參考答案</summary><div><div class="ansbox"><b>答案</b>c) discovery and understanding → a) classification and organization → b) prioritization and negotiation → d) documentation</div></div></details>
+<p class="q">(4) Explain the moving target problem and the two general approaches to cope with it. (&lt;100 words, 3 points)</p>
+<details class="ans"><summary>參考答案</summary><div><div class="ansbox"><b>答案</b>The moving target problem is that requirements keep changing while the system is being developed, so developers are aiming at a target that moves; it cannot be eliminated. Change anticipation: include activities that foresee changes before significant rework is required, e.g., developing a prototype to show key features to customers early. Change tolerance: design the process so that changes can be accommodated at low cost, e.g., incremental development, where changes affect only increments not yet implemented.</div></div></details></div>
+
+<div class="practice"><span class="src">2024 Q22 · 12 分 · L4</span>
+<p class="q">(1) Tom interviewed hospital users with only a list of true/false questions. What did he do wrong and how should interviews be conducted? (&lt;60 words, 2 points)</p>
+<details class="ans"><summary>參考答案</summary><div><div class="ansbox"><b>答案</b>Tom used only closed true/false questions, so interviewees could not describe their work, problems and implicit needs, and he could not follow up. Interviews should mix open-ended questions to explore the domain and closed questions to confirm details, with follow-up questions when answers are unexpected.</div></div></details>
+<p class="q">(2) How to gather requirements via observation; one advantage and one disadvantage. (&lt;100 words, 4 points)</p>
+<details class="ans"><summary>參考答案</summary><div><div class="ansbox"><b>答案</b>In observation (ethnography), an analyst watches users doing their real work in their natural environment without interrupting, recording how tasks are actually carried out. Advantage: people do not have to explain or articulate their work, and the observer gains practical insight, including social and organizational factors. Disadvantage: participants may change the way they work while being observed, so the observer may not get a true picture; also, knowledge-based activities are hard to observe.</div></div></details>
+<p class="q">(3) Explain consistency, verifiability, realism and completeness. (&lt;100 words, 6 points)</p>
+<details class="ans"><summary>參考答案</summary><div><div class="ansbox"><b>答案</b>a) Consistency: the requirements do not conflict with or contradict each other. b) Verifiability: each requirement can be objectively checked, e.g., by a test, to decide whether the delivered system meets it. c) Realism: the requirements can be implemented within the available budget, schedule and technology. d) Completeness: the requirements include all the functions and constraints intended by the customer.</div></div></details></div>
+
+<div class="practice"><span class="src">2023 Q22 · 10 分 · L4、L6</span>
+<p class="q">1) Use an example to explain why the distinction between FR and NFR is not clear-cut. (&lt;100 words, 3 points)</p>
+<details class="ans"><summary>參考答案</summary><div><div class="ansbox"><b>答案</b>Requirements are not independent, and one requirement often generates others. For example, a security requirement "Only authorized staff shall access patient records" is non-functional, constraining the whole system. However, to satisfy it, functional requirements must be added, such as "The system shall provide a login function that authenticates users" and "The system shall check a user's role before displaying a record." Whether this need is written as a constraint or as services depends on the level of detail.</div></div></details>
+<p class="q">2) Why do high performance and high maintainability conflict in a distributed system? (&lt;100 words, 3 points)</p>
+<details class="ans"><summary>參考答案</summary><div><div class="ansbox"><b>答案</b>High performance requires localizing critical operations in a few large components deployed on the same machine to minimize communication over the network. High maintainability requires using fine-grained, self-contained components with clear interfaces and layers so they can be easily changed or replaced. In a distributed system, more fine-grained components mean more remote communication and indirection, which reduces performance, while fewer large components make changes harder.</div></div></details>
+<p class="q">3) For a desktop word processor, define one requirement verifiable via inspection and one via testing. (&lt;100 words, 4 points)</p>
+<details class="ans"><summary>參考答案</summary><div><div class="ansbox"><b>答案</b>Inspection: "All source code of the application shall conform to the company's Java coding standard, and every public method shall have a documentation comment." (checked by reviewing the code). Testing: "The application shall open a 100-page document within 2 seconds on the reference PC." (checked by executing the application and measuring the time).</div></div></details></div>
+
+<div class="practice"><span class="src">Asm1 Q3 · 8 分 · 官方 solution</span>
+<p class="q">Web-based LLM-assisted UML tool: 1) one FR for "New Diagram" (&lt;50 words) 2) one availability NFR (&lt;50 words).</p>
+<details class="ans"><summary>官方例子</summary><div><div class="ansbox"><b>官方答案</b>FR: Users shall be able to create a new UML diagram from scratch, choosing from at least the most common UML types (e.g., Class, Sequence, Use Case).<br>NFR: Users shall be able to access the application for at least 99.5% of requests during their typical 9 AM–6 PM working hours, measured monthly.</div></div></details></div>
+
+<h2 id="drill">五、Drill</h2>
+<div class="practice"><span class="src">Drill 1 · 改寫成可驗證</span>
+<p class="q">改寫：(a) "The app should be secure." (b) "The system shall be available most of the time."</p>
+<details class="ans"><summary>答案</summary><div><p>(a) The app shall lock a user account for 15 minutes after 5 consecutive failed login attempts, and shall encrypt all data in transit using TLS 1.3. (b) The system shall be available for at least 99.9% of each calendar month, excluding planned maintenance announced 48 hours in advance.</p></div></details></div>
+<div class="practice"><span class="src">Drill 2 · F 定 NF</span>
+<p class="q">分類：(a) 系統要每日自動備份資料 (b) 備份要喺 30 分鐘內完成 (c) 用戶可以匯出 PDF (d) 介面要支援中英文 (e) 系統唔可以將病人資料傳去外國 server。</p>
+<details class="ans"><summary>答案</summary><div><p>(a) FR（一個服務）(b) NFR（performance 限制）(c) FR (d) NFR（localization）(e) NFR（compliance／security 限制；亦可以寫成「系統不應做」嘅 FR，L4：FR may state what the system should not do，示範咗界線唔清楚）。</p></div></details></div>
+<div class="practice"><span class="src">Drill 3 · 搵 stage 錯</span>
+<p class="q">「Amy 為一間診所收 requirement：佢只問咗醫生，冇問護士同接待；即場記低重點；之後將 requirement 按『預約』『病歷』『收費』分組；但醫生要 A、接待要 B 時，佢兩樣都照寫，冇傾。」邊個 stage 有問題？</p>
+<details class="ans"><summary>答案</summary><div><p>Discovery &amp; understanding（持份者唔夠：漏咗護士、接待）同 prioritization &amp; negotiation（冇解決衝突）。Classification 同 documentation 做得啱。</p></div></details></div>
+
+<h2 id="fill">六、互動填充</h2>
+<div class="practice fill"><span class="src">Fill A · 歸類（填 elicitation／specification／validation）</span>
+<div class="frow"><p><b>1.</b> feasibility study</p><div class="fin"><span><input class="blank" data-ans="elicitation"></span></div></div>
+<div class="frow"><p><b>2.</b> requirements review</p><div class="fin"><span><input class="blank" data-ans="validation"></span></div></div>
+<div class="frow"><p><b>3.</b> user requirements specification</p><div class="fin"><span><input class="blank" data-ans="specification"></span></div></div>
+<div class="frow"><p><b>4.</b> system requirements modelling</p><div class="fin"><span><input class="blank" data-ans="specification"></span></div></div>
+<div class="frow"><p><b>5.</b> test-case generation for requirements</p><div class="fin"><span><input class="blank" data-ans="validation"></span></div></div>
+<div class="frow"><p><b>6.</b> user requirements elicitation</p><div class="fin"><span><input class="blank" data-ans="elicitation"></span></div></div>
+<div class="fillbar"><button class="btn pri" data-check>對答案</button><button class="btn" data-show>顯示答案</button><button class="btn" data-clear>清除</button><span class="fillmsg"></span></div></div>
+<div class="practice fill"><span class="src">Fill B · 邊個 validation check 失敗（validity／consistency／completeness／realism／verifiability）</span>
+<div class="frow"><p><b>1.</b> 「The system shall be user-friendly.」</p><div class="fin"><span><input class="blank" data-ans="verifiability"></span></div></div>
+<div class="frow"><p><b>2.</b> 一條 requirement 話報表每晚自動生成，另一條話報表只可以手動生成。</p><div class="fin"><span><input class="blank" data-ans="consistency"></span></div></div>
+<div class="frow"><p><b>3.</b> 有「借書」功能，但冇「還書」功能。</p><div class="fin"><span><input class="blank" data-ans="completeness"></span></div></div>
+<div class="frow"><p><b>4.</b> 要求 $5,000 預算內 1 個月做出自動駕駛系統。</p><div class="fin"><span><input class="blank" data-ans="realism"></span></div></div>
+<div class="frow"><p><b>5.</b> 開發者自己覺得型，加咗 VR 書架，但圖書館根本唔需要。</p><div class="fin"><span><input class="blank" data-ans="validity"></span></div></div>
+<div class="fillbar"><button class="btn pri" data-check>對答案</button><button class="btn" data-show>顯示答案</button><button class="btn" data-clear>清除</button><span class="fillmsg"></span></div></div>
+
+<h2 id="mcq">七、T/F + MC</h2>
+<h3>T/F（22 題）</h3>
+<div class="mcq" data-set="T"><script type="application/json">[
+{"t":"L4","s":"<p>Requirements are descriptions of the services a system should provide and the constraints on its operation.</p>","a":0,"e":"<b>True</b>。L4 定義。"},
+{"t":"L4","s":"<p>User requirements are mainly written for developers, testers and architects.</p>","a":1,"e":"<b>False</b>。呢個係 <b>system</b> requirements 嘅讀者；user requirements 寫俾客、用戶、product owner。"},
+{"t":"L4","s":"<p>Functional requirements may state what the system should not do.</p>","a":0,"e":"<b>True</b>。"},
+{"t":"L4","s":"<p>Non-functional requirements usually affect individual components rather than the overall architecture.</p>","a":1,"e":"<b>False</b>。NFR 通常影響<b>整體 architecture</b>。"},
+{"t":"L4","s":"<p>A non-functional requirement may generate other related functional requirements.</p>","a":0,"e":"<b>True</b>。例如 security 衍生 login 功能。"},
+{"t":"L4","s":"<p>Maintainability is easy to specify because it has simple, standard metrics.</p>","a":1,"e":"<b>False</b>。L4：No simple metrics for some goals (e.g., maintainability)。"},
+{"t":"L4","s":"<p>99.9% uptime corresponds to about 8.76 hours of downtime per year.</p>","a":0,"e":"<b>True</b>。\\(0.001 \\times 8760 = 8.76\\)。"},
+{"t":"L4","s":"<p>In practice, requirements elicitation, specification and validation are performed strictly once, in sequence.</p>","a":1,"e":"<b>False</b>。RE 係 iterative，交錯進行（spiral）。"},
+{"t":"L4","s":"<p>In the requirements iceberg model, stated requirements are about 10% of the actual needs.</p>","a":0,"e":"<b>True</b>。其餘 90% 喺水面以下。"},
+{"t":"L4","s":"<p>Regulatory bodies are stakeholders whose constraints are usually negotiable.</p>","a":1,"e":"<b>False</b>。Regulatory constraints are <b>non-negotiable</b>（而且成日被遺忘）。"},
+{"t":"L4","s":"<p>Secondary users do not use the system directly but feed it or depend on it.</p>","a":0,"e":"<b>True</b>。例如供應商、經理。"},
+{"t":"L4","s":"<p>A closed interview uses a predefined set of closed-ended questions.</p>","a":0,"e":"<b>True</b>。"},
+{"t":"L4","s":"<p>Observation is effective for discovering broader organizational requirements and suggesting innovations.</p>","a":1,"e":"<b>False</b>。呢個係 observation 嘅<b>弱點</b>。"},
+{"t":"L4","s":"<p>In requirements documents, \"should\" is used for mandatory requirements and \"shall\" for desirable ones.</p>","a":1,"e":"<b>False</b>。調轉咗：shall = mandatory，should = desirable。"},
+{"t":"L4","s":"<p>Structured natural language removes some problems of natural language while keeping most of its expressiveness.</p>","a":0,"e":"<b>True</b>。但仍然有時難寫得清楚冇歧義。"},
+{"t":"L4","s":"<p>The SRS is a design document that describes how the system will be implemented.</p>","a":1,"e":"<b>False</b>。SRS is NOT a design document：講 WHAT 唔講 HOW。"},
+{"t":"L4","s":"<p>A design element in a requirements specification is acceptable if it is explicit, justified and traceable.</p>","a":0,"e":"<b>True</b>。偷偷塞入先係 defect。"},
+{"t":"L4","s":"<p>The realism check asks whether the requirements can be implemented given the available budget and technology.</p>","a":0,"e":"<b>True</b>。"},
+{"t":"L4","s":"<p>Test-case generation can be used as a requirements validation technique.</p>","a":0,"e":"<b>True</b>。寫 test 檢查 verifiability。"},
+{"t":"L4","s":"<p>Requirements validation usually finds all problems in the requirements.</p>","a":1,"e":"<b>False</b>。You rarely find all requirements problems。"},
+{"t":"L4","s":"<p>Forward traceability records where a requirement came from.</p>","a":1,"e":"<b>False</b>。嗰個係 <b>backward</b>；forward 係 requirement 去咗邊（design、code、test）。"},
+{"t":"L2","s":"<p>Freezing requirements early fully solves the moving target problem.</p>","a":1,"e":"<b>False</b>。There is no solution to the moving target problem。"}
+]</script></div>
+<h3>MC（8 題，含多選）</h3>
+<div class="mcq" data-set="M"><script type="application/json">[
+{"t":"L4","s":"<p>Which is the best verifiable NFR?</p>","o":["The system should respond quickly.","The system shall respond to 95% of search requests within 1 second under 2,000 concurrent users.","The system shall be easy to maintain.","The system shall use a fast database."],"a":1,"e":"B 有數值、比例同負載條件。A、C 冇量度；D 係 design 選擇唔係可量度 requirement。"},
+{"t":"L4","s":"<p>Which are generic RE activities common to all processes? (Select all that apply)</p>","o":["Requirements elicitation","Requirements specification","Requirements validation","Requirements compilation"],"a":[0,1,2],"e":"L4：elicitation、specification、validation。D 唔係。"},
+{"t":"L4","s":"<p>What is the correct order of the elicitation stages?</p>","o":["Classification → Discovery → Documentation → Prioritization","Discovery → Classification → Prioritization → Documentation","Discovery → Prioritization → Classification → Documentation","Documentation → Discovery → Classification → Prioritization"],"a":1,"e":"B 啱（2025 Q22(3)）。"},
+{"t":"L4","s":"<p>Which are weaknesses of interviews listed in L4? (Select all that apply)</p>","o":["Time-consuming to run, record and analyze","Answers shaped by interviewer and interviewee bias","No room for follow-up questions","Hard to build rapport"],"a":[0,1],"e":"A、B 啱。C、D 錯：interview 嘅<b>強項</b>正係可以追問同建立互信。"},
+{"t":"L4","s":"<p>\"Two requirements state different maximum file sizes for the same upload.\" Which check fails?</p>","o":["Validity","Consistency","Realism","Completeness"],"a":1,"e":"B：互相矛盾 = consistency。"},
+{"t":"L4","s":"<p>Which SRS chapter describes fundamental assumptions and anticipated changes due to hardware evolution or changing user needs?</p>","o":["Introduction","System requirements specification","System evolution","Glossary"],"a":2,"e":"C：System evolution，幫設計者避免限制將來改動嘅決定。"},
+{"t":"L4","s":"<p>Which purposes does a requirements traceability matrix serve? (Select all that apply)</p>","o":["Impact analysis when a requirement changes","Demonstrating completeness and compliance","Progress tracking","Replacing the need for testing"],"a":[0,1,2],"e":"A、B、C 啱（static correctness + dynamic resilience）。D 錯。"},
+{"t":"L4","s":"<p>The \"faster horse\" problem in elicitation means:</p>","o":["Users describe surface-level solutions rather than the root problem","Developers work too fast","Requirements change faster than code","Interviews take too long"],"a":0,"e":"A 啱（「如果我問人想要咩，佢哋會話要隻快啲嘅馬」）。"}
+]</script></div>
+
+<h2 id="short">八、短答題</h2>
+<p class="q">1. Distinguish user requirements and system requirements, with one example each. (&lt;80 words)</p>
+<details class="ans"><summary>參考答案</summary><div><div class="ansbox"><b>答案</b>User requirements are high-level, natural-language statements for customers and users describing what they need, e.g., "A customer should be able to search for products." System requirements are detailed, precise descriptions for developers and testers of the services and constraints, e.g., "The system shall allow searching by name, category and price range and return results within 2 seconds for up to 10,000 products."</div></div></details>
+<p class="q">2. Name four stakeholder types and give one challenge of requirements elicitation. (&lt;80 words)</p>
+<details class="ans"><summary>參考答案</summary><div><div class="ansbox"><b>答案</b>Primary users who use the system daily; secondary users who feed or depend on it, such as managers; domain experts who know the business rules; and regulatory bodies that impose legal constraints. Challenge: stakeholders often do not know what they really want and express requirements in their own terms with implicit knowledge, so analysts may misunderstand them.</div></div></details>
+<p class="q">3. Why are requirements and design inseparable in practice? (&lt;80 words)</p>
+<details class="ans"><summary>參考答案</summary><div><div class="ansbox"><b>答案</b>An initial architecture is often needed to structure the requirements specification; interoperability with existing systems constrains the design and imposes new requirements; and some non-functional requirements, such as reliability achieved through N-version programming, force a particular architecture. Design elements in a specification are acceptable if they are explicit, justified and traceable.</div></div></details>
+
+<h2 id="faq">九、常見疑問</h2>
+<dl class="faq">
+<dt>Q：寫 requirement 要唔要加 rationale？</dt><dd>L4 指引建議加，Asm1 注意事項都講「Provide an explanation in parentheses if necessary」。字數夠就加一句。</dd>
+<dt>Q：Prototyping 係 elicitation 定 validation？</dt><dd>兩樣都係。L4 core techniques 將佢列做 elicitation 技術；validation techniques 亦有佢；spiral 圖放喺 validation。2025 Q22(2) 答 validation，可以加一句說明。</dd>
+<dt>Q：Availability 同 reliability 點分？</dt><dd>Availability：需要時用唔用到（uptime %）；reliability：幾耐壞一次（MTBF、failure rate）。</dd>
+<dt>Q：Validity check 同 completeness check 有咩分別？</dt><dd>Validity 問「寫咗嘅係唔係真正需要」（有冇寫錯或寫多咗）；completeness 問「需要嘅有冇寫晒」（有冇漏）。</dd>
+<dt>Q：Moving target 係 L2 定 L4？</dt><dd>L2 coping with change。2025 放喺 RE 題（Q22(4)），兩課都要識。</dd>
+</dl>

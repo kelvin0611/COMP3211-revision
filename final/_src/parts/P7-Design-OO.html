@@ -1,0 +1,455 @@
+<h1>P7 · Structured vs OO Design：DFD、Java OOP、GRASP、SOLID</h1>
+<p class="sub">主要考 Section A（T/F）+ 小題（2022 Q23(3) DIP 5 分）· 對應 L7 Structured Software Development、L7b OOP in Java、L8 OO Analysis, Design and Programming（後半）</p>
+<ul class="toc">
+<li><a href="#exam">一、點考</a></li><li><a href="#notes">二、筆記：由零講起</a></li>
+<li><a href="#demo">三、完整示範：用 SOLID 改 code</a></li><li><a href="#past">四、Past paper 全答 + 預測題</a></li>
+<li><a href="#drill">五、Drill</a></li><li><a href="#fill">六、互動填充</a></li>
+<li><a href="#mcq">七、T/F + MC</a></li><li><a href="#short">八、短答題</a></li><li><a href="#faq">九、常見疑問</a></li></ul>
+
+<h2 id="exam">一、點考</h2>
+<div class="key"><b>一分鐘重點</b><ul>
+<li>L7（structured／DFD）同 L7b（Java OOP）<b>未出過長題</b>（L7 係今年新加嘅內容），但好可能出 <b>Section A T/F</b>。</li>
+<li>L8 後半：<b>SOLID</b> 已經考過（2022 Q23(3) DIP 5 分）；<b>GRASP、cohesion／coupling</b> 會幫你答 class diagram 嘅 operation 放邊同架構題。</li>
+<li>呢頁 T/F 題最多（28 題），因為 Section A 好可能抽呢幾課嘅細節。</li></ul></div>
+<div class="tw"><table class="stack"><tr><th>來源</th><th>題目</th><th>分數</th></tr>
+<tr><td>2022 Q23(3)</td><td>Dependency Inversion Principle：提議咩、點解</td><td>5</td></tr>
+<tr><td>2023 Q23(3)</td><td>printTask 放 model（同 SRP、MVC 相關）</td><td>3</td></tr>
+<tr><td>Section A（每年）</td><td>L7、L7b、L8 細節嘅 T/F（原題冇公開）</td><td>估計 3–6</td></tr>
+<tr><td>預測</td><td>SOLID 某一條原則解釋 + 例子；cohesion vs coupling；analysis vs design</td><td>3–6</td></tr></table></div>
+<h3>SOLID 題答題步驟</h3>
+<ol class="steps"><li>寫原則嘅定義（一句英文原句）。</li><li>講違反會點：例如「每加一種新 shape 都要改 for-loop」。</li><li>講點樣改：抽 interface／abstract class、composition、拆 class。</li><li>講好處：改動局部化、易重用、易測試。</li></ol>
+
+<h2 id="notes">二、筆記：由零講起</h2>
+<div class="key"><b>一分鐘重點</b><ul>
+<li><b>Analysis</b> 講 WHAT（同實作無關）；<b>design</b> 講 HOW（實作導向藍圖）；<b>programming</b> 將藍圖變成 code。</li>
+<li><b>Structured（PO）</b>：function-first、top-down、圈動詞；DFD + ER model；structure chart。</li>
+<li><b>OO</b>：圈名詞；class、encapsulation、inheritance、polymorphism；CRC cards + GRASP；SOLID。</li>
+<li>兩種方法都追求 <b>high cohesion、low coupling、information hiding</b>。</li></ul></div>
+
+<div class="concept">
+<h3>1. Analysis vs design vs programming</h3>
+<span class="lab">一句講完</span>
+<p><b>Analysis</b>（狹義）：建立同實作無關嘅 analysis model，描述系統<b>必須做咩、知道咩</b>。<b>Design</b>：喺特定實作環境下滿足 requirement 嘅具體藍圖（唔一定可以執行）。<b>Programming</b>：將藍圖實現成可執行 source code。</p>
+<span class="lab why">點解要分</span>
+<p>先搞清楚問題（唔受技術限制），再揀解決方法；混埋一齊會將設計決定偷偷塞入 requirement。</p>
+<span class="lab pic">圖解</span>
+<figure class="fig"><svg viewBox="0 0 360 170" role="img" aria-label="analysis design programming" style="max-width:380px">
+<defs><marker id="d1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#15202B"/></marker></defs>
+<g font-size="12" text-anchor="middle"><rect class="hl" x="5" y="20" width="105" height="80" rx="8"/><text x="57" y="42" font-weight="700">Analysis</text><text x="57" y="62">WHAT</text><text x="57" y="80" font-size="11">implementation-</text><text x="57" y="93" font-size="11">independent</text>
+<rect class="ac" x="128" y="20" width="105" height="80" rx="8"/><text x="180" y="42" font-weight="700">Design</text><text x="180" y="62">HOW</text><text x="180" y="80" font-size="11">implementation-</text><text x="180" y="93" font-size="11">specific 藍圖</text>
+<rect class="bx" x="250" y="20" width="105" height="80" rx="8"/><text x="302" y="42" font-weight="700">Programming</text><text x="302" y="62">CODE</text><text x="302" y="80" font-size="11">可執行</text></g>
+<g class="ln"><line x1="110" y1="60" x2="126" y2="60" marker-end="url(#d1)"/><line x1="233" y1="60" x2="248" y2="60" marker-end="url(#d1)"/></g>
+<text x="180" y="130" text-anchor="middle" font-size="12">越向右：越具體、越接近 code</text><text x="180" y="150" text-anchor="middle" font-size="11.5" fill="#566273">Analysis 內容：essential behaviour + information</text>
+</svg><figcaption>L7「Software Analysis Versus Design」</figcaption></figure>
+<span class="lab eg">例子：圖書館</span>
+<p>Analysis：「借書時要檢查會員、物品同借書上限」（DFD + ER）。Design：「checkout_item() 依次 call validate_member()、look_up_item()…」（structure chart + pseudocode）。Programming：寫成 Python function。</p>
+<span class="lab trap">易錯</span>
+<p>Analysis model <b>唔可以執行</b>、離 code 好遠；design 先係「可以翻譯成 source code」。</p>
+</div>
+
+<div class="concept">
+<h3>2. Structured（procedure-oriented）development</h3>
+<span class="lab">一句講完</span>
+<p>一種 <b>top-down、function-first</b> 嘅方法：軟件係一堆分組成 function／procedure 嘅指令；著重<b>動詞</b>（系統做咩）；data 係被動、傳嚟傳去，logic 主動控制流程。</p>
+<span class="lab why">理論基礎</span>
+<ul><li><b>Dijkstra 1968</b>「Go To Statement Considered Harmful」：無限制跳轉令邏輯難明 → structured control flow。</li><li><b>Wirth 1971</b>「Stepwise Refinement」：將問題逐步細化。</li><li><b>Parnas 1972</b>：用 <b>information hiding</b> 分 module，唔係按執行次序分。</li></ul>
+<span class="lab pic">圖解：三個階段用咩工具</span>
+<figure class="fig"><svg viewBox="0 0 360 200" role="img" aria-label="structured development" style="max-width:380px">
+<g font-size="11.5"><rect class="hl" x="5" y="5" width="350" height="56" rx="6"/><text x="14" y="24" font-weight="700">Analysis（What）</text><text x="14" y="41">functional decomposition · DFD · ER model</text><text x="14" y="55">圈動詞 → process；名詞 → data store／flow</text>
+<rect class="ac" x="5" y="68" width="350" height="56" rx="6"/><text x="14" y="87" font-weight="700">Design（How）</text><text x="14" y="104">structure chart · IPO spec · pseudocode／flowchart</text><text x="14" y="118">high cohesion、low coupling、info hiding</text>
+<rect class="bx" x="5" y="131" width="350" height="62" rx="6"/><text x="14" y="150" font-weight="700">Programming</text><text x="14" y="167">C、Pascal、Python；一個 module 一個 function</text><text x="14" y="182">parameter（唔用 global）；by value vs by reference</text></g>
+</svg><figcaption>L7「Structured Analysis/Design &amp; Procedural Programming」</figcaption></figure>
+<span class="lab eg">例子：動詞分層（L7）</span>
+<div class="tw"><table class="stack"><tr><th>層次</th><th>例子</th><th>處理</th></tr>
+<tr><td>High-level</td><td>process、manage、handle</td><td>上層 DFD 嘅 parent process → 再分解</td></tr>
+<tr><td>Low-level</td><td>validate、compute、update</td><td>Functional primitive → 寫 mini-spec</td></tr>
+<tr><td>Too-low-level</td><td>open file、increment、format</td><td>Design 細節 → 留俾 design</td></tr></table></div>
+<span class="lab trap">易錯</span>
+<p>Functional primitive 嘅條件：單一清楚目的；一份 mini-spec 寫得晒；input／output 穩定；唔需要 design 決定；用戶同分析員都明。</p>
+</div>
+
+<div class="concept">
+<h3>3. Data flow diagram（DFD）：4 個符號、leveling、balancing</h3>
+<span class="lab">一句講完</span>
+<p>DFD 畫<b>資料喺邊度流動、被邊個 process 轉換</b>：process（圓）、data store（有分隔線嘅長方形）、external entity（長方形）、data flow（有名嘅箭咀）。</p>
+<span class="lab why">Leveling 同 balancing</span>
+<p><b>Leveling</b>：將一個 process 向下分解成 sub-process（Level-0 → 1 → 2）。<b>Balancing</b>：檢查邊界，每層嘅 input／output 一定要同上一層<b>完全一樣</b>（下層可以加 local data store）。</p>
+<span class="lab pic">圖解：library Level-0（context）</span>
+<figure class="fig"><svg viewBox="0 0 360 240" role="img" aria-label="level 0 DFD" style="max-width:380px">
+<defs><marker id="df" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#15202B"/></marker></defs>
+<rect class="ac" x="5" y="20" width="95" height="40" rx="2"/><text x="52" y="45" text-anchor="middle" font-size="12" font-weight="700">LIBRARIAN</text>
+<rect class="ac" x="5" y="180" width="95" height="40" rx="2"/><text x="52" y="205" text-anchor="middle" font-size="12" font-weight="700">MEMBER</text>
+<circle cx="295" cy="120" r="55" fill="#D9EFEE" stroke="#0B7472" stroke-width="1.4"/><text x="295" y="116" text-anchor="middle" font-size="12.5" font-weight="700">0</text><text x="295" y="134" text-anchor="middle" font-size="12" font-weight="700">Library System</text>
+<g class="ln"><line x1="100" y1="30" x2="252" y2="88" marker-end="url(#df)"/><line x1="250" y1="102" x2="102" y2="52" marker-end="url(#df)"/><line x1="100" y1="190" x2="250" y2="140" marker-end="url(#df)"/><line x1="252" y1="152" x2="102" y2="212" marker-end="url(#df)"/></g>
+<g font-size="10.5" fill="#566273"><text x="150" y="38" transform="rotate(21 150 38)">member details, item</text><text x="128" y="84" transform="rotate(18 128 84)">member ID issued</text><text x="118" y="176" transform="rotate(-18 118 176)">keyword, IDs, return</text><text x="140" y="222" transform="rotate(-21 140 222)">titles, due date, fine</text></g>
+</svg><figcaption>Level-0：只得一個 process、冇 data store；界定系統範圍（L7 有 9 條邊界 flow）</figcaption></figure>
+<div class="tw"><table class="stack"><tr><th>Level</th><th>內容</th></tr>
+<tr><td>Level-0（context）</td><td>一個 bubble = 成個系統；external entity；邊界 flow；<b>冇 data store</b>、冇規則</td></tr>
+<tr><td>Level-1</td><td>主要 process（1 Register member … 5 Return item）同 data store（D1 Member Records、D2 Item Catalogue、D3 Loans）</td></tr>
+<tr><td>Level-2</td><td>將 process 4 Checkout 拆成 4.1 Validate member … 4.5 Report outcome；可以加新 local store（D5 Loan Rules）</td></tr></table></div>
+<span class="lab eg">例子：DFD 講唔到嘅嘢</span>
+<p>DFD 冇<b>時間同次序</b>嘅概念：「due date passes」呢類時間觸發、「每步都過先寫入」呢類次序，只可以寫喺 mini-spec 或者用 state machine。DFD 講資料去邊，<b>唔講點樣決定一個值</b>（規則放 mini-spec）。</p>
+<span class="lab trap">易錯</span>
+<p>Level-0 唔畫 data store（store 喺 bubble 入面）。只有 entity 同 store 可以重複畫，<b>process 唔可以</b>。下層多出一條邊界 flow = 冇 elicit 過嘅 requirement；少咗 = 漏洞。</p>
+</div>
+
+<div class="concept">
+<h3>4. ER model：DFD 嘅資料伙伴</h3>
+<span class="lab">一句講完</span>
+<p><b>Entity-Relationship model</b> 描述 domain 入面互相關連嘅「嘢」，係 DFD 嘅邏輯資料伙伴，隨 DFD 細化逐步完善。</p>
+<span class="lab why">8 個步驟（L7）</span>
+<ol class="steps"><li>由名詞同 data store 搵 entity（D1 → MEMBER、D2 → ITEM）。</li><li>由動詞同存取多個 store 嘅 process 搵 relationship（MEMBER borrows ITEM）。</li><li>定 cardinality 同 participation（MEMBER 1:M LOAN）。</li><li>用 associative entity 解決 M:N（MEMBER M:N ITEM → LOAN，有 loan date、due date）。</li><li>由 data dictionary 同 flow 加 attribute 同 identifier。</li><li>Normalize 到 3NF。</li><li>同 DFD 交叉驗證。</li><li>DFD 細化時記錄同迭代。</li></ol>
+<span class="lab pic">圖解：M:N 變 associative entity</span>
+<figure class="fig"><svg viewBox="0 0 360 170" role="img" aria-label="ER model" style="max-width:380px">
+<g font-size="12" text-anchor="middle"><rect class="hl" x="5" y="15" width="90" height="36" rx="2"/><text x="50" y="38" font-weight="700">MEMBER</text>
+<polygon class="ac" points="180,13 225,33 180,53 135,33"/><text x="180" y="37" font-size="11">borrows</text>
+<rect class="hl" x="265" y="15" width="90" height="36" rx="2"/><text x="310" y="38" font-weight="700">ITEM</text>
+<line x1="95" y1="33" x2="135" y2="33" stroke="#15202B"/><line x1="225" y1="33" x2="265" y2="33" stroke="#15202B"/><text x="112" y="27" font-size="11">M</text><text x="248" y="27" font-size="11">N</text>
+<rect class="hl" x="5" y="110" width="90" height="36" rx="2"/><text x="50" y="133" font-weight="700">MEMBER</text>
+<rect class="ac" x="135" y="110" width="90" height="36" rx="2"/><text x="180" y="127" font-weight="700">LOAN</text><text x="180" y="141" font-size="10">due_date, open</text>
+<rect class="hl" x="265" y="110" width="90" height="36" rx="2"/><text x="310" y="133" font-weight="700">ITEM</text>
+<line x1="95" y1="128" x2="135" y2="128" stroke="#15202B"/><line x1="225" y1="128" x2="265" y2="128" stroke="#15202B"/><text x="104" y="122" font-size="11">1</text><text x="128" y="122" font-size="11">M</text><text x="232" y="122" font-size="11">M</text><text x="258" y="122" font-size="11">1</text></g>
+<text x="180" y="82" text-anchor="middle" font-size="18">⇓</text>
+</svg><figcaption>上：M:N；下：用 LOAN 做 associative entity，變兩個 1:M</figcaption></figure>
+<span class="lab eg">例子</span>
+<p>D4 Fines 冇對應 entity：fine 只係 return 時計出嚟報告，係 design 決定要唔要存，唔係 analysis 發現。</p>
+<span class="lab trap">易錯</span>
+<p>DFD 同 ER model 要對得上：每個 data store 對應 entity（或者講明點解冇）。</p>
+</div>
+
+<div class="concept">
+<h3>5. Structured design：由 process 到 module（6 個 task）</h3>
+<span class="lab">一句講完</span>
+<p>Design 決定<b>邊個 module 擁有邊個 process</b>、每個 module 守咩 contract。Input 係 analysis model（DFD、mini-spec、ER）。</p>
+<span class="lab why">6 個 task</span>
+<ol class="steps"><li>每個 process 一個 owner → module list（雙向可追溯）。</li><li>Top-down 排 module → <b>structure chart</b>。</li><li>寫每個 module 嘅 contract → <b>IPO</b>（input-process-output）spec。</li><li>定資料結構同擁有權 → record layout、parameter list。</li><li>指定內部邏輯 → pseudocode。</li><li>檢討質素、隱藏決定 → cohesion／coupling 檢查。</li></ol>
+<span class="lab pic">圖解：structure chart</span>
+<figure class="fig"><svg viewBox="0 0 360 200" role="img" aria-label="structure chart" style="max-width:380px">
+<g font-size="10.5" text-anchor="middle"><rect class="ac" x="140" y="5" width="80" height="28" rx="3"/><text x="180" y="23" font-weight="700">main</text>
+<rect class="hl" x="20" y="65" width="95" height="28" rx="3"/><text x="67" y="83">search_catalog</text>
+<rect class="hl" x="135" y="65" width="95" height="28" rx="3"/><text x="182" y="83">checkout_item</text>
+<rect class="hl" x="250" y="65" width="95" height="28" rx="3"/><text x="297" y="83">return_item</text>
+<rect class="bx" x="2" y="140" width="88" height="28" rx="3"/><text x="46" y="158" font-size="9.5">validate_member</text>
+<rect class="bx" x="92" y="140" width="86" height="28" rx="3"/><text x="135" y="158" font-size="9.5">look_up_item</text>
+<rect class="bx" x="180" y="140" width="90" height="28" rx="3"/><text x="225" y="158" font-size="9.5">check_loan_limit</text>
+<rect class="bx" x="272" y="140" width="86" height="28" rx="3"/><text x="315" y="158" font-size="9.5">compute_fine</text></g>
+<g stroke="#15202B" stroke-width="1.2"><line x1="180" y1="33" x2="67" y2="65"/><line x1="180" y1="33" x2="182" y2="65"/><line x1="180" y1="33" x2="297" y2="65"/><line x1="182" y1="93" x2="46" y2="140"/><line x1="182" y1="93" x2="135" y2="140"/><line x1="182" y1="93" x2="225" y2="140"/><line x1="297" y1="93" x2="315" y2="140"/></g>
+<text x="180" y="190" text-anchor="middle" font-size="11.5" fill="#566273">上層 call 下層；同層唔會互相 call；DFD flow 變 data couple</text>
+</svg><figcaption>簡化版（L7 Task 2）；每片葉都係 Level-2 DFD 嘅 functional primitive</figcaption></figure>
+<span class="lab eg">例子：programming + testing</span>
+<p>每個 module 變一個短、單一目的嘅 Python function；main driver 一個 loop：load data → show menu → read choice → dispatch → loop until quit。Testing 跟 structure chart：先 unit-test 葉，再 bottom-up 整合。</p>
+<span class="lab trap">易錯</span>
+<p>Design 只係組織，<b>唔會發明新工作</b>：每片葉都應該係 DFD 已有嘅 primitive。</p>
+</div>
+
+<div class="concept">
+<h3>6. Cohesion 同 coupling</h3>
+<span class="lab">一句講完</span>
+<p><b>Cohesion</b>：一個 module／class 入面嘅元素有幾屬於一齊（<b>越高越好</b>）。<b>Coupling</b>：唔同 module 之間有幾互相依賴（<b>越低越好</b>）。</p>
+<span class="lab why">點解</span>
+<p>High cohesion：一個 module 一件事，易明、易測、易重用。Low coupling：改動留喺局部，冇連鎖反應，module 可以獨立替換。</p>
+<span class="lab pic">圖解：L7 兩個 checkout 設計</span>
+<figure class="fig"><svg viewBox="0 0 360 220" role="img" aria-label="cohesion coupling" style="max-width:380px">
+<rect x="5" y="5" width="170" height="205" rx="8" fill="#FADFDB" stroke="#B42318"/><text x="90" y="25" text-anchor="middle" font-size="12.5" font-weight="700">✗ 差設計</text>
+<g font-size="11"><text x="14" y="48">checkout_item() 自己：</text><text x="14" y="66">• validate member</text><text x="14" y="82">• update catalogue</text><text x="14" y="98">• compute fine</text><text x="14" y="114">• print 落 screen</text><text x="14" y="140" font-weight="700">Cohesion 低</text><text x="14" y="156">四樣唔相關嘅工作</text><text x="14" y="178" font-weight="700">Coupling 高</text><text x="14" y="194">掂 D1、D2、D3 + screen</text></g>
+<rect x="185" y="5" width="170" height="205" rx="8" fill="#DCF1E3" stroke="#17733A"/><text x="270" y="25" text-anchor="middle" font-size="12.5" font-weight="700">✓ 好設計</text>
+<g font-size="11"><text x="194" y="48">checkout_item() 只係</text><text x="194" y="64">依次 call：</text><text x="194" y="82">validate_member(…)</text><text x="194" y="98">restore_item(…)</text><text x="194" y="114">report_outcome(…)</text><text x="194" y="140" font-weight="700">Cohesion 高</text><text x="194" y="156">一個 module 一件事</text><text x="194" y="178" font-weight="700">Coupling 低</text><text x="194" y="194">compute_fine(due, ret)</text></g>
+</svg><figcaption>compute_fine 只收需要嘅兩個日期，完全唔掂 store</figcaption></figure>
+<span class="lab eg">例子：OO 版本（L8）</span>
+<p>Loan 只知道日期同 fine，從來唔 format UI 文字（high cohesion）；Catalog 用 message 同 Member、LibraryItem 溝通，唔掂佢哋內部（low coupling）。警號：一個 class 嘅職責要用「and」先講得晒。</p>
+<span class="lab trap">易錯</span>
+<p>減 coupling 嘅方法：用 parameter 傳資料、<b>唔用 global</b>；OO 偏好 composition 多過深層 inheritance。</p>
+</div>
+
+<div class="concept">
+<h3>7. Information hiding（Parnas KWIC）</h3>
+<span class="lab">一句講完</span>
+<p>Module 嘅內部實作細節<b>保密</b>，外面只可以經穩定嘅 public interface 使用；分 module 嘅準則係<b>隱藏每個 module 嘅設計決定</b>（尤其最可能改嘅）。</p>
+<span class="lab why">KWIC 例子</span>
+<p>KWIC（Key Word in Context）：讀入多行文字，每行做 circular shift，再按字母排序輸出。按<b>執行次序</b>分（Input、Shift、Alphabetizer、Output 共用 array）：一旦檔案太大要改用 database，<b>所有 module 都要改</b>。按 information hiding 分：用一個 line storage module 隱藏「資料點樣儲存」，其他 module 經 interface 存取，改儲存方式只影響一個 module。</p>
+<span class="lab pic">圖解</span>
+<figure class="fig"><svg viewBox="0 0 360 220" role="img" aria-label="information hiding KWIC" style="max-width:380px">
+<text x="90" y="16" text-anchor="middle" font-size="12" font-weight="700">✗ 按流程分</text><text x="270" y="16" text-anchor="middle" font-size="12" font-weight="700">✓ 按 info hiding 分</text>
+<g font-size="11" text-anchor="middle"><g class="hl"><rect x="5" y="25" width="80" height="26" rx="4"/><rect x="95" y="25" width="80" height="26" rx="4"/><rect x="5" y="60" width="80" height="26" rx="4"/><rect x="95" y="60" width="80" height="26" rx="4"/></g><text x="45" y="42">Input</text><text x="135" y="42">Shift</text><text x="45" y="77">Alphabetize</text><text x="135" y="77">Output</text>
+<rect x="30" y="120" width="120" height="36" rx="4" fill="#FADFDB" stroke="#B42318"/><text x="90" y="135">共享 String[]</text><text x="90" y="149">（人人都知格式）</text></g>
+<g stroke="#B42318" stroke-width="1.2"><line x1="45" y1="86" x2="70" y2="120"/><line x1="135" y1="86" x2="110" y2="120"/><line x1="45" y1="51" x2="60" y2="120"/><line x1="135" y1="51" x2="120" y2="120"/></g>
+<g font-size="11" text-anchor="middle"><g class="hl"><rect x="190" y="25" width="80" height="26" rx="4"/><rect x="280" y="25" width="75" height="26" rx="4"/><rect x="190" y="60" width="80" height="26" rx="4"/><rect x="280" y="60" width="75" height="26" rx="4"/></g><text x="230" y="42">Input</text><text x="317" y="42">Shift</text><text x="230" y="77">Alphabetize</text><text x="317" y="77">Output</text>
+<rect class="ac" x="210" y="120" width="130" height="36" rx="4"/><text x="275" y="135" font-weight="700">LineStorage</text><text x="275" y="149">getLine()／setLine()</text></g>
+<g stroke="#17733A" stroke-width="1.2"><line x1="230" y1="86" x2="250" y2="120"/><line x1="317" y1="86" x2="300" y2="120"/></g>
+<text x="180" y="185" text-anchor="middle" font-size="11.5">改用 database：左邊 4 個都要改；右邊只改 LineStorage</text>
+<text x="180" y="205" text-anchor="middle" font-size="11" fill="#566273">Parnas 1972：hide the design decisions most likely to change</text>
+</svg><figcaption>L7 Information Hiding (1)–(3)</figcaption></figure>
+<span class="lab eg">例子：OO 嘅 encapsulation</span>
+<p>LibraryItem 嘅 attribute 全部 private，只可以經 checkout()、giveBack() 改；object 自己守住「可唔可以借」、借書上限、due date 呢啲規則。</p>
+<span class="lab trap">易錯</span>
+<p>Information hiding 唔係「冇文件」：佢係<b>隱藏實作</b>，interface 要清楚公開。「Getters everywhere」（將所有內部用 getter 開放）違反佢（L8 pitfall）。</p>
+</div>
+
+<div class="concept">
+<h3>8. Java OOP 基本：class、object、constructor、overloading、encapsulation</h3>
+<span class="lab">一句講完</span>
+<p>Class 係 object 嘅藍圖；object 用 <code>new</code> 建立，變數存住嘅係 object 嘅 <b>reference</b>。Constructor 初始化 object；<b>overloading</b> = 同名 method、唔同 signature。</p>
+<span class="lab why">Encapsulation 同 least privilege</span>
+<p>Attribute 用 <code>private</code>，經 public method 存取：外面唔可以亂改狀態（例如 Hero 嘅 health 唔可以俾外面設做負數）。<b>Principle of least privilege</b>：每個 module 只可以存取佢合法用途需要嘅資訊同資源。</p>
+<span class="lab pic">圖解：object 同 reference</span>
+<figure class="fig"><svg viewBox="0 0 360 150" role="img" aria-label="object reference" style="max-width:380px">
+<defs><marker id="o1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#15202B"/></marker></defs>
+<text x="60" y="18" text-anchor="middle" font-size="12" font-weight="700">Stack（變數）</text><text x="260" y="18" text-anchor="middle" font-size="12" font-weight="700">Heap（object）</text>
+<rect class="bx" x="10" y="35" width="100" height="32" rx="4"/><text x="18" y="56" font-size="12" font-family="ui-monospace,Menlo,monospace">h1 ●</text>
+<rect class="bx" x="10" y="85" width="100" height="32" rx="4"/><text x="18" y="106" font-size="12" font-family="ui-monospace,Menlo,monospace">h2 ●</text>
+<rect class="hl" x="190" y="45" width="150" height="62" rx="6"/><text x="200" y="66" font-size="12" font-weight="700">:Hero</text><text x="200" y="84" font-size="11.5" font-family="ui-monospace,Menlo,monospace">name = "Ann"</text><text x="200" y="100" font-size="11.5" font-family="ui-monospace,Menlo,monospace">health = 100</text>
+<g class="ln"><line x1="52" y1="51" x2="188" y2="65" marker-end="url(#o1)"/><line x1="52" y1="101" x2="188" y2="90" marker-end="url(#o1)"/></g>
+<text x="180" y="140" text-anchor="middle" font-size="11.5">Hero h2 = h1;  兩個變數指向同一個 object</text>
+</svg><figcaption>改 h2.health，h1 都見到</figcaption></figure>
+<span class="lab eg">例子：overloading vs overriding</span>
+<div class="tw"><table class="stack"><tr><th></th><th>Overloading</th><th>Overriding</th></tr>
+<tr><td>喺邊</td><td>同一個 class</td><td>Subclass 改 superclass 嘅 method</td></tr>
+<tr><td>Signature</td><td>同名、<b>唔同</b> parameter</td><td>同名、<b>相同</b> signature</td></tr>
+<tr><td>幾時決定</td><td>Compile time</td><td>Runtime（polymorphism）</td></tr>
+<tr><td>例子</td><td><code>fight()</code>、<code>fight(Monster m)</code></td><td>Monster 改寫 Hero 嘅 <code>fight()</code></td></tr></table></div>
+<span class="lab trap">易錯</span>
+<p>Return type 唔同但 parameter 一樣<b>唔算</b> overloading（compile error）。</p>
+</div>
+
+<div class="concept">
+<h3>9. Inheritance、polymorphism、abstract class、interface</h3>
+<span class="lab">一句講完</span>
+<p><b>Inheritance</b>：subclass 繼承 superclass（is-a）。<b>Polymorphism</b>：同一個 message，唔同 subclass 各自回應。<b>Abstract class</b>：有 abstract method、唔可以 instantiate。<b>Interface</b>：只定義 method signature，class implements 佢。</p>
+<span class="lab why">點解要</span>
+<p>Polymorphism <b>取代 branching</b>：唔使「if kind == BOOK … else if CD …」，加新種類只要加 subclass（L8：no kind field, no lookup table, no if-chain）。需要一個共同 origin 先可以 generic programming（一個 List 裝晒唔同種類）。</p>
+<span class="lab pic">圖解：L8 item kinds</span>
+{{UML:p7-poly}}
+<span class="lab eg">例子：Composite pattern（L7b）</span>
+<p>Leaf 同 Composite 都係 Component；Composite 入面有一堆 Component（可以係 leaf 或者再一個 composite），call <code>operation()</code> 時遞迴轉發俾 children。用嚟表示樹狀結構（例如 folder 入面有檔案同 folder）。</p>
+{{UML:p7-composite}}
+<span class="lab trap">易錯</span>
+<p>Abstract class 可以有 concrete method 同 attribute；interface（傳統 Java）只有 method signature 同常數。Abstract class <b>唔可以 new</b>。</p>
+</div>
+
+<div class="concept">
+<h3>10. OO vs PO；CRC cards；responsibility-driven design</h3>
+<span class="lab">一句講完</span>
+<p><b>OO</b>：圈<b>名詞</b>，data 同操作佢嘅 method 放埋一齊（object 主動）；<b>PO</b>：圈<b>動詞</b>，data 被動、傳嚟傳去。<b>CRC card</b>（Class-Responsibility-Collaborator）幫你決定每個 class 負責咩、同邊個合作。</p>
+<span class="lab why">比較</span>
+<div class="tw"><table class="stack"><tr><th></th><th>Procedure-oriented</th><th>Object-oriented</th></tr>
+<tr><td>出發點</td><td>動詞 → process／function</td><td>名詞 → class</td></tr>
+<tr><td>Data</td><td>被動，經 parameter 傳</td><td>封裝喺 object 入面</td></tr>
+<tr><td>Analysis model</td><td>DFD + ER</td><td>Domain model（class diagram）</td></tr>
+<tr><td>Design</td><td>Structure chart、pseudocode</td><td>Design class diagram、sequence、state diagram</td></tr>
+<tr><td>變化</td><td>Kind field + if-chain</td><td>Polymorphism</td></tr></table></div>
+<span class="lab pic">圖解：CRC card</span>
+<figure class="fig"><svg viewBox="0 0 360 150" role="img" aria-label="CRC card" style="max-width:380px">
+<rect x="20" y="10" width="320" height="130" rx="4" fill="#FFFDF5" stroke="#8F6200" stroke-width="1.4"/>
+<text x="30" y="32" font-size="13" font-weight="700">Class: Loan</text><line x1="20" y1="42" x2="340" y2="42" stroke="#8F6200"/><line x1="200" y1="42" x2="200" y2="140" stroke="#8F6200"/>
+<text x="30" y="60" font-size="11.5" font-weight="700">Responsibilities</text><g font-size="11.5"><text x="30" y="80">知道 due date</text><text x="30" y="98">計 fine</text><text x="30" y="116">close（還書）</text></g>
+<text x="210" y="60" font-size="11.5" font-weight="700">Collaborators</text><g font-size="11.5"><text x="210" y="80">LibraryItem</text><text x="210" y="98">Member</text></g>
+</svg><figcaption>一張咭一個 class；角色扮演一個 use case，睇邊張咭負責</figcaption></figure>
+<span class="lab eg">例子</span>
+<p>Responsibility = class 嘅責任：<b>知道</b>某啲嘢（knowing）或者<b>做</b>某啲嘢（doing）。Static model（class diagram）同 dynamic model（sequence、state）要一致。</p>
+<span class="lab trap">易錯</span>
+<p>PO 項目都可以接受（PIM project 說明）：唔同 paradigm 各有能力同限制。L7 pitfall：資料越嚟越複雜時，考慮轉 OOP。</p>
+</div>
+
+<div class="concept">
+<h3>11. GRASP：9 個分配職責原則</h3>
+<span class="lab">一句講完</span>
+<p><b>GRASP</b>（General Responsibility Assignment Software Patterns，Craig Larman）：9 個 heuristics 回答「每個 responsibility 應該放喺邊個 class」。係原則唔係法律，有時會互相拉扯。</p>
+<span class="lab why">9 個原則</span>
+<div class="tw"><table class="stack"><tr><th>用途</th><th>原則</th><th>Library 例子</th></tr>
+<tr><td rowspan="3">分配職責</td><td><b>Information Expert</b>：交俾擁有相關資訊（擁有要數嘅 collection）嘅 class</td><td>computeFine() 放 Loan（有 dueDate）；canBorrow() 放 Member（擁有佢嘅 loans）</td></tr>
+<tr><td><b>Creator</b>：由聚合／記錄／密切使用 part 嘅 class 建立</td><td>LibraryItem 喺 checkout() 入面建立 Loan</td></tr>
+<tr><td><b>Controller</b>：每個 use case 一個非 UI object 接收 system event</td><td>Catalog.checkout(...) 安排步驟</td></tr>
+<tr><td rowspan="2">評估</td><td><b>Low Coupling</b></td><td>Catalog 用 message，唔掂內部</td></tr>
+<tr><td><b>High Cohesion</b></td><td>Loan 唔 format UI 文字</td></tr>
+<tr><td rowspan="4">管理變化</td><td><b>Polymorphism</b>：隨 type 變嘅行為用同一個名</td><td>Book、CD、Magazine 各自回答 loanDays()</td></tr>
+<tr><td><b>Pure Fabrication</b>：發明 domain 冇嘅 class 保持其他 class cohesive</td><td>CheckoutResult</td></tr>
+<tr><td><b>Indirection</b>：經中間人避免硬連接</td><td>Catalog 喺 UI 同 object 之間</td></tr>
+<tr><td><b>Protected Variations</b>：將會變嘅嘢包喺穩定 interface 後面</td><td>罰款政策藏喺 computeFine()</td></tr></table></div>
+<span class="lab pic">圖解：checkout 職責流</span>
+<figure class="fig"><svg viewBox="0 0 360 160" role="img" aria-label="GRASP checkout" style="max-width:380px">
+<defs><marker id="g1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#15202B"/></marker></defs>
+<g font-size="11.5" text-anchor="middle"><rect class="bx" x="5" y="60" width="70" height="36" rx="6"/><text x="40" y="82">UI</text>
+<rect class="ac" x="100" y="60" width="80" height="36" rx="6"/><text x="140" y="76">Catalog</text><text x="140" y="90" font-size="10">Controller</text>
+<rect class="hl" x="205" y="15" width="80" height="36" rx="6"/><text x="245" y="31">Member</text><text x="245" y="45" font-size="10">Expert</text>
+<rect class="hl" x="205" y="105" width="80" height="36" rx="6"/><text x="245" y="121">LibraryItem</text><text x="245" y="135" font-size="10">Creator</text>
+<rect class="hl" x="300" y="105" width="55" height="36" rx="6"/><text x="327" y="127">Loan</text></g>
+<g class="ln"><line x1="75" y1="78" x2="98" y2="78" marker-end="url(#g1)"/><line x1="180" y1="70" x2="203" y2="40" marker-end="url(#g1)"/><line x1="180" y1="86" x2="203" y2="116" marker-end="url(#g1)"/><line x1="285" y1="123" x2="298" y2="123" marker-end="url(#g1)"/></g>
+<g font-size="10" fill="#566273"><text x="150" y="40">canBorrow?</text><text x="150" y="120">checkout()</text><text x="300" y="98">«create»</text></g>
+</svg><figcaption>Controller 只係安排，唔自己計晒（否則變 god controller）</figcaption></figure>
+<span class="lab eg">例子：Information Expert 嘅細節</span>
+<p>L8 refinement：Expert 唔係「擁有最多資料」或者「攞得到資料」嘅 class，而係<b>擁有規則要數嘅 collection</b>、同埋規則要隨<b>邊個 type 軸</b>變化嘅 class。</p>
+<span class="lab trap">易錯</span>
+<p>Information Expert 有時會提高 coupling：要判斷取捨，唔好盲目跟。</p>
+</div>
+
+<div class="concept">
+<h3>12. SOLID 五個原則</h3>
+<span class="lab">一句講完</span>
+<p><b>S</b>RP、<b>O</b>CP、<b>L</b>SP、<b>I</b>SP、<b>D</b>IP：令 OO 設計易改、易擴展、易重用嘅五個原則。</p>
+<span class="lab why">定義（L8 原句）</span>
+<div class="tw"><table class="stack"><tr><th>原則</th><th>定義</th><th>L8 例子</th></tr>
+<tr><td>SRP Single responsibility</td><td>A class should have only a single responsibility（只有一個改變嘅理由）</td><td>Book 唔應該自己 printPageAt()；抽 Printer interface（PlainTextPrinter、HtmlPrinter）</td></tr>
+<tr><td>OCP Open/closed</td><td>Open for extension, closed for modification</td><td>Progress 依賴 Measurable interface，加 Computation 唔使改 Progress；Shape.draw() 代替 instanceof if-chain</td></tr>
+<tr><td>LSP Liskov substitution</td><td>Subtype 嘅 instance 可以取代 supertype，而唔影響程式正確性</td><td>Square extends Rectangle 會令 setW(5)、setH(4) 之後 area ≠ 20；改用 composition</td></tr>
+<tr><td>ISP Interface segregation</td><td>多個 client-specific interface 好過一個通用 interface</td><td>TimedDoor：Door 唔應該包 Timer 嘅 method，分開 Door 同 TimerClient</td></tr>
+<tr><td>DIP Dependency inversion</td><td>Depend upon abstractions, not concretions</td><td>EBookReader 依賴 EBook interface，唔依賴 PDFBook</td></tr></table></div>
+<span class="lab pic">圖解：OCP 同 DIP</span>
+{{UML:p7-ocp}}
+{{UML:p7-dip}}
+<span class="lab eg">例子：LSP 實際跑（Java）</span>
+<pre><code>Rectangle r = new Square();
+r.setW(5); r.setH(4);
+r.area();   // Rectangle → 20；Square → 16（已用 Java 跑過）</code></pre>
+<p>Square 改寫 setW／setH 令兩邊一齊變，用 Rectangle 嘅 test 就會失敗 → 違反 LSP。L8 建議：<b>composition + delegation</b>（Square 入面有一個 Rectangle）通常好過 inheritance。</p>
+<span class="lab trap">易錯</span>
+<p>OCP：「closure cannot be complete」：唔可能對所有改變都封閉，開頭作合理估計，之後 refactor。DIP 兩句：高層同低層都依賴 abstraction；<b>abstraction 唔依賴細節，細節依賴 abstraction</b>。</p>
+</div>
+
+<div class="concept">
+<h3>13. PO 同 OO 嘅常見陷阱</h3>
+<span class="lab">一句講完</span>
+<p>L7 同 L8 各列出 4 個常見錯同修正方法。</p>
+<span class="lab why">對照表</span>
+<div class="tw"><table class="stack"><tr><th></th><th>陷阱</th><th>修正</th></tr>
+<tr><td rowspan="4">PO（L7）</td><td>Global data creep</td><td>用 parameter，資料留喺 function 本地</td></tr>
+<tr><td>100 行 function</td><td>再拆細，單一目的</td></tr>
+<tr><td>Mixed responsibilities</td><td>一個 module 一件事，做兩件就拆</td></tr>
+<tr><td>Growing data</td><td>資料超出簡單結構就考慮 OOP</td></tr>
+<tr><td rowspan="4">OO（L8）</td><td>God class</td><td>將職責分俾合作嘅 class</td></tr>
+<tr><td>Deep inheritance</td><td>Favor composition over inheritance</td></tr>
+<tr><td>Anemic objects（得資料冇行為）</td><td>將 method 搬去用嗰啲資料嘅 class 旁邊</td></tr>
+<tr><td>Getters everywhere</td><td>設計 interface，唔係 struct</td></tr></table></div>
+<span class="lab pic">圖解：god class vs 分工</span>
+<figure class="fig"><svg viewBox="0 0 360 150" role="img" aria-label="god class" style="max-width:380px">
+<rect x="5" y="20" width="150" height="110" rx="8" fill="#FADFDB" stroke="#B42318"/><text x="80" y="42" text-anchor="middle" font-size="12.5" font-weight="700">LibrarySystem</text><g font-size="10.5"><text x="14" y="62">checkout() computeFine()</text><text x="14" y="78">search() register()</text><text x="14" y="94">print() saveFile()</text><text x="14" y="110">validate() report()…</text></g>
+<text x="180" y="80" text-anchor="middle" font-size="18">⇒</text>
+<g font-size="11" text-anchor="middle"><rect class="hl" x="205" y="15" width="70" height="30" rx="5"/><text x="240" y="35">Catalog</text><rect class="hl" x="285" y="15" width="70" height="30" rx="5"/><text x="320" y="35">Member</text>
+<rect class="hl" x="205" y="60" width="70" height="30" rx="5"/><text x="240" y="80">LibraryItem</text><rect class="hl" x="285" y="60" width="70" height="30" rx="5"/><text x="320" y="80">Loan</text>
+<rect class="bx" x="245" y="105" width="70" height="30" rx="5"/><text x="280" y="125">Main（UI）</text></g>
+</svg><figcaption>一個 class 做晒所有嘢 = god class（cohesion 低、coupling 高）</figcaption></figure>
+<span class="lab eg">例子</span>
+<p>Anemic：Loan 只有 getDueDate()，fine 由 Catalog 計 → 搬 computeFine() 入 Loan。</p>
+<span class="lab trap">易錯</span>
+<p>「Favor composition over inheritance」唔係「唔好用 inheritance」：真 is-a 關係（Book is a LibraryItem）用 inheritance 冇問題。</p>
+</div>
+
+<h2 id="demo">三、完整示範：用 SOLID 改 code（OCP + DIP）</h2>
+<div class="key"><b>一分鐘重點</b><ul><li>見到 <code>instanceof</code> if-chain、或者高層 class 直接 new 低層 concrete class，就諗 OCP／DIP：抽 interface。</li></ul></div>
+<h3>Step 1：原本 code（違反 OCP）</h3>
+<pre><code>for (Object s : shapes) {
+  if (s instanceof Circle)      ((Circle) s).drawCircle();
+  else if (s instanceof Rectangle) ((Rectangle) s).drawRectangle();
+}</code></pre>
+<ol class="steps"><li><b>問題</b>：每加一種 shape（例如 Triangle）都要改呢個 loop → 唔係 closed for modification。</li>
+<li><b>改法</b>：定義 <code>interface Shape { void draw(); }</code>，每種 shape implements 佢。</li>
+<li><b>結果</b>：loop 變 <code>for (Shape s : shapes) s.draw();</code>，加 Triangle 只要加新 class（open for extension）。已用 Java 跑過：輸出 circle rect triangle。</li></ol>
+<h3>Step 2：Progress（違反 OCP + DIP）</h3>
+<pre><code>class Progress {
+  private File f;                         // 直接依賴 concrete File
+  int getAsPercent() { return f.getSent() * 100 / f.getLength(); }
+}</code></pre>
+<ol class="steps"><li><b>問題</b>：想顯示「長計算」嘅進度，要改 Progress。高層（Progress）依賴低層細節（File）。</li>
+<li><b>改法</b>：<code>interface Measurable { int getTotal(); int getPartial(); }</code>；File、Computation implements；Progress 只持有 Measurable。</li>
+<li><b>驗證</b>（Java 跑過）：File(200, 100) → 50%；Computation(8, 2) → 25%；Progress 一行都冇改。</li></ol>
+<p class="memo"><b>考試見到「新增一種 X 要改舊 code」就答 OCP；見到「高層直接用低層 concrete class」就答 DIP</b>，兩個嘅解決方法都係抽 interface／abstraction。</p>
+
+<h2 id="past">四、Past paper 全答 + 預測題</h2>
+<div class="practice"><span class="src">2022 Q23(3) · Dependency Inversion · 5 分 · L8</span>
+<p class="q">In conventional layered architecture, a high-level layer depends directly on the layer beneath. The DI principle proposes against this. Explain what it proposes instead and why. (&lt;120 words)</p>
+<details class="ans"><summary>參考答案</summary><div><div class="ansbox"><b>答案</b>DI proposes that high-level modules should not depend on low-level modules; both should depend on abstractions such as interfaces, and abstractions should not depend on details—details should depend on abstractions. For example, an EBookReader depends on an EBook interface that PDFBook and other book classes implement, instead of depending directly on PDFBook. The reason is that direct dependence on lower-level components limits the reusability of higher-level components and forces them to change whenever the lower-level implementation changes. With abstractions in between, low-level implementations can be replaced or added without modifying the high-level policy, so the layers are decoupled and easier to reuse and test.</div><p>（P5 都有同一題。）</p></div></details></div>
+<div class="practice"><span class="src">預測題 1 · SRP · 4 分</span>
+<p class="q">A class <code>Report</code> has methods <code>calculateTotals()</code>, <code>formatAsHtml()</code> and <code>saveToDatabase()</code>. Which SOLID principle does it violate? How should it be redesigned? (&lt;80 words)</p>
+<details class="ans"><summary>參考答案</summary><div><div class="ansbox"><b>答案</b>It violates the Single Responsibility Principle: the class has three reasons to change (business calculation, presentation format and persistence), so these responsibilities become coupled. It should be split into Report (calculating totals), a ReportFormatter interface with implementations such as HtmlFormatter, and a ReportRepository that saves reports, so each class changes for only one reason.</div></div></details></div>
+<div class="practice"><span class="src">預測題 2 · Analysis vs design · 4 分</span>
+<p class="q">Compare software analysis and software design in terms of purpose, key question and orientation. (&lt;80 words)</p>
+<details class="ans"><summary>參考答案</summary><div><div class="ansbox"><b>答案</b>Analysis aims to understand and specify the essence of the problem; its key question is what the system must do and know, and it is implementation-independent, conceptual and not executable. Design aims to construct a concrete solution; its key question is how the system will do it, and it is implementation-specific, covering architecture, components, interfaces, algorithms and data structures that can be translated into code.</div></div></details></div>
+<div class="practice"><span class="src">預測題 3 · DFD balancing · 3 分</span>
+<p class="q">What are leveling and balancing in data flow diagrams? Why is balancing important? (&lt;80 words)</p>
+<details class="ans"><summary>參考答案</summary><div><div class="ansbox"><b>答案</b>Leveling decomposes a process into sub-processes in a lower-level DFD (Level-0 → Level-1 → Level-2). Balancing checks that the inputs and outputs at the boundary of a lower-level diagram exactly match those of its parent process. It is important because an extra boundary flow at a lower level indicates an un-elicited requirement, while a missing one indicates a hole in the decomposition.</div></div></details></div>
+
+<h2 id="drill">五、Drill</h2>
+<div class="practice"><span class="src">Drill 1 · 認 SOLID</span>
+<p class="q">邊條原則被違反？(a) <code>Penguin extends Bird</code>，但 Bird 有 <code>fly()</code>，Penguin 嘅 fly() 拋 exception (b) <code>interface Worker { work(); eat(); }</code>，Robot implements 要寫一個冇用嘅 eat() (c) <code>OrderService</code> 入面 <code>new MySqlDatabase()</code> (d) <code>Invoice</code> 同時計稅、印 PDF、寄 email。</p>
+<details class="ans"><summary>答案</summary><div><p>(a) LSP（用 Bird 嘅地方換成 Penguin 就出錯）。(b) ISP（應該拆 Workable、Eatable）。(c) DIP（應該依賴 Database interface）。(d) SRP。</p></div></details></div>
+<div class="practice"><span class="src">Drill 2 · GRASP</span>
+<p class="q">網上商店：(a) 邊個 class 應該計 order 總價？(b) 邊個建立 OrderItem？(c) 邊個接收「checkout」system event？</p>
+<details class="ans"><summary>答案</summary><div><p>(a) Order（Information Expert：擁有所有 OrderItem）。(b) Order（Creator：佢聚合 OrderItem）。(c) 一個非 UI 嘅 CheckoutController 或 Store（Controller）。</p></div></details></div>
+<div class="practice"><span class="src">Drill 3 · 動詞分層</span>
+<p class="q">分類：manage accounts、compute interest、open file、validate PIN、handle transactions、increment counter。</p>
+<details class="ans"><summary>答案</summary><div><p>High-level（再分解）：manage accounts、handle transactions。Low-level（functional primitive，寫 mini-spec）：compute interest、validate PIN。Too-low-level（留俾 design）：open file、increment counter。</p></div></details></div>
+
+<h2 id="fill">六、互動填充</h2>
+<div class="practice fill"><span class="src">Fill A · SOLID 縮寫（填英文全名，例如 single responsibility）</span>
+<div class="frow"><p>S</p><div class="fin"><span><input class="blank" data-ans="single responsibility§single responsibility principle"></span></div></div>
+<div class="frow"><p>O</p><div class="fin"><span><input class="blank" data-ans="open/closed§open closed§open-closed§open/closed principle"></span></div></div>
+<div class="frow"><p>L</p><div class="fin"><span><input class="blank" data-ans="liskov substitution§liskov substitution principle"></span></div></div>
+<div class="frow"><p>I</p><div class="fin"><span><input class="blank" data-ans="interface segregation§interface segregation principle"></span></div></div>
+<div class="frow"><p>D</p><div class="fin"><span><input class="blank" data-ans="dependency inversion§dependency inversion principle"></span></div></div>
+<div class="fillbar"><button class="btn pri" data-check>對答案</button><button class="btn" data-show>顯示答案</button><button class="btn" data-clear>清除</button><span class="fillmsg"></span></div></div>
+<div class="practice fill"><span class="src">Fill B · GRASP 對應</span>
+<div class="frow"><p>將 fine 政策藏喺 computeFine() 後面</p><div class="fin"><span><input class="blank" data-ans="protected variations§protected variation"></span></div></div>
+<div class="frow"><p>發明 CheckoutResult 呢個 domain 冇嘅 class</p><div class="fin"><span><input class="blank" data-ans="pure fabrication"></span></div></div>
+<div class="frow"><p>Book、CD、Magazine 各自回答 loanDays()</p><div class="fin"><span><input class="blank" data-ans="polymorphism"></span></div></div>
+<div class="frow"><p>LibraryItem 喺 checkout() 建立 Loan</p><div class="fin"><span><input class="blank" data-ans="creator"></span></div></div>
+<div class="frow"><p>Catalog 企喺 UI 同 domain object 中間</p><div class="fin"><span><input class="blank" data-ans="indirection"></span></div></div>
+<div class="fillbar"><button class="btn pri" data-check>對答案</button><button class="btn" data-show>顯示答案</button><button class="btn" data-clear>清除</button><span class="fillmsg"></span></div></div>
+
+<h2 id="mcq">七、T/F + MC</h2>
+<h3>T/F（28 題）</h3>
+<div class="mcq" data-set="T"><script type="application/json">[
+{"t":"L7","s":"<p>The analysis model is implementation-independent, while design is implementation-oriented.</p>","a":0,"e":"<b>True</b>。"},
+{"t":"L7","s":"<p>A design is always directly executable.</p>","a":1,"e":"<b>False</b>。Design 係藍圖，not necessarily executable itself。"},
+{"t":"L7","s":"<p>In structured development, data is active and controls the flow, while logic is passive.</p>","a":1,"e":"<b>False</b>。調轉咗：data 被動，logic 主動。"},
+{"t":"L7","s":"<p>Dijkstra's 1968 letter argued that unrestricted goto statements obscure program logic.</p>","a":0,"e":"<b>True</b>。"},
+{"t":"L7","s":"<p>Parnas proposed decomposing systems into modules according to the sequence of execution.</p>","a":1,"e":"<b>False</b>。Parnas：按 <b>information hiding</b> 分，唔係按執行流程。"},
+{"t":"L7","s":"<p>In procedure-oriented analysis, action verbs become candidate processes.</p>","a":0,"e":"<b>True</b>。名詞變 data store 或 data flow。"},
+{"t":"L7","s":"<p>A verb such as \"open file\" should be decomposed further in the analysis DFD.</p>","a":1,"e":"<b>False</b>。Too-low-level → 留俾 design。"},
+{"t":"L7","s":"<p>In a DFD, a process is drawn as a circle.</p>","a":0,"e":"<b>True</b>。Data store 係有分隔線嘅長方形；external entity 係長方形。"},
+{"t":"L7","s":"<p>A Level-0 (context) DFD shows the data stores used by the system.</p>","a":1,"e":"<b>False</b>。Store 喺 bubble 入面，context diagram 唔畫。"},
+{"t":"L7","s":"<p>Balancing means the inputs and outputs of a lower-level DFD must match those of its parent process.</p>","a":0,"e":"<b>True</b>。"},
+{"t":"L7","s":"<p>Processes may be drawn more than once in a DFD to improve readability.</p>","a":1,"e":"<b>False</b>。只有 entity 同 store 可以重複畫，process 唔可以。"},
+{"t":"L7","s":"<p>A DFD can show the order in which events happen over time.</p>","a":1,"e":"<b>False</b>。DFD 冇時間／次序概念。"},
+{"t":"L7","s":"<p>In an ER model, an M:N relationship is resolved by introducing an associative entity.</p>","a":0,"e":"<b>True</b>。MEMBER M:N ITEM → LOAN。"},
+{"t":"L7","s":"<p>In a structure chart, sibling modules frequently call each other sideways.</p>","a":1,"e":"<b>False</b>。Siblings never call sideways；parents call children。"},
+{"t":"L7","s":"<p>Good modular design aims for high cohesion and low coupling.</p>","a":0,"e":"<b>True</b>。"},
+{"t":"L7","s":"<p>Passing data through global variables reduces coupling.</p>","a":1,"e":"<b>False</b>。Global 增加 coupling；應該用 parameter。"},
+{"t":"L7b","s":"<p>Method overloading requires methods with the same name but different signatures in the same class.</p>","a":0,"e":"<b>True</b>。"},
+{"t":"L7b","s":"<p>Method overriding means defining two methods with the same name but different parameter lists.</p>","a":1,"e":"<b>False</b>。嗰個係 overloading；overriding 係 subclass 改寫 superclass 同 signature 嘅 method。"},
+{"t":"L7b","s":"<p>An abstract class cannot be instantiated.</p>","a":0,"e":"<b>True</b>。"},
+{"t":"L7b","s":"<p>The principle of least privilege says every module should access only the information and resources necessary for its legitimate purpose.</p>","a":0,"e":"<b>True</b>。"},
+{"t":"L8","s":"<p>A responsibility of a class can be either knowing something or doing something.</p>","a":0,"e":"<b>True</b>。"},
+{"t":"L8","s":"<p>GRASP principles are strict laws that never conflict with each other.</p>","a":1,"e":"<b>False</b>。Principles, not laws；有時會互相拉扯。"},
+{"t":"L8","s":"<p>According to the Controller principle, the UI object should receive and handle each system event.</p>","a":1,"e":"<b>False</b>。應該係一個<b>非 UI</b> object。"},
+{"t":"L8","s":"<p>Pure Fabrication means inventing a class that the domain never mentions to keep other classes cohesive.</p>","a":0,"e":"<b>True</b>。例如 CheckoutResult。"},
+{"t":"L8","s":"<p>The Open/Closed principle states that software entities should be open for modification but closed for extension.</p>","a":1,"e":"<b>False</b>。調轉咗：open for extension, closed for modification。"},
+{"t":"L8","s":"<p>Making Square a subclass of Rectangle with setters that change both sides can violate the Liskov substitution principle.</p>","a":0,"e":"<b>True</b>。setW(5)、setH(4) 後 area 係 16 唔係 20（Java 跑過）。"},
+{"t":"L8","s":"<p>The Interface Segregation principle prefers one general-purpose interface over many client-specific ones.</p>","a":1,"e":"<b>False</b>。剛剛相反。"},
+{"t":"L8","s":"<p>Anemic objects are objects that contain data but no meaningful behaviour.</p>","a":0,"e":"<b>True</b>。修正：將 method 搬去資料旁邊。"}
+]</script></div>
+<h3>MC（8 題，含多選）</h3>
+<div class="mcq" data-set="M"><script type="application/json">[
+{"t":"L7","s":"<p>Which are the four DFD symbols? (Select all that apply)</p>","o":["Process","Data store","External entity","Data flow","Class"],"a":[0,1,2,3],"e":"A–D 係 DFD 四個符號。E 係 UML class diagram。"},
+{"t":"L7","s":"<p>When should you stop decomposing a process in a DFD?</p>","o":["When it is a functional primitive","When it has exactly three sub-processes","When it reads a data store","When it becomes a Python function"],"a":0,"e":"A：單一目的、一份 mini-spec 寫得晒、唔使 design 決定。"},
+{"t":"L7","s":"<p>In Parnas's KWIC example, why is the flow-based decomposition problematic?</p>","o":["It runs too slowly","Changing the storage format (e.g., to a database) affects all modules","It cannot sort lines","It needs object-oriented programming"],"a":1,"e":"B：所有 module 都知道共享 array 嘅格式。"},
+{"t":"L8","s":"<p>Which GRASP principle assigns computeFine() to Loan because Loan holds the due date?</p>","o":["Creator","Information Expert","Controller","Indirection"],"a":1,"e":"B。"},
+{"t":"L8","s":"<p>Which are OO pitfalls listed in L8? (Select all that apply)</p>","o":["God class","Deep inheritance","Anemic objects","Getters everywhere","High cohesion"],"a":[0,1,2,3],"e":"A–D 係 pitfalls。E 係目標。"},
+{"t":"L8","s":"<p>A loop uses instanceof checks to call drawCircle() or drawRectangle(). Which principle does introducing a Shape interface with draw() mainly satisfy?</p>","o":["SRP","OCP","LSP","ISP"],"a":1,"e":"B：加新 shape 唔使改 loop（open for extension, closed for modification）。"},
+{"t":"L8","s":"<p>\"Depend upon abstractions. Do not depend upon concretions.\" is the:</p>","o":["Single responsibility principle","Liskov substitution principle","Dependency inversion principle","Interface segregation principle"],"a":2,"e":"C。"},
+{"t":"L8","s":"<p>What does L8 suggest as an alternative to making Square inherit from Rectangle?</p>","o":["Multiple inheritance","Composition and delegation","Making all fields public","Using a kind field"],"a":1,"e":"B：Square 入面持有一個 Rectangle，委派 area()。"}
+]</script></div>
+
+<h2 id="short">八、短答題</h2>
+<p class="q">1. Explain cohesion and coupling and why good designs aim for high cohesion and low coupling. (&lt;80 words)</p>
+<details class="ans"><summary>參考答案</summary><div><div class="ansbox"><b>答案</b>Cohesion measures how strongly the elements inside a module belong together; coupling measures how much modules depend on each other. High cohesion gives each module one clear job, making it easier to understand, test and reuse. Low coupling means modules share minimal internal knowledge and communicate through parameters or messages, so changes stay local without ripple effects and modules remain independent and replaceable.</div></div></details>
+<p class="q">2. What is information hiding? Illustrate with the KWIC example. (&lt;80 words)</p>
+<details class="ans"><summary>參考答案</summary><div><div class="ansbox"><b>答案</b>Information hiding keeps a module's implementation details secret and exposes them only through a stable interface; modules should be decomposed by hiding design decisions likely to change. In KWIC, decomposing by processing steps lets all modules share the line array format, so switching to a database changes every module. Hiding storage behind a line-storage module confines that change to one module.</div></div></details>
+<p class="q">3. Distinguish method overloading and method overriding. (&lt;60 words)</p>
+<details class="ans"><summary>參考答案</summary><div><div class="ansbox"><b>答案</b>Overloading declares several methods with the same name but different parameter lists in the same class; the call is resolved at compile time. Overriding is when a subclass redefines a method inherited from its superclass with the same signature; the version executed is chosen at run time according to the object's actual type (polymorphism).</div></div></details>
+
+<h2 id="faq">九、常見疑問</h2>
+<dl class="faq">
+<dt>Q：L7 未出過長題，要唔要溫？</dt><dd>要識 T/F 程度：DFD 符號、leveling／balancing、動詞分層、cohesion／coupling、information hiding。佢係今年先加嘅課，冇舊題，所以出 T/F 嘅機會唔細。</dd>
+<dt>Q：GRASP 要背晒 9 個？</dt><dd>最重要：Information Expert、Creator、Controller（亦係答 class diagram 放 operation 嘅理由）。其餘 4 個（Polymorphism、Pure Fabrication、Indirection、Protected Variations）識認就得。</dd>
+<dt>Q：DIP 同 layered architecture 有咩關係？</dt><dd>傳統 layered：高層直接依賴下一層。DIP：兩層之間加 abstraction（interface），高層依賴 interface，低層實作 interface，令高層可以重用、低層可以替換。</dd>
+<dt>Q：Abstract class 同 interface 揀邊個？</dt><dd>有共享 code 同 state（例如 LibraryItem 嘅 itemId、checkout()）用 abstract class；只係定義能力（例如 Shape.draw()、Measurable）用 interface。</dd>
+</dl>

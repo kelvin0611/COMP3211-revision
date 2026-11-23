@@ -1,0 +1,696 @@
+<!DOCTYPE html><html lang="zh-HK"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light"><title>P3 · Software Process + Agile</title><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css"><style>
+:root{color-scheme:light;--bg:#F2F4F7;--card:#FFFFFF;--ink:#15202B;--mut:#566273;--line:#D2D9E1;--acc:#BF4A14;--acc2:#0B7472;--soft:#D9EFEE;--ok:#17733A;--okbg:#DCF1E3;--bad:#B42318;--badbg:#FADFDB;--code:#E9EDF2;--warn:#8F6200;--warnbg:#F6EBCB}
+*{box-sizing:border-box}html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.7 -apple-system,BlinkMacSystemFont,"PingFang HK","Noto Sans HK","Microsoft JhengHei",sans-serif}
+nav.top{position:sticky;top:0;z-index:20;background:var(--bg);border-bottom:1px solid var(--line);display:flex;gap:4px;overflow-x:auto;padding:8px 12px;scrollbar-width:none}
+nav.top::-webkit-scrollbar{display:none}
+nav.top a{flex:none;text-decoration:none;color:var(--mut);font-size:14px;padding:5px 11px;border-radius:999px;border:1px solid var(--line);white-space:nowrap}
+nav.top a.on{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+main{max-width:860px;margin:0 auto;padding:20px 16px 80px}
+h1{font-size:26px;line-height:1.3;margin:12px 0 4px}h2{font-size:21px;margin:40px 0 10px;padding-top:8px;border-top:2px solid var(--ink)}
+h3{font-size:17px;margin:26px 0 8px}h4{font-size:15px;margin:18px 0 6px;color:var(--acc2)}
+.sub{color:var(--mut);margin:0 0 16px}
+p,li{overflow-wrap:anywhere}
+a{color:var(--acc2)}
+code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.88em;background:var(--code);padding:1px 5px;border-radius:4px}
+pre{background:var(--code);border:1px solid var(--line);border-radius:8px;padding:12px;overflow-x:auto;font-size:13.5px;line-height:1.55;margin:10px 0}
+pre code{background:none;padding:0;font-size:inherit}
+.tw{overflow-x:auto;margin:10px 0;-webkit-overflow-scrolling:touch}
+table{border-collapse:collapse;width:100%;font-size:14.5px}
+th,td{border:1px solid var(--line);padding:6px 9px;text-align:left;vertical-align:top}
+th{background:var(--soft);font-weight:600}
+td.c,th.c{text-align:center}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin:14px 0}
+.toc{columns:2;column-gap:20px;font-size:14.5px;padding-left:18px}@media(max-width:560px){.toc{columns:1}}
+.tag{display:inline-block;white-space:nowrap;font-size:12px;padding:1px 8px;border-radius:999px;border:1px solid var(--line);color:var(--mut);margin-right:4px;vertical-align:middle}
+.t-must{background:var(--badbg);color:var(--bad);border-color:transparent}
+.t-likely{background:var(--warnbg);color:var(--warn);border-color:transparent}
+.t-know{background:var(--okbg);color:var(--ok);border-color:transparent}
+.tip,.warn,.memo{border-radius:0;padding:10px 14px;margin:12px 0;border-left:4px solid}
+.tip{background:var(--soft);border-color:var(--acc2)}.warn{background:var(--warnbg);border-color:var(--warn)}.memo{background:var(--okbg);border-color:var(--ok)}
+.tip b:first-child,.warn b:first-child,.memo b:first-child{display:block;margin-bottom:2px}
+details.ans{border:1px dashed var(--acc);border-radius:10px;margin:10px 0;background:var(--card)}
+details.ans>summary{cursor:pointer;padding:8px 14px;color:var(--acc);font-weight:600;list-style:none}
+details.ans>summary::-webkit-details-marker{display:none}
+details.ans>summary::before{content:"▸ "}details.ans[open]>summary::before{content:"▾ "}
+details.ans>div{padding:0 14px 12px}
+.q{font-weight:600;margin-top:18px}
+.faq dt{font-weight:600;margin-top:14px}.faq dd{margin:4px 0 0 0;padding-left:12px;border-left:2px solid var(--line)}
+svg{max-width:100%;height:auto;display:block;margin:10px auto}
+svg text{fill:var(--ink);font-family:inherit}
+svg .ln{stroke:var(--ink);fill:none;stroke-width:1.4}
+svg .bx{fill:var(--card);stroke:var(--ink);stroke-width:1.2}
+svg .hl{fill:var(--soft);stroke:var(--acc2);stroke-width:1.4}
+svg .ac{fill:var(--badbg);stroke:var(--acc);stroke-width:1.4}
+.done{display:flex;align-items:center;gap:8px;font-size:14px;color:var(--mut);margin:6px 0 0}
+.done input{width:18px;height:18px}
+.mcq{margin:18px 0}
+.mcq .bar{position:sticky;top:46px;z-index:5;background:var(--bg);display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid var(--line);font-size:14px}
+.mcq .bar button{font:inherit;font-size:13px;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:8px;padding:3px 10px;cursor:pointer}
+.mq{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin:12px 0}
+.mq .stem{margin-bottom:8px}.mq .stem p{margin:4px 0}
+.mq .num{font-size:12px;color:var(--mut)}
+.opt{display:flex;gap:8px;width:100%;text-align:left;font:inherit;font-size:15px;background:var(--bg);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:8px 10px;margin:6px 0;cursor:pointer}
+.opt>span:first-child{font-weight:700;color:var(--mut);flex:none}.opt>span:last-child{overflow-wrap:anywhere}
+.opt.right{background:var(--okbg);border-color:var(--ok)}.opt.wrong{background:var(--badbg);border-color:var(--bad)}
+.opt:disabled{cursor:default;opacity:1}
+.opt.sel{background:var(--soft);border-color:var(--acc2)}.opt.miss{border-style:dashed}
+.mq .btn{margin-top:4px}
+.exp{margin-top:8px;padding:8px 10px;border-radius:8px;background:var(--soft);font-size:14.5px;overflow-wrap:anywhere}
+.exp .v{font-weight:700}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}@media(max-width:600px){.grid2{grid-template-columns:1fr}}
+.prog{display:flex;flex-direction:column;gap:6px}.prog .row{display:flex;justify-content:space-between;gap:10px;font-size:14.5px;border-bottom:1px solid var(--line);padding:4px 0}
+.mflow{display:flex;gap:10px;align-items:stretch;margin:10px 0}.mfcol{flex:1;min-width:0}.mfh{font-weight:700;font-size:14px;margin-bottom:6px}.fb{border:1px solid var(--line);background:var(--card);border-radius:8px;padding:6px 9px;margin-bottom:6px;font-size:13px;line-height:1.5;font-family:ui-monospace,Menlo,monospace;overflow-wrap:anywhere}.fb b{font-family:inherit}.hl2{background:var(--soft);border-color:var(--acc2)}.ac2{background:var(--badbg);border-color:var(--acc)}.mfarr{align-self:center;color:var(--mut);font-size:20px}.mfarr::before{content:"→"}@media(max-width:640px){.mflow{flex-direction:column}.mfarr{text-align:center}.mfarr::before{content:"↓"}}
+
+:root{--surface:var(--card);--muted:var(--mut);--accent:var(--acc);--accent-soft:var(--badbg);--map:var(--acc2);--map-soft:var(--soft);--shuf:var(--warn);--shuf-soft:var(--warnbg);--red:#3D4BAA;--red-soft:#E2E6F8;--ok-soft:var(--okbg);--bad-soft:var(--badbg);--code-bg:var(--code);--code-ink:var(--ink);--code-dim:var(--mut);--f-mono:ui-monospace,Menlo,monospace}
+
+.fmap{fill:var(--map-soft);stroke:var(--map);stroke-width:1.2}.fshuf{fill:var(--shuf-soft);stroke:var(--shuf);stroke-width:1.2}.fred{fill:var(--red-soft);stroke:var(--red);stroke-width:1.2}.facc{fill:var(--accent-soft);stroke:var(--accent);stroke-width:1.2}.tacc{fill:var(--accent);font-weight:600}
+svg .arr{stroke:var(--ink);stroke-width:1.6;fill:none}.ah{fill:var(--ink)}.dash{stroke:var(--muted);stroke-width:1.4;stroke-dasharray:5 5;fill:none}
+svg .small{font-size:11.5px;fill:var(--muted)}svg.dia{width:100%;height:auto}.mono{font-family:var(--f-mono);font-size:12.5px}
+.diawrap{overflow-x:auto;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px;margin:10px 0}.w700{min-width:640px}
+span.hl{background:var(--accent-soft);color:var(--accent);border-radius:3px;padding:0 2px;font-weight:600}
+.dp table{width:auto}.num{font-variant-numeric:tabular-nums}td.brk code{white-space:normal}
+.practice{border:1px solid var(--line);border-radius:14px;background:var(--card);padding:14px 16px;margin:16px 0}
+.practice .src{font-family:var(--f-mono);font-size:12px;color:var(--mut);display:block}
+.practice h4{margin-top:6px}
+input.blank{font-family:var(--f-mono);font-size:13px;background:var(--card);color:var(--ink);border:1px solid var(--acc);border-radius:5px;padding:1px 4px;margin:0 1px;max-width:100%}
+input.blank.ok{border-color:var(--ok);background:var(--okbg)}input.blank.bad{border-color:var(--bad);background:var(--badbg)}input.blank.shown{border-style:dashed}
+.bn{display:inline-block;min-width:1.35em;text-align:center;font-size:10.5px;font-weight:600;color:var(--card);background:var(--acc);border-radius:999px;margin-right:2px}
+.fillbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:6px}
+.btn{font:inherit;font-size:13.5px;font-weight:600;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:8px;padding:6px 12px;cursor:pointer}.btn.pri{background:var(--acc);border-color:var(--acc);color:var(--card)}
+.fillmsg{font-size:13.5px;color:var(--mut)}
+
+
+.key{background:#FAE6DA;border-left:4px solid var(--acc);padding:12px 16px;margin:14px 0}
+.key>b:first-child{display:block;color:var(--acc);margin-bottom:4px}
+.key ul{margin:4px 0;padding-left:20px}
+.fx{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:6px 12px;margin:12px 0;overflow-x:auto;text-align:center}
+.concept{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:6px 16px 12px;margin:18px 0}
+.concept>h3{margin-top:14px}
+.lab{display:inline-block;font-size:12.5px;font-weight:700;color:#fff;background:var(--acc2);border-radius:6px;padding:1px 8px;margin:14px 0 4px}
+.lab.why{background:#3D4BAA}.lab.pic{background:#8F6200}.lab.eg{background:var(--acc)}.lab.trap{background:var(--bad)}
+figure.fig{margin:14px 0;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px}
+figure.fig figcaption{font-size:13.5px;color:var(--mut);text-align:center;margin-top:6px}
+.scroll{overflow-x:auto}
+ol.steps{padding-left:0;list-style:none;counter-reset:s}
+ol.steps>li{counter-increment:s;position:relative;padding:8px 10px 8px 42px;margin:8px 0;background:var(--card);border:1px solid var(--line);border-radius:10px}
+ol.steps>li::before{content:counter(s);position:absolute;left:10px;top:8px;width:22px;height:22px;border-radius:50%;background:var(--acc2);color:#fff;font-size:13px;font-weight:700;text-align:center;line-height:22px}
+.katex-display{margin:.4em 0;overflow-x:auto;overflow-y:hidden;padding:4px 0}
+@media(max-width:600px){table.stack thead{display:none}table.stack tr:first-child:has(th){display:none}table.stack,table.stack tbody,table.stack tr,table.stack td{display:block;width:100%}
+table.stack tr{border:1px solid var(--line);border-radius:10px;margin:0 0 10px;background:var(--card);padding:4px 0}
+table.stack td{border:0;border-bottom:1px dashed var(--line);padding:6px 12px}table.stack td:last-child{border-bottom:0}
+table.stack td::before{content:attr(data-label);display:block;font-size:12px;font-weight:700;color:var(--acc2)}}
+
+
+/* COMP3211 additions */
+.uml{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:8px;margin:12px 0;overflow-x:auto;-webkit-overflow-scrolling:touch}
+.uml svg{margin:0 auto}
+.legend{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:13px;color:var(--mut);margin:6px 0}
+.legend i{display:inline-block;width:14px;height:14px;border-radius:3px;vertical-align:-2px;margin-right:4px;border:1px solid var(--line)}
+table.pt td,table.pt th{text-align:center;white-space:nowrap;font-family:ui-monospace,Menlo,monospace;font-size:13px}
+table.pt td,table.pt th{padding:4px 3px;font-size:12.5px}table.pt input.blank{width:3ch!important;padding:1px 1px;text-align:center;font-size:12.5px}table.pt td.ex input.blank{width:7ch!important}
+.wl{font-size:12.5px;color:var(--mut)}.scrollhint{text-align:center;margin-top:-6px}@media(min-width:760px){.scrollhint{display:none}}
+.frow{border-bottom:1px dashed var(--line);padding:6px 0 10px}.frow p{margin:4px 0 6px}.fin{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:14px;color:var(--mut)}
+.ansbox{background:var(--okbg);border-left:4px solid var(--ok);padding:10px 14px;margin:8px 0}
+.ansbox>b:first-child{display:block;color:var(--ok);margin-bottom:2px}
+footer{color:var(--mut);font-size:13px;text-align:center;margin-top:50px}
+</style></head><body data-page="P3-Process-Agile.html"><nav class="top"><a href="index.html">總覽</a><a href="P1-UML.html">P1 UML 圖</a><a href="P2-Testing.html">P2 Testing</a><a href="P3-Process-Agile.html" class=on>P3 Process</a><a href="P4-Requirements.html">P4 Requirements</a><a href="P5-Architecture.html">P5 Architecture</a><a href="P6-Evolution-Reuse.html">P6 Evolution</a><a href="P7-Design-OO.html">P7 Design</a></nav><main><h1>P3 · Software Process + Agile</h1>
+<p class="sub">必考，Q21 每年 8–15 分 · 對應 L1 Introduction、L2 Software Processes、L3 Agile Software Development、Asm1 Q1</p>
+<ul class="toc">
+<li><a href="#exam">一、點考</a></li><li><a href="#notes">二、筆記：由零講起</a></li>
+<li><a href="#demo">三、完整示範：2025 Q21</a></li><li><a href="#past">四、Past paper 全答</a></li>
+<li><a href="#drill">五、Drill</a></li><li><a href="#fill">六、互動填充</a></li>
+<li><a href="#mcq">七、T/F + MC</a></li><li><a href="#short">八、短答題</a></li><li><a href="#faq">九、常見疑問</a></li></ul>
+
+<h2 id="exam">一、點考</h2>
+<div class="key"><b>一分鐘重點</b><ul>
+<li>Q21 永遠係<b>第一條長題</b>（2023–2025 都係 15 分）。主題輪流：waterfall／incremental、coping with change、CMMI、XP、Scrum。</li>
+<li>2022 同今年 Asm1 都有「<b>贊成定反對用 agile</b>」情境題：先答立場，再用 lecture 嘅條件逐點講。</li>
+<li>L1（SE 定義、ethics）未出過長題，但好適合出 T/F。</li></ul></div>
+<div class="tw"><table class="stack"><tr><th>卷</th><th>題目</th><th>分數</th></tr>
+<tr><td>2025 Q21</td><td>(1) waterfall 描述、點解難應付 requirement 改變、適合嘅系統 (5) (2) incremental delivery 2 好處 2 問題 (4) (3) product vs sprint backlog (4) (4) sprint 只完成 80% 點做 (2)</td><td>15</td></tr>
+<tr><td>2024 Q21</td><td>(1) change anticipation vs tolerance；incremental delivery 點樣兩樣都支持 (6) (2) 5 個 XP practice 配 agile principle (5) (3) refactoring 係咩 + 2 個必要原因 (4)</td><td>15</td></tr>
+<tr><td>2023 Q21</td><td>(1) process performance／capability／maturity (6) (2) Defined、QM、Managed 特徵 (3) (3) 排序 (3) (4) staged vs continuous (3)</td><td>15</td></tr>
+<tr><td>2022 Q21</td><td>城市智能交通系統，多間公司、幾年：贊成定反對 agile + 3 個理由</td><td>8</td></tr>
+<tr><td>Asm1 Q1</td><td>植入式胰島素泵：贊成定反對 agile + 2 個理由（有官方 solution）</td><td>10</td></tr></table></div>
+<h3>「贊成／反對 agile」答題步驟</h3>
+<ol class="steps">
+<li><b>第一句答立場</b>（2 分）：「I am against using an agile approach as the main approach.」</li>
+<li><b>喺情境搵線索</b>：requirement 穩唔穩定？有冇硬件／合約固定？系統大唔大、幾長命？幾多間公司？要唔要 safety certification？客可唔可以長期參與？</li>
+<li><b>每個理由對應 lecture 一句</b>：例如「critical systems need extensive safety analysis」（L2 waterfall 適用）、「contract, governance and risk mismatch」（L3 agile 問題）。</li>
+<li><b>每個理由一句情境 + 一句原因</b>，守字數。</li></ol>
+
+<h2 id="notes">二、筆記：由零講起</h2>
+<div class="key"><b>一分鐘重點</b><ul>
+<li>所有 process 都有 4 個活動：<b>specification、development、V&amp;V、evolution</b>。</li>
+<li>3 個 process model：<b>waterfall</b>（plan-driven）、<b>incremental</b>、<b>integration &amp; configuration</b>（reuse）。</li>
+<li>應付改變：<b>change anticipation</b>（prototyping）同 <b>change tolerance</b>；incremental delivery 兩樣都支持。</li>
+<li>CMMI 5 級：Initial → Managed → Defined → Quantitatively Managed → Optimizing。</li>
+<li>Agile：manifesto 4 句、5 個 principle；XP practices；Scrum（product owner、ScrumMaster、sprint、backlog）。</li></ul></div>
+
+<div class="concept">
+<h3>1. Software engineering 係咩；好軟件有咩特質（L1）</h3>
+<span class="lab">一句講完</span>
+<p>SE 係一門<b>工程學科</b>，處理軟件生產嘅<b>所有方面</b>：技術開發過程、支援工具同方法，同埋 project management。</p>
+<span class="lab why">點解需要</span>
+<p>現代世界靠軟件運作，要經濟又快咁整出可靠嘅軟件。<b>軟件維護成本通常高過開發成本</b>，所以長遠用 SE 方法更平。Software crisis 未解決：Standish Chaos Report 2020：約 31% 成功、50% challenged（遲、超支、減功能）、19% 失敗。</p>
+<span class="lab pic">圖解：越遲修 bug 越貴</span>
+<figure class="fig"><svg viewBox="0 0 360 180" role="img" aria-label="cost of fixing faults" style="max-width:380px">
+<line x1="40" y1="150" x2="345" y2="150" stroke="#15202B"/><line x1="40" y1="150" x2="40" y2="15" stroke="#15202B"/>
+<text x="16" y="85" font-size="12" transform="rotate(-90 16 85)" text-anchor="middle">修正成本</text>
+<g font-size="11" text-anchor="middle"><text x="70" y="166">Req</text><text x="125" y="166">Analysis</text><text x="180" y="166">Design</text><text x="235" y="166">Impl.</text><text x="300" y="166">Maintenance</text></g>
+<g fill="#0B7472"><rect x="58" y="140" width="24" height="10"/><rect x="113" y="132" width="24" height="18"/><rect x="168" y="118" width="24" height="32"/><rect x="223" y="90" width="24" height="60"/></g>
+<rect x="288" y="22" width="24" height="128" fill="#BF4A14"/>
+<text x="150" y="40" text-anchor="middle" font-size="12">早期：只改文件</text><text x="150" y="56" text-anchor="middle" font-size="12">後期：改 code＋文件＋test＋regression</text>
+</svg><figcaption>60–70% 大型系統嘅錯源自 requirement、analysis、design：要盡早搵</figcaption></figure>
+<div class="tw"><table class="stack"><tr><th>好軟件特質</th><th>意思</th></tr>
+<tr><td>Acceptability</td><td>目標用戶接受：易明、易用、同佢哋其他系統兼容</td></tr>
+<tr><td>Dependability</td><td>可以信賴：reliability、availability、safety、maintainability、fault tolerance</td></tr>
+<tr><td>Trustworthiness</td><td>用戶同社會應該信佢：security、privacy、透明、合規、可預測</td></tr>
+<tr><td>Efficiency</td><td>唔浪費資源：反應時間、處理時間、資源使用</td></tr></table></div>
+<span class="lab eg">例子：FAQ</span>
+<p>Software = 程式 + 相關文件。SE vs computer science：CS 重理論同基礎，SE 重實際開發同交付。SE vs system engineering：system engineering 包括硬件、軟件、process，SE 係其中一部分。Maintenance 分四類：corrective（修 bug）、adaptive（適應環境）、perfective（改善）、preventive（預防）。</p>
+<span class="lab trap">易錯</span>
+<p>冇一套「最好」嘅技術適用所有系統：要按應用類型、客需要、團隊背景揀（SE diversity）。</p>
+</div>
+
+<div class="concept">
+<h3>2. SE ethics 同 ETHICS-PLUS model（L1）</h3>
+<span class="lab">一句講完</span>
+<p>軟件工程師嘅責任超越技術同法律：ACM／IEEE-CS 嘅 <b>SE Code of Ethics</b> 有 <b>8 個 principles</b>；遇到兩難可以用 HKIE 嘅 <b>ETHICS-PLUS</b> 模型分析。</p>
+<span class="lab why">點解</span>
+<p>Ethical conduct 唔止係守法；專業信任要靠誠實、透明、負責任。軟件工程師應該以<b>公眾利益</b>行事。</p>
+<span class="lab pic">流程圖：ETHICS 六步 + PLUS 四個過濾</span>
+<figure class="fig"><svg viewBox="0 0 360 290" role="img" aria-label="ETHICS PLUS model" style="max-width:380px">
+<g font-size="12"><g class="hl"><rect x="5" y="5" width="170" height="34" rx="6"/><rect x="5" y="47" width="170" height="34" rx="6"/><rect x="5" y="89" width="170" height="34" rx="6"/><rect x="5" y="131" width="170" height="34" rx="6"/><rect x="5" y="173" width="170" height="34" rx="6"/><rect x="5" y="215" width="170" height="34" rx="6"/></g>
+<text x="12" y="27"><tspan font-weight="700">E</tspan>stablish 事實同問題</text><text x="12" y="69"><tspan font-weight="700">T</tspan>ake stock 持份者</text><text x="12" y="111"><tspan font-weight="700">H</tspan>ave 客觀評估各立場</text><text x="12" y="153"><tspan font-weight="700">I</tspan>dentify 可行方案</text><text x="12" y="195"><tspan font-weight="700">C</tspan>ompare 用標準評估</text><text x="12" y="237"><tspan font-weight="700">S</tspan>elect 最佳做法</text>
+<g class="ac"><rect x="195" y="47" width="160" height="34" rx="6"/><rect x="195" y="89" width="160" height="34" rx="6"/><rect x="195" y="131" width="160" height="34" rx="6"/><rect x="195" y="173" width="160" height="34" rx="6"/></g>
+<text x="202" y="69"><tspan font-weight="700">P</tspan>rofessional codes</text><text x="202" y="111"><tspan font-weight="700">L</tspan>egal 法律要求</text><text x="202" y="153"><tspan font-weight="700">U</tspan>ncompromising 自身價值</text><text x="202" y="195"><tspan font-weight="700">S</tspan>unshine test 公開得</text></g>
+<text x="275" y="30" text-anchor="middle" font-size="12.5" font-weight="700">PLUS 標準</text>
+<path class="dash" d="M195 190 L 178 190"/><text x="180" y="275" text-anchor="middle" font-size="11.5" fill="#566273">第 5 步「Compare」用右邊 4 個標準過濾</text>
+</svg><figcaption>Sunshine test：個決定可唔可以公開討論而唔心虛</figcaption></figure>
+<span class="lab eg">例子：L1 dilemmas</span>
+<ul><li>管理層要求為趕 launch 跳過關鍵 testing 或者忽略保安漏洞 → clauses 1.03、3.10。</li>
+<li>老闆要你偷偷收集用戶資料、用 dark pattern → principle 2、clauses 3.12、1.06。</li>
+<li>ML model 對某族群有偏見、唔考慮殘疾人士 → clauses 1.07、4.03。</li></ul>
+<span class="lab trap">易錯</span>
+<p>「Ethics = 守法」係錯：L1 話 ethical conduct transcends legal compliance。</p>
+</div>
+
+<div class="concept">
+<h3>3. Software process：4 個基本活動；plan-driven vs agile</h3>
+<span class="lab">一句講完</span>
+<p>Software process 係開發軟件所需嘅一套有結構嘅活動。所有 process 都包括：<b>specification</b>（定義要做咩）、<b>development</b>（design + implementation）、<b>V&amp;V</b>（檢查符合 spec 同需要）、<b>evolution</b>（因應需要改變）。</p>
+<span class="lab why">點解要 process</span>
+<p>「You cannot test quality into a product; you must build it in.」Process 將個人英雄主義變成機構能力，提供審計基礎，管理複雜度。Process 描述仲可以包括 products（交付物）、roles（角色）、pre/post-conditions。</p>
+<span class="lab pic">圖解</span>
+<figure class="fig"><svg viewBox="0 0 360 200" role="img" aria-label="four process activities" style="max-width:380px">
+<defs><marker id="p3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#15202B"/></marker></defs>
+<g font-size="12.5" text-anchor="middle"><rect class="hl" x="10" y="10" width="160" height="50" rx="8"/><text x="90" y="32" font-weight="700">Specification</text><text x="90" y="50" font-size="11.5">要做咩（RE）</text>
+<rect class="hl" x="190" y="10" width="160" height="50" rx="8"/><text x="270" y="32" font-weight="700">Development</text><text x="270" y="50" font-size="11.5">design + implementation</text>
+<rect class="hl" x="190" y="120" width="160" height="50" rx="8"/><text x="270" y="142" font-weight="700">V &amp; V</text><text x="270" y="160" font-size="11.5">啱 spec？啱客？</text>
+<rect class="hl" x="10" y="120" width="160" height="50" rx="8"/><text x="90" y="142" font-weight="700">Evolution</text><text x="90" y="160" font-size="11.5">因應改變修改</text></g>
+<g class="ln"><line x1="170" y1="35" x2="188" y2="35" marker-end="url(#p3)"/><line x1="270" y1="60" x2="270" y2="118" marker-end="url(#p3)"/><line x1="190" y1="145" x2="172" y2="145" marker-end="url(#p3)"/><line x1="90" y1="120" x2="90" y2="62" marker-end="url(#p3)"/></g>
+<text x="180" y="192" text-anchor="middle" font-size="11.5" fill="#566273">真實 process 係交錯進行，唔一定一條直線</text>
+</svg><figcaption>Plan-driven：全部預先計劃，按計劃量度進度；agile：逐步計劃，容易因應改變</figcaption></figure>
+<span class="lab eg">例子：plan-driven vs agile</span>
+<div class="tw"><table class="stack"><tr><th></th><th>Plan-driven</th><th>Agile</th></tr>
+<tr><td>計劃</td><td>所有活動預先計劃</td><td>逐步（incremental）計劃</td></tr>
+<tr><td>進度量度</td><td>同原本計劃比</td><td>睇交付咗幾多可用軟件</td></tr>
+<tr><td>改變</td><td>代價高</td><td>容易</td></tr>
+<tr><td>實際</td><td colspan="2">大部分 process 兩樣都有；冇絕對啱或錯嘅 process</td></tr></table></div>
+<span class="lab trap">易錯</span>
+<p>Evolution 唔係「開發完先開始」：L2 話 development 同 evolution 嘅界線越嚟越唔重要，因為好少系統係全新。</p>
+</div>
+
+<div class="concept">
+<h3>4. Waterfall model</h3>
+<span class="lab">一句講完</span>
+<p>Waterfall 有分開嘅 phase：requirements analysis &amp; definition → system &amp; software design → implementation &amp; unit testing → integration &amp; system testing → operation &amp; maintenance；原則上<b>一個 phase 完成先去下一個</b>。</p>
+<span class="lab why">點解難應付 requirement 改變</span>
+<p>Project 被硬性切成獨立階段，requirement 喺第一個 phase 已經「凍結」；後期先發現要改，就要返轉頭改晒之前所有文件同設計，成本好高。所以只適合 requirement 清楚、改變有限嘅情況（好少商業系統係咁穩定）。</p>
+<span class="lab pic">圖解</span>
+<figure class="fig"><svg viewBox="0 0 360 250" role="img" aria-label="waterfall model" style="max-width:380px">
+<defs><marker id="w1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#15202B"/></marker></defs>
+<g font-size="12"><rect class="hl" x="5" y="5" width="170" height="34" rx="6"/><text x="12" y="27">Requirements definition</text>
+<rect class="hl" x="50" y="52" width="170" height="34" rx="6"/><text x="57" y="74">System &amp; software design</text>
+<rect class="hl" x="95" y="99" width="170" height="34" rx="6"/><text x="102" y="121">Implementation &amp; unit test</text>
+<rect class="hl" x="140" y="146" width="170" height="34" rx="6"/><text x="147" y="168">Integration &amp; system test</text>
+<rect class="ac" x="185" y="193" width="170" height="34" rx="6"/><text x="192" y="215">Operation &amp; maintenance</text></g>
+<g class="ln"><path d="M175 22 H 190 V 50" marker-end="url(#w1)"/><path d="M220 69 H 235 V 97" marker-end="url(#w1)"/><path d="M265 116 H 280 V 144" marker-end="url(#w1)"/><path d="M310 163 H 325 V 191" marker-end="url(#w1)"/></g>
+<path class="dash" d="M185 215 C 60 230, 20 120, 30 42" marker-end="url(#w1)"/><text x="10" y="150" font-size="11" fill="#566273">返轉頭改</text><text x="10" y="164" font-size="11" fill="#566273">好貴</text>
+</svg><figcaption>好似瀑布咁一級級落；後面發現 requirement 錯要倒流返上去</figcaption></figure>
+<span class="lab eg">例子：適合 waterfall 嘅系統（L2）</span>
+<ol class="steps"><li><b>Embedded systems</b>：軟件要同硬件 interface，硬件唔可以隨時改（例如 Asm1 嘅胰島素泵）。</li>
+<li><b>Critical systems</b>：需要對 spec 同 design 做大量 safety／security analysis（例如醫療、航空）。</li>
+<li><b>大型系統，屬於更大嘅工程系統，由幾間 partner 公司合作開發</b>（例如 2022 嘅城市交通系統）。</li></ol>
+<span class="lab trap">易錯</span>
+<p>Waterfall 嘅 maintenance 係最後一個 phase；L1 講 classical view「development-then-maintenance」已經過時：maintenance 可以喺 deploy 之前已經發生。</p>
+</div>
+
+<div class="concept">
+<h3>5. Incremental development</h3>
+<span class="lab">一句講完</span>
+<p>先整一個初步版本，收用戶反饋，再逐個版本演化，直到完成。可以係 plan-driven、agile 或者混合；每個 increment <b>唔一定要交俾客</b>。</p>
+<span class="lab why">好處同問題</span>
+<div class="tw"><table class="stack"><tr><th>Benefits</th><th>Problems</th></tr>
+<tr><td>容易收客對已完成部分嘅反饋</td><td>需要更強嘅 configuration management 同 project 協調</td></tr>
+<tr><td>應付 requirement 改變嘅成本降低</td><td>初始 architecture 要夠靈活，加新部分唔可以整壞舊功能</td></tr>
+<tr><td>更快交付同部署有用嘅軟件</td><td>加越多 increment，系統結構越容易退化</td></tr></table></div>
+<span class="lab pic">圖解</span>
+<figure class="fig"><svg viewBox="0 0 360 170" role="img" aria-label="incremental development" style="max-width:380px">
+<defs><marker id="i1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#15202B"/></marker></defs>
+<rect class="bx" x="5" y="20" width="95" height="50" rx="8"/><text x="52" y="42" text-anchor="middle" font-size="12" font-weight="700">Outline</text><text x="52" y="58" text-anchor="middle" font-size="11.5">description</text>
+<g class="hl"><rect x="130" y="5" width="100" height="34" rx="6"/><rect x="130" y="50" width="100" height="34" rx="6"/><rect x="130" y="95" width="100" height="34" rx="6"/></g>
+<g font-size="12" text-anchor="middle"><text x="180" y="27">Specification</text><text x="180" y="72">Development</text><text x="180" y="117">Validation</text></g>
+<g class="ac"><rect x="255" y="5" width="100" height="34" rx="6"/><rect x="255" y="50" width="100" height="34" rx="6"/><rect x="255" y="95" width="100" height="34" rx="6"/></g>
+<g font-size="12" text-anchor="middle"><text x="305" y="27">Initial version</text><text x="305" y="72">Intermediate</text><text x="305" y="117">Final version</text></g>
+<g class="ln"><line x1="100" y1="45" x2="128" y2="45" marker-end="url(#i1)"/><line x1="230" y1="22" x2="253" y2="22" marker-end="url(#i1)"/><line x1="230" y1="67" x2="253" y2="67" marker-end="url(#i1)"/><line x1="230" y1="112" x2="253" y2="112" marker-end="url(#i1)"/></g>
+<text x="180" y="155" text-anchor="middle" font-size="12">三個活動同時交錯進行，產生一連串版本</text>
+</svg><figcaption>Sommerville 圖：specification、development、validation 交錯</figcaption></figure>
+<span class="lab eg">例子</span>
+<p>PIM 項目：第一個版本只做 task 增刪；收到組員反饋後加 search；再加 contact 同 event。每個版本都可以行，但唔一定交俾老師。</p>
+<span class="lab trap">易錯</span>
+<p><b>Incremental development</b>（開發方式）同 <b>incremental delivery</b>（將 increment 真係交俾客用）唔同：後者係 coping with change 嘅方法（概念卡 7）。</p>
+</div>
+
+<div class="concept">
+<h3>6. Integration and configuration（reuse-oriented）</h3>
+<span class="lab">一句講完</span>
+<p>由現有 component、application system 或者 COTS（commercial off-the-shelf）系統<b>整合</b>出新系統，再<b>配置</b>佢哋嘅行為去配合用戶需要。而家好多商業系統都係咁整。</p>
+<span class="lab why">好處同壞處</span>
+<ul><li>✓ 少啲由零開始寫，成本同風險降低；交付同部署更快。</li>
+<li>✗ Requirement 一定要妥協，系統可能唔完全符合用戶真正需要；對系統演化失去控制（新版本由供應商決定）。</li></ul>
+<span class="lab pic">圖解：可重用軟件 3 類</span>
+<figure class="fig"><svg viewBox="0 0 360 150" role="img" aria-label="types of reusable software" style="max-width:380px">
+<g font-size="12" text-anchor="middle"><rect class="hl" x="5" y="10" width="110" height="80" rx="8"/><text x="60" y="35" font-weight="700">Stand-alone</text><text x="60" y="52">application</text><text x="60" y="72" font-size="11">配置後用</text>
+<rect class="hl" x="125" y="10" width="110" height="80" rx="8"/><text x="180" y="35" font-weight="700">Components</text><text x="180" y="52">／packages</text><text x="180" y="72" font-size="11">整合入 .NET／J2EE</text>
+<rect class="hl" x="245" y="10" width="110" height="80" rx="8"/><text x="300" y="35" font-weight="700">Web services</text><text x="300" y="52">按標準開發</text><text x="300" y="72" font-size="11">遠端調用</text></g>
+<text x="180" y="125" text-anchor="middle" font-size="12">詳細見 P6（L11 Software Reuse）</text>
+</svg><figcaption>Reuse 嘅三種形式</figcaption></figure>
+<span class="lab eg">例子</span>
+<p>學校用現成嘅 Canvas（COTS）加配置，而唔係自己寫 LMS：快、平，但某啲功能要遷就 Canvas 嘅做法，而且升級時間由 Instructure 決定。</p>
+<span class="lab trap">易錯</span>
+<p>Reuse 嘅缺點唔係「質素一定差」，係 <b>requirement 妥協</b>同<b>失去演化控制</b>。</p>
+</div>
+
+<div class="concept">
+<h3>7. Coping with change：moving target、anticipation、tolerance</h3>
+<span class="lab">一句講完</span>
+<p>大型項目一定有改變。<b>Moving target problem</b>：開發期間 requirement 不斷變，而且<b>冇根治方法</b>。減少 rework 成本有兩個方向：<b>change anticipation</b>（預早發現要改咩）同 <b>change tolerance</b>（令改動成本低）。</p>
+<span class="lab why">點解要咁做</span>
+<p>改變成本包括 rework（重做已完成嘅嘢）同實作新功能；越遲改越貴。</p>
+<span class="lab pic">圖解</span>
+<figure class="fig"><svg viewBox="0 0 360 240" role="img" aria-label="coping with change" style="max-width:380px">
+<rect class="ac" x="100" y="5" width="160" height="40" rx="8"/><text x="180" y="30" text-anchor="middle" font-size="13" font-weight="700">Requirement 改變</text>
+<rect class="hl" x="5" y="80" width="165" height="62" rx="8"/><text x="87" y="102" text-anchor="middle" font-size="13" font-weight="700">Change anticipation</text><text x="87" y="120" text-anchor="middle" font-size="11.5">改之前預早估到</text><text x="87" y="135" text-anchor="middle" font-size="11.5">→ 少 rework</text>
+<rect class="hl" x="190" y="80" width="165" height="62" rx="8"/><text x="272" y="102" text-anchor="middle" font-size="13" font-weight="700">Change tolerance</text><text x="272" y="120" text-anchor="middle" font-size="11.5">process 設計到改動</text><text x="272" y="135" text-anchor="middle" font-size="11.5">只影響一小部分</text>
+<rect class="bx" x="5" y="180" width="165" height="50" rx="8"/><text x="87" y="202" text-anchor="middle" font-size="12.5" font-weight="700">System prototyping</text><text x="87" y="220" text-anchor="middle" font-size="11.5">只支持 anticipation</text>
+<rect class="bx" x="190" y="180" width="165" height="50" rx="8" stroke="#BF4A14" stroke-width="2"/><text x="272" y="202" text-anchor="middle" font-size="12.5" font-weight="700">Incremental delivery</text><text x="272" y="220" text-anchor="middle" font-size="11.5">兩樣都支持</text>
+<g class="ln"><line x1="150" y1="45" x2="100" y2="78"/><line x1="210" y1="45" x2="260" y2="78"/><line x1="87" y1="142" x2="87" y2="178"/><line x1="140" y1="142" x2="230" y2="178"/><line x1="272" y1="142" x2="272" y2="178"/></g>
+</svg><figcaption>Incremental delivery 同時連住兩個方向</figcaption></figure>
+<span class="lab eg">例子：點解 incremental delivery 兩樣都支持（2024 Q21(1)）</span>
+<ol class="steps"><li><b>Anticipation</b>：用戶喺早期 increment 試用系統，好早就發現佢哋真正想要咩，之後 increment 嘅 requirement 可以跟住調整。</li>
+<li><b>Tolerance</b>：每個 increment 細、而且開發一個 increment 時只凍結嗰個 increment 嘅 requirement；改變可以放入之後嘅 increment，成本低。</li></ol>
+<span class="lab trap">易錯</span>
+<p>Prototyping 唔係 change tolerance：prototype 通常用完就掉（throwaway），佢只係幫你「預早知道」。</p>
+</div>
+
+<div class="concept">
+<h3>8. Prototyping 同 incremental delivery：好處同問題</h3>
+<span class="lab">一句講完</span>
+<p><b>Prototype</b>：快速整嘅初版，用嚟示範概念、試設計、了解問題。分 <b>throwaway</b>（rapid）同 <b>evolutionary</b>（breadboarding）。金句：<b>「Prototype just enough to learn, but not enough to ship.」</b> <b>Incremental delivery</b>：將開發同交付拆做 increment，每個交付部分功能。</p>
+<span class="lab why">Incremental delivery 點運作</span>
+<p>用戶 requirement 排優先次序，<b>最高優先嘅放最早嘅 increment</b>；一個 increment 開始開發，佢嘅 requirement 就凍結，但之後 increment 嘅 requirement 仲可以改。</p>
+<span class="lab pic">圖解：increment 時間軸</span>
+<figure class="fig"><svg viewBox="0 0 360 150" role="img" aria-label="incremental delivery timeline" style="max-width:380px">
+<line x1="10" y1="120" x2="350" y2="120" stroke="#15202B"/><text x="345" y="140" text-anchor="end" font-size="11.5">時間 →</text>
+<rect x="15" y="80" width="100" height="30" fill="#FAE6DA" stroke="#BF4A14"/><text x="65" y="100" text-anchor="middle" font-size="12">Inc 1：最高優先</text>
+<rect x="125" y="80" width="100" height="30" fill="#D9EFEE" stroke="#0B7472"/><text x="175" y="100" text-anchor="middle" font-size="12">Inc 2</text>
+<rect x="235" y="80" width="100" height="30" fill="#D9EFEE" stroke="#0B7472"/><text x="285" y="100" text-anchor="middle" font-size="12">Inc 3</text>
+<text x="65" y="70" text-anchor="middle" font-size="11">requirement 凍結</text><text x="230" y="40" text-anchor="middle" font-size="11.5">後面 increment 嘅 requirement 仲可以改</text>
+<path class="dash" d="M150 45 C 170 60, 200 60, 230 78"/><path class="dash" d="M300 45 L 290 78"/>
+<g font-size="11" fill="#566273" text-anchor="middle"><text x="115" y="138">交付</text><text x="225" y="138">交付</text></g>
+</svg><figcaption>每個 increment 交付後，用戶即刻用到嗰部分功能</figcaption></figure>
+<span class="lab eg">例子：兩張清單（2025 Q21(2) 考）</span>
+<div class="tw"><table class="stack"><tr><th></th><th>Prototyping</th><th>Incremental delivery</th></tr>
+<tr><td>好處</td><td>澄清模糊 requirement；早期用戶反饋；增加持份者支持；減少 rework；降低風險</td><td>早期持續交付價值；更快 ROI 同現金流；降低風險；反饋循環好；整合衝擊細；士氣好</td></tr>
+<tr><td>問題</td><td>持份者誤解（以為 prototype 係成品）；scope creep；前期時間成本增加；analysis paralysis；虛假安全感；evolutionary code rot</td><td>Architecture 侵蝕（最大風險）；管理同 CI/CD 負擔重；scope creep；只有部分功能令用戶沮喪；文件難管理；固定價合約難處理</td></tr></table></div>
+<span class="lab trap">易錯</span>
+<p>2025 Q21(2) 問嘅係「compared with a <b>non-iterative</b> process」：答好處時要對比 waterfall（例如 waterfall 要等到最後先有可用軟件）。</p>
+</div>
+
+<div class="concept">
+<h3>9. Process improvement：performance、capability、maturity；CMMI</h3>
+<span class="lab">一句講完</span>
+<p><b>Performance</b>：某個 project 實際做到嘅結果；<b>capability</b>：某個 process 重複做時可預期嘅結果範圍；<b>maturity</b>：成個機構將 process 制度化、文件化、優化嘅程度。<b>CMMI V2.0</b> 定義 5 個 maturity level。</p>
+<span class="lab why">L2 嘅比喻：交通</span>
+<ul><li>Performance = 你今朝實際用咗幾耐返工（變化大）。</li>
+<li>Capability = 「95% 嘅行程喺 30–40 分鐘之內」（可預測範圍）。</li>
+<li>Maturity = 城市規劃署有冇標準政策、同步燈號、中央指揮中心（制度）。</li></ul>
+<span class="lab pic">圖解：CMMI 5 級樓梯</span>
+<figure class="fig"><svg viewBox="0 0 360 230" role="img" aria-label="CMMI maturity levels" style="max-width:380px">
+<g font-size="12"><rect class="bx" x="5" y="180" width="130" height="40" rx="4"/><text x="12" y="197" font-weight="700">1 Initial</text><text x="12" y="213" font-size="11">ad hoc，靠英雄</text>
+<rect class="hl" x="60" y="138" width="130" height="40" rx="4"/><text x="67" y="155" font-weight="700">2 Managed</text><text x="67" y="171" font-size="11">project 層面計劃追蹤</text>
+<rect class="hl" x="115" y="96" width="130" height="40" rx="4"/><text x="122" y="113" font-weight="700">3 Defined</text><text x="122" y="129" font-size="11">全機構標準化</text>
+<rect class="hl" x="170" y="54" width="130" height="40" rx="4"/><text x="177" y="71" font-weight="700">4 Quant. Managed</text><text x="177" y="87" font-size="11">統計方法控制</text>
+<rect class="ac" x="225" y="12" width="130" height="40" rx="4"/><text x="232" y="29" font-weight="700">5 Optimizing</text><text x="232" y="45" font-size="11">用數據持續改善</text></g>
+</svg><figcaption>越高級：要做嘅 practice area 越多、capability level 越高</figcaption></figure>
+<div class="tw"><table class="stack"><tr><th>Level</th><th>機構狀態</th><th>結果</th></tr>
+<tr><td>1 Initial</td><td>被動、冇文件、靠個人英雄</td><td>唔可預測，成功靠運</td></tr>
+<tr><td>2 Managed</td><td>Project 層面計劃、追蹤、控制（requirement、planning、monitoring）</td><td>同一團隊／project 可以重複，跨 project 唔穩定</td></tr>
+<tr><td>3 Defined</td><td>全機構標準 process、共同培訓</td><td>無論邊隊做都穩定</td></tr>
+<tr><td>4 Quantitatively Managed</td><td>用統計方法（例如 Six Sigma）控制 sub-process</td><td>表現喺嚴格數量範圍內</td></tr>
+<tr><td>5 Optimizing</td><td>用 level 4 數據主動改進</td><td>持續改善，消除最差情況</td></tr></table></div>
+<span class="lab eg">例子：staged vs continuous（2023 Q21(4)）</span>
+<ol class="steps"><li><b>Staged</b>：定一個戰略目標「達到 maturity level X」，然後系統地改善嗰級要求嘅<b>所有</b> practice area。結果用一個 maturity level 表示。</li>
+<li><b>Continuous</b>：benchmark 同診斷 → 按業務需要揀優先 → 實施 → 量度改善；機構自己揀<b>個別</b> practice area，提升佢哋嘅 capability level（0–5）。</li></ol>
+<span class="lab trap">易錯</span>
+<p>Maturity level 係 1–5（成個機構）；capability level 係 0–5（個別 practice area）。2023 Q21(3) 排序答案：<b>Managed &lt; Defined &lt; Quantitatively Managed</b>。QA 係確保 CMMI 嘅要求真係做到、提供 appraisal 證據嘅機制。</p>
+</div>
+
+<div class="concept">
+<h3>10. Agile：manifesto、5 個 principles、適用範圍</h3>
+<span class="lab">一句講完</span>
+<p>Agile 為咗減少 process overhead（例如少啲文件），快速應付 requirement 改變；所有 agile 方法都主張<b>逐步開發同交付</b>。</p>
+<span class="lab why">點解出現</span>
+<p>1980–90 年代 plan-driven 方法嘅 overhead 太大（嗰啲方法原本為大型、長命系統而設，例如航空、政府系統）。</p>
+<span class="lab pic">圖解：Agile Manifesto（左邊更重要，但右邊都有價值）</span>
+<figure class="fig"><svg viewBox="0 0 360 200" role="img" aria-label="agile manifesto" style="max-width:380px">
+<g font-size="12"><g class="ac"><rect x="5" y="10" width="160" height="38" rx="6"/><rect x="5" y="56" width="160" height="38" rx="6"/><rect x="5" y="102" width="160" height="38" rx="6"/><rect x="5" y="148" width="160" height="38" rx="6"/></g>
+<g class="bx"><rect x="195" y="10" width="160" height="38" rx="6"/><rect x="195" y="56" width="160" height="38" rx="6"/><rect x="195" y="102" width="160" height="38" rx="6"/><rect x="195" y="148" width="160" height="38" rx="6"/></g>
+<text x="12" y="27">Individuals &amp;</text><text x="12" y="42">interactions</text><text x="12" y="73">Working software</text><text x="12" y="119">Customer</text><text x="12" y="134">collaboration</text><text x="12" y="165">Responding to</text><text x="12" y="180">change</text>
+<text x="202" y="27">Processes &amp; tools</text><text x="202" y="73">Comprehensive</text><text x="202" y="88">documentation</text><text x="202" y="119">Contract</text><text x="202" y="134">negotiation</text><text x="202" y="165">Following a plan</text></g>
+<g font-size="14" font-weight="700" text-anchor="middle"><text x="180" y="34">&gt;</text><text x="180" y="80">&gt;</text><text x="180" y="126">&gt;</text><text x="180" y="172">&gt;</text></g>
+</svg><figcaption>We value the items on the left more</figcaption></figure>
+<div class="tw"><table class="stack"><tr><th>5 個 principles</th><th>意思</th></tr>
+<tr><td>Customer involvement</td><td>客全程參與，提供同排序 requirement，評估每個 iteration</td></tr>
+<tr><td>Incremental delivery</td><td>逐個 increment 開發，客決定每個 increment 包含咩</td></tr>
+<tr><td>People not process</td><td>認同團隊技能，俾佢哋自己決定工作方式</td></tr>
+<tr><td>Embrace change</td><td>預期 requirement 會變，設計系統去容納</td></tr>
+<tr><td>Maintain simplicity</td><td>軟件同 process 都保持簡單，主動消除複雜度</td></tr></table></div>
+<span class="lab eg">例子：agile 適合邊類</span>
+<ol class="steps"><li>軟件公司開發<b>中小型產品</b>出售（而家大部分 app 都用 agile）。</li>
+<li>機構內部 custom system，條件係：客<b>承諾參與</b>開發，同埋<b>外部規管少</b>。</li></ol>
+<span class="lab trap">易錯</span>
+<p>Agile 唔係「冇文件」：manifesto 話右邊都有價值，只係左邊更重要。</p>
+</div>
+
+<div class="concept">
+<h3>11. Extreme Programming（XP）practices</h3>
+<span class="lab">一句講完</span>
+<p>XP 將好嘅做法推到「極端」：一日 build 幾次、每 2 星期交付一次、每次 build 要所有 test 過。主要 practices：user stories、refactoring、TDD、pair programming。</p>
+<span class="lab why">各 practice 點解</span>
+<ul><li><b>User stories</b>（「As a &lt;role&gt; I can &lt;capability&gt;, so that &lt;benefit&gt;」）：3 個 C = Card、Conversation（L3 寫 Communication）、Confirmation。易明，但難判斷 story 夠唔夠覆蓋晒 requirement。</li>
+<li><b>Refactoring</b>：主動改善 code（改名、抽 method），即使冇即時需要。XP 認為「design for change」唔值得，因為改變冇辦法可靠咁預計。</li>
+<li><b>Pair programming</b>：兩人一部機；支持 collective ownership、等於非正式 review、鼓勵 refactoring、未必冇效率。</li>
+<li><b>TDD</b>：見 <a href="P2-Testing.html">P2</a> 概念卡 11。</li></ul>
+<span class="lab pic">圖解：XP practice → agile principle（2024 Q21(2) 考）</span>
+<figure class="fig"><svg viewBox="0 0 360 330" role="img" aria-label="XP practices map to agile principles" style="max-width:380px">
+<g font-size="11.5"><g class="hl"><rect x="5" y="5" width="150" height="26" rx="5"/><rect x="5" y="37" width="150" height="26" rx="5"/><rect x="5" y="69" width="150" height="26" rx="5"/><rect x="5" y="101" width="150" height="26" rx="5"/><rect x="5" y="133" width="150" height="26" rx="5"/><rect x="5" y="165" width="150" height="26" rx="5"/><rect x="5" y="197" width="150" height="26" rx="5"/><rect x="5" y="229" width="150" height="26" rx="5"/><rect x="5" y="261" width="150" height="26" rx="5"/><rect x="5" y="293" width="150" height="26" rx="5"/></g>
+<text x="12" y="23">Small releases</text><text x="12" y="55">On-site customer</text><text x="12" y="87">Pair programming</text><text x="12" y="119">Collective ownership</text><text x="12" y="151">Sustainable pace</text><text x="12" y="183">Test-first development</text><text x="12" y="215">Refactoring</text><text x="12" y="247">Continuous integration</text><text x="12" y="279">Simple design</text><text x="12" y="311">（Refactoring 亦支持↓）</text>
+<g class="ac"><rect x="215" y="20" width="140" height="30" rx="5"/><rect x="215" y="70" width="140" height="30" rx="5"/><rect x="215" y="120" width="140" height="30" rx="5"/><rect x="215" y="200" width="140" height="30" rx="5"/><rect x="215" y="280" width="140" height="30" rx="5"/></g>
+<text x="222" y="40">Incremental delivery</text><text x="222" y="90">Customer involvement</text><text x="222" y="140">People not process</text><text x="222" y="220">Embrace change</text><text x="222" y="300">Maintain simplicity</text></g>
+<g stroke="#15202B" stroke-width="1.1" fill="none"><line x1="155" y1="18" x2="215" y2="35"/><line x1="155" y1="18" x2="215" y2="215"/><line x1="155" y1="50" x2="215" y2="85"/><line x1="155" y1="82" x2="215" y2="135"/><line x1="155" y1="114" x2="215" y2="135"/><line x1="155" y1="146" x2="215" y2="135"/><line x1="155" y1="178" x2="215" y2="215"/><line x1="155" y1="210" x2="215" y2="215"/><line x1="155" y1="242" x2="215" y2="215"/><line x1="155" y1="274" x2="215" y2="295"/><line x1="155" y1="306" x2="215" y2="295"/></g>
+</svg><figcaption>L3「Support for Agile Principles in XP Practices」：small releases 同時支持 incremental delivery 同 embrace change；refactoring 同時支持 embrace change 同 maintain simplicity</figcaption></figure>
+<span class="lab eg">例子：XP 其他 practices</span>
+<div class="tw"><table class="stack"><tr><th>Practice</th><th>意思</th></tr>
+<tr><td>Incremental planning</td><td>requirement 寫喺 story card，按時間同優先揀入 release</td></tr>
+<tr><td>Small releases</td><td>先做最少而有商業價值嘅功能，頻繁 release</td></tr>
+<tr><td>Simple design</td><td>只做到滿足現時 requirement 嘅設計，唔多做</td></tr>
+<tr><td>Collective ownership</td><td>大家都可以改任何 code，冇「專家孤島」</td></tr>
+<tr><td>Continuous integration</td><td>完成一個 task 即刻整合，所有 unit test 一定要過</td></tr>
+<tr><td>Sustainable pace</td><td>唔接受大量 OT：長遠會降低 code 質素同生產力</td></tr>
+<tr><td>On-site customer</td><td>用戶代表全職陪 XP 團隊</td></tr></table></div>
+<span class="lab trap">易錯</span>
+<p>XP 技術導向，好難融入一般機構管理，所以原版 XP 唔普及，但佢嘅 practices 被廣泛採用。XP 冇外部 testing 團隊可以用嘅 system spec：user story 唔係 system requirement。</p>
+</div>
+
+<div class="concept">
+<h3>12. Scrum：agile project management</h3>
+<span class="lab">一句講完</span>
+<p>Scrum 專注<b>管理 iterative 開發</b>（唔係指定技術 practice）。三個 phase：<b>outline planning</b>（目標 + architecture）→ 一連串 <b>sprint cycle</b> → <b>project closure</b>（文件、總結經驗）。</p>
+<span class="lab why">點解要 Scrum</span>
+<p>Plan-driven 管理需要 visibility；早期 agile 嘅非正式計劃同呢個需要衝突。Scrum 用固定長度 sprint、backlog、每日 Scrum 提供 visibility 同控制。</p>
+<span class="lab pic">圖解：sprint cycle</span>
+<figure class="fig"><svg viewBox="0 0 360 270" role="img" aria-label="scrum sprint cycle" style="max-width:380px">
+<defs><marker id="sc" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#15202B"/></marker></defs>
+<rect class="hl" x="5" y="10" width="125" height="56" rx="8"/><text x="67" y="32" text-anchor="middle" font-size="12.5" font-weight="700">Product backlog</text><text x="67" y="50" text-anchor="middle" font-size="11">成個 project to-do</text>
+<rect class="bx" x="150" y="10" width="95" height="56" rx="8"/><text x="197" y="32" text-anchor="middle" font-size="12.5" font-weight="700">Select</text><text x="197" y="50" text-anchor="middle" font-size="11">全隊 + 客</text>
+<rect class="hl" x="265" y="10" width="90" height="56" rx="8"/><text x="310" y="32" text-anchor="middle" font-size="12.5" font-weight="700">Sprint</text><text x="310" y="50" text-anchor="middle" font-size="11">backlog</text>
+<circle cx="250" cy="160" r="58" fill="#FAE6DA" stroke="#BF4A14" stroke-width="1.4"/><text x="250" y="152" text-anchor="middle" font-size="12.5" font-weight="700">Sprint</text><text x="250" y="170" text-anchor="middle" font-size="11">2–4 星期</text><text x="250" y="186" text-anchor="middle" font-size="11">團隊自組織</text>
+<circle cx="250" cy="102" r="0"/><path d="M290 125 C 320 100, 330 150, 305 170" fill="none" stroke="#15202B" marker-end="url(#sc)"/><text x="330" y="138" font-size="11">Daily</text><text x="330" y="152" font-size="11">Scrum</text>
+<rect class="bx" x="5" y="135" width="130" height="56" rx="8"/><text x="70" y="157" text-anchor="middle" font-size="12.5" font-weight="700">Review</text><text x="70" y="175" text-anchor="middle" font-size="11">向持份者展示</text>
+<rect class="ac" x="5" y="210" width="130" height="50" rx="8"/><text x="70" y="231" text-anchor="middle" font-size="11.5" font-weight="700">Potentially shippable</text><text x="70" y="248" text-anchor="middle" font-size="11.5">product increment</text>
+<g class="ln"><line x1="130" y1="38" x2="148" y2="38" marker-end="url(#sc)"/><line x1="245" y1="38" x2="263" y2="38" marker-end="url(#sc)"/><line x1="300" y1="66" x2="275" y2="105" marker-end="url(#sc)"/><line x1="192" y1="160" x2="137" y2="160" marker-end="url(#sc)"/><line x1="70" y1="191" x2="70" y2="208" marker-end="url(#sc)"/><path d="M40 135 C 20 110, 25 90, 40 68" marker-end="url(#sc)"/></g>
+<text x="28" y="108" font-size="11" fill="#566273">下一個</text>
+</svg><figcaption>Sprint 期間團隊同外界隔離，溝通全部經 ScrumMaster</figcaption></figure>
+<div class="tw"><table class="stack"><tr><th>術語</th><th>意思</th></tr>
+<tr><td>Development team</td><td>自組織，≤ 7 人</td></tr>
+<tr><td>Product owner</td><td>搵 feature、排優先、持續 review product backlog</td></tr>
+<tr><td>ScrumMaster</td><td>確保跟 Scrum、安排每日會議、追蹤 backlog、記錄決定、同外界溝通；保護團隊唔受外界干擾。<b>唔係</b>傳統 project manager</td></tr>
+<tr><td>Product backlog</td><td>成個 project 嘅 to-do：feature、requirement、user story、architecture 定義、文件</td></tr>
+<tr><td>Sprint backlog</td><td>今個 sprint 揀咗做嘅 item</td></tr>
+<tr><td>Velocity</td><td>一個 sprint 估計做到幾多 backlog effort，用嚟估計同量度進步</td></tr>
+<tr><td>Scrum（daily）</td><td>每日短會：昨日進度、問題、今日計劃</td></tr></table></div>
+<span class="lab eg">例子：Scrum 好處</span>
+<p>產品拆成持份者明白嘅細塊；requirement 唔穩定都唔會阻住進度；全隊睇到晒所有嘢，溝通改善；客準時見到 increment；建立互信同正面文化。</p>
+<span class="lab trap">易錯</span>
+<p><b>Sprint 長度固定</b>：做唔晒唔會延長 sprint，未完成嘅 item 返去 product backlog（見 2025 Q21(4)）。</p>
+</div>
+
+<div class="concept">
+<h3>13. Agile 嘅實際問題：幾時唔適合</h3>
+<span class="lab">一句講完</span>
+<p>Agile 可能唔適合<b>大型、長命、為外部客戶開發</b>嘅系統，亦比較適合<b>新開發</b>多過 maintenance。</p>
+<span class="lab why">L3 列出嘅原因</span>
+<div class="tw"><table class="stack"><tr><th>情況</th><th>問題</th></tr>
+<tr><td>大型、長命、外部客戶</td><td>合約、管治、風險錯配；product ownership 弱或分散；architecture、規模、整合困難；文件、交接、長期維護</td></tr>
+<tr><td>Maintenance</td><td>突發工作同 sprint 計劃衝突；冇 product owner／用戶；legacy code、regression 風險；管治、合約、合規、交接</td></tr></table></div>
+<span class="lab pic">決策圖：用唔用 agile</span>
+<figure class="fig"><svg viewBox="0 0 360 290" role="img" aria-label="agile decision" style="max-width:380px">
+<defs><marker id="ag" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#15202B"/></marker></defs>
+<g font-size="12" text-anchor="middle">
+<polygon class="ac" points="180,5 330,35 180,65 30,35"/><text x="180" y="32">Requirement 穩定／</text><text x="180" y="47">硬件合約固定？</text>
+<polygon class="ac" points="180,90 330,120 180,150 30,120"/><text x="180" y="117">要 safety 認證／</text><text x="180" y="132">詳細文件？</text>
+<polygon class="ac" points="180,175 330,205 180,235 30,205"/><text x="180" y="202">大型、多間公司、</text><text x="180" y="217">長期、外部合約？</text>
+<rect class="hl" x="110" y="252" width="140" height="32" rx="8"/><text x="180" y="273" font-weight="700">傾向 agile</text></g>
+<rect class="bx" x="300" y="248" width="55" height="40" rx="6"/><text x="327" y="266" text-anchor="middle" font-size="11.5">plan-</text><text x="327" y="280" text-anchor="middle" font-size="11.5">driven</text>
+<g class="ln"><line x1="180" y1="65" x2="180" y2="88" marker-end="url(#ag)"/><line x1="180" y1="150" x2="180" y2="173" marker-end="url(#ag)"/><line x1="180" y1="235" x2="180" y2="250" marker-end="url(#ag)"/><path d="M330 35 H 345 V 246" marker-end="url(#ag)"/><line x1="330" y1="120" x2="345" y2="120"/><line x1="330" y1="205" x2="345" y2="205"/></g>
+<g font-size="11" fill="#566273"><text x="335" y="28">係</text><text x="335" y="113">係</text><text x="335" y="198">係</text><text x="186" y="80">唔係</text><text x="186" y="165">唔係</text><text x="186" y="246">唔係</text></g>
+</svg><figcaption>任何一個「係」都係反對 agile 做主要方法嘅好理由（實際上可以混合）</figcaption></figure>
+<span class="lab eg">例子</span>
+<p>Asm1 胰島素泵：硬件已經合約固定（requirement 穩定）、臨床試驗日期固定（要凍結嘅分階段計劃）、要監管安全認證（要詳細文件）→ 反對 agile。</p>
+<span class="lab trap">易錯</span>
+<p>答「贊成 agile」都得分，只要理由同情境配合（例如 requirement 唔清楚、要快啲交付、客可以全程參與）。最重要係<b>理由要扣返情境同 lecture</b>。</p>
+</div>
+
+<h2 id="demo">三、完整示範：2025 Q21 Software Process（15 分）</h2>
+<div class="key"><b>一分鐘重點</b><ul><li>4 小題全部可以直接用 L2、L3 嘅清單答。(4) 嘅選項唔喺卷上（嗰頁被抽走），下面按 Scrum 原則推斷。</li></ul></div>
+<div class="practice"><span class="src">2025 Q21(1) · 5 分 · &lt;150 words · L2</span>
+<p class="q">1) Describe the waterfall model, 2) state why it is difficult for it to handle changing requirements, 3) describe one type of system suitable for it and explain why.</p>
+<ol class="steps"><li>描述：列 5 個 phase + 「一個 phase 完成先去下一個」。</li><li>原因：硬性切分 + 早期凍結 requirement → 後期改要返轉頭。</li><li>適合系統：揀 L2 三類之一，講點解 requirement 穩定或者需要預先分析。</li></ol>
+<details class="ans"><summary>參考答案</summary><div><div class="ansbox"><b>答案</b>1) The waterfall model is a plan-driven process with separate phases: requirements analysis and definition, system and software design, implementation and unit testing, integration and system testing, and operation and maintenance. In principle, each phase must be completed and signed off before the next begins. 2) Because the project is inflexibly partitioned into distinct stages and requirements are fixed early, a change discovered later requires going back to rework the completed specification, design and code, which is costly. 3) An embedded control system, e.g., an insulin pump controller: its software must interface with hardware that is fixed in advance, so the requirements are stable, and it is safety-critical, so extensive analysis and documentation of the specification and design are needed before implementation.</div><p class="wl">約 135 字</p></div></details></div>
+<div class="practice"><span class="src">2025 Q21(2) · 4 分 · &lt;100 words · L2</span>
+<p class="q">Name two benefits and two problems of incremental delivery, compared with a non-iterative process.</p>
+<details class="ans"><summary>參考答案</summary><div><div class="ansbox"><b>答案</b>Benefits: 1) Customers receive useful functionality early and continuously, instead of waiting until the end, so value and return on investment come sooner. 2) Early increments act as prototypes, giving feedback that reduces the risk of building the wrong system and lowers overall project risk. Problems: 1) Architectural erosion: as increments are added, the system structure tends to degrade unless the initial architecture is flexible. 2) It is hard to use with fixed-price contracts and requires heavier management, configuration and integration effort, because the full specification is not known up front.</div></div></details></div>
+<div class="practice"><span class="src">2025 Q21(3) · 4 分 · &lt;100 words · L3</span>
+<p class="q">Compare the product backlog and the sprint backlog in terms of 1) what they contain and 2) what changes may occur during a sprint.</p>
+<details class="ans"><summary>參考答案</summary><div><div class="ansbox"><b>答案</b>1) The product backlog is the list of all to-do items for the whole project: features, requirements, user stories and supplementary tasks such as architecture definition and documentation. The sprint backlog contains only the items selected from the product backlog to be developed in the current sprint. 2) During a sprint, the product backlog may change: the product owner can add, remove or reprioritize items. The sprint backlog is essentially fixed once the sprint starts; the team is isolated from outside changes and only updates the progress of its items.</div></div></details></div>
+<div class="practice"><span class="src">2025 Q21(4) · 2 分 · &lt;50 words · L3 · <b>選項缺頁</b></span>
+<p class="q">At the end of a 12-day sprint only 80% of tasks are done (constant speed). Which of the two options is appropriate according to Scrum? Why?</p>
+<div class="warn"><b>注意</b>卷上冇印出兩個選項。按題意（「constant speed」），兩個選項好可能係：(a) 延長 sprint 3 日去做完（12 × 20% ÷ 80% = 3 日）；(b) sprint 準時結束，未完成嘅 task 返去 product backlog，下個 sprint 按實際 velocity 計劃。以下按 Scrum 原則答。</div>
+<details class="ans"><summary>參考答案</summary><div><div class="ansbox"><b>答案</b>End the sprint on schedule and return the unfinished tasks to the product backlog. In Scrum, sprints are fixed-length, so the sprint is not extended; the shortfall is used to adjust the team's velocity when planning the next sprint.</div><p class="wl">約 40 字 · 計法：完成 80% 用咗 12 日 → 速度 = 80% ÷ 12；剩低 20% 要 \(20\% \div (80\%/12) = 3\) 日。Scrum 唔會加呢 3 日。</p></div></details></div>
+
+<h2 id="past">四、Past paper 全答</h2>
+<div class="practice"><span class="src">2024 Q21 · 15 分 · L2、L3</span>
+<p class="q">(1) Describe change anticipation and change tolerance, and explain why incremental delivery supports both. (&lt;100 words, 6 points)</p>
+<details class="ans"><summary>參考答案</summary><div><div class="ansbox"><b>答案</b>Change anticipation: the process includes activities that can foresee possible changes before significant rework is needed, e.g., showing a prototype to customers. Change tolerance: the process is designed so that changes can be accommodated at relatively low cost, normally through incremental development. Incremental delivery supports anticipation because users experiment with early increments and refine their requirements for later ones; it supports tolerance because only the current increment's requirements are frozen, so changes go into later increments and affect only a small part of the system.</div><p class="wl">約 90 字</p></div></details>
+<p class="q">(2) For each XP practice, list the agile principle it supports: A) pair programming B) test-first development C) on-site customer D) collective ownership E) simple design. (5 points)</p>
+<details class="ans"><summary>參考答案</summary><div><div class="ansbox"><b>答案</b>A → people not process；B → embrace change；C → customer involvement；D → people not process；E → maintain simplicity。</div><p>出處：L3 slide 20。A、D 同屬 people not process（同 sustainable pace 一齊）。</p></div></details>
+<p class="q">(3) Explain what refactoring is and give two reasons for its necessity in XP. (&lt;100 words, 4 points)</p>
+<details class="ans"><summary>參考答案</summary><div><div class="ansbox"><b>答案</b>Refactoring is continuously improving the internal structure of code without changing its behaviour, e.g., renaming attributes and methods or replacing inline code with calls to library methods, even when there is no immediate need. Reasons: 1) XP does not design for change, because changes cannot be reliably anticipated; refactoring keeps code well-structured so that changes are easy when they arrive. 2) Frequent incremental local changes degrade software structure and readability; refactoring restores understandability and reduces the need for documentation.</div></div></details></div>
+
+<div class="practice"><span class="src">2023 Q21 · CMMI · 15 分 · L2</span>
+<p class="q">1) Explain (a) process performance (b) process capability (c) process maturity. (&lt;100 words, 6 points)</p>
+<details class="ans"><summary>參考答案</summary><div><div class="ansbox"><b>答案</b>(a) Performance is the actual, observable result of a specific project or activity, measured by indicators such as cycle time, defect density, cost and customer satisfaction. (b) Capability is the predictable range of results that a specific process can produce when it is run again, i.e., how consistent its performance is. (c) Maturity is the degree to which an organization has institutionalized, documented and optimized its processes across the whole enterprise.</div></div></details>
+<p class="q">2) Key characteristics of (a) Defined (b) Quantitatively Managed (c) Managed. (&lt;100 words, 3 points) 3) Sort them in increasing maturity. (3 points)</p>
+<details class="ans"><summary>參考答案</summary><div><div class="ansbox"><b>答案</b>(a) Defined: processes are standardized across the entire organization with a common training curriculum and process framework, so performance is consistent regardless of the team. (b) Quantitatively Managed: statistical and quantitative techniques are used to control sub-processes, keeping performance within quantitative bounds. (c) Managed: processes are planned, tracked and controlled at the project level, so success can be repeated on similar work by the same team.<br>3) Managed &lt; Defined &lt; Quantitatively Managed.</div></div></details>
+<p class="q">4) Key difference between the staged and continuous representations of CMMI. (&lt;100 words, 3 points)</p>
+<details class="ans"><summary>參考答案</summary><div><div class="ansbox"><b>答案</b>The staged representation sets an organization-wide goal of reaching a specific maturity level and systematically improves all the practice areas that level requires, so progress is described by one maturity level (1–5). The continuous representation lets the organization select individual practice areas according to its business priorities and raise their capability levels (0–5) independently, so progress is described by a capability profile across practice areas.</div></div></details></div>
+
+<div class="practice"><span class="src">2022 Q21 · 8 分 · L2、L3</span>
+<p class="q">A city plans a smart traffic management system developed by multiple companies over a few years. (1) For or against agile as the main approach? (2 points) (2) Three reasons. (&lt;120 words, 6 points)</p>
+<details class="ans"><summary>參考答案</summary><div><div class="ansbox"><b>答案</b>(1) Against.<br>(2) 1) It is a large, long-lifetime system developed by several companies under government contracts; agile's informal, short-term planning mismatches the contracts, governance and need for coordination across organizations, which require detailed upfront plans and specifications. 2) It is a safety-critical system interfacing with traffic hardware, so extensive safety analysis and documentation of the specification and design are needed before implementation. 3) Integrating subsystems from different companies requires a stable overall architecture and documented interfaces defined early, and long-term maintenance and handover require comprehensive documentation that agile methods minimize.</div><p class="wl">約 105 字 · L2：waterfall 適合「large systems … developed by several partner companies」同「critical systems」；L3：agile practical problems</p></div></details></div>
+
+<div class="practice"><span class="src">Asm1 Q1 · 10 分 · 官方 solution</span>
+<p class="q">Implantable insulin pump controller; components and interfaces contractually fixed; immovable 6-month clinical trial window. For or against agile? Two reasons. (&lt;120 words)</p>
+<details class="ans"><summary>官方答案（加解釋）</summary><div><div class="ansbox"><b>官方答案</b>Against. Any two of: 1) The hardware system to control is contractually fixed already, making its requirements highly stable. 2) The fixed clinical trial schedule demands a frozen, phase-gated plan. 3) For the whole system to get regulatory safety certification, detailed documentation is needed, not just working code.</div>
+<p>寫法：每個理由寫成兩句，第一句引情境，第二句講點解同 agile 唔夾（例如「agile values working software over comprehensive documentation, but certification requires …」）。</p></div></details></div>
+
+<h2 id="drill">五、Drill</h2>
+<div class="practice"><span class="src">Drill 1 · 用唔用 agile</span>
+<p class="q">一間 startup 為大學生整一個社交 app，唔太肯定用戶想要咩功能，想 3 個月內推出第一版，創辦人每日都喺 office。贊成定反對 agile？兩個理由。</p>
+<details class="ans"><summary>答案</summary><div><p><b>贊成</b>。1) Requirement 唔清楚、會變：agile 嘅 incremental delivery 同 embrace change 可以邊做邊根據用戶反饋調整。2) 創辦人可以做 on-site customer／product owner（customer involvement），而且係中小型產品（L3：agile 最成功嘅類型），冇外部規管。</p></div></details></div>
+<div class="practice"><span class="src">Drill 2 · CMMI level</span>
+<p class="q">一間公司每個 project 都有計劃同進度追蹤，同一隊做類似 project 表現穩定，但唔同團隊用唔同做法，表現差異大。佢喺邊級？下一步要做咩？</p>
+<details class="ans"><summary>答案</summary><div><p>Level 2 Managed（project 層面管理，可重複但跨 project 唔穩定）。下一步：將 process 標準化到全機構，有共同 framework 同培訓 → Level 3 Defined。</p></div></details></div>
+<div class="practice"><span class="src">Drill 3 · 計 sprint</span>
+<p class="q">一隊 velocity 係每個 2 星期 sprint 做 30 story points。Product backlog 仲有 165 points。最少要幾多個 sprint？如果今個 sprint 只做到 24 points，正確做法係？</p>
+<details class="ans"><summary>答案</summary><div><p>\(\lceil 165/30 \rceil = \lceil 5.5 \rceil = 6\) 個 sprint。只做到 24：sprint 準時結束，未完成嘅 6 points 返 product backlog，下次計劃按實際 velocity（可能調低）揀 item，唔會延長 sprint。</p></div></details></div>
+<div class="practice"><span class="src">Drill 4 · Model 揀邊個</span>
+<p class="q">為下面三個情況揀 process model：(a) 銀行用現成嘅 CRM 系統加少量設定 (b) 飛機自動駕駛軟件 (c) 一個新嘅網上教學平台，功能會按老師反饋逐步加。</p>
+<details class="ans"><summary>答案</summary><div><p>(a) Integration and configuration（reuse COTS）。(b) Waterfall（critical system，要大量 safety analysis）。(c) Incremental development／delivery（或者 agile）。</p></div></details></div>
+
+<h2 id="fill">六、互動填充</h2>
+<div class="practice fill"><span class="src">Fill A · XP practice → agile principle（填 principle 英文，例如 embrace change）</span>
+<div class="frow"><p><b>1.</b> On-site customer</p><div class="fin"><span><input class="blank" data-ans="customer involvement"></span></div></div>
+<div class="frow"><p><b>2.</b> Sustainable pace</p><div class="fin"><span><input class="blank" data-ans="people not process"></span></div></div>
+<div class="frow"><p><b>3.</b> Simple design</p><div class="fin"><span><input class="blank" data-ans="maintain simplicity"></span></div></div>
+<div class="frow"><p><b>4.</b> Continuous integration</p><div class="fin"><span><input class="blank" data-ans="embrace change"></span></div></div>
+<div class="frow"><p><b>5.</b> Collective ownership</p><div class="fin"><span><input class="blank" data-ans="people not process"></span></div></div>
+<div class="frow"><p><b>6.</b> Test-first development</p><div class="fin"><span><input class="blank" data-ans="embrace change"></span></div></div>
+<div class="fillbar"><button class="btn pri" data-check>對答案</button><button class="btn" data-show>顯示答案</button><button class="btn" data-clear>清除</button><span class="fillmsg"></span></div></div>
+<div class="practice fill"><span class="src">Fill B · 排序同清單</span>
+<div class="frow"><p><b>1.</b> CMMI level 2 叫咩？</p><div class="fin"><span><input class="blank" data-ans="managed"></span></div></div>
+<div class="frow"><p><b>2.</b> CMMI level 4 叫咩？</p><div class="fin"><span><input class="blank" data-ans="quantitatively managed"></span></div></div>
+<div class="frow"><p><b>3.</b> CMMI level 5 叫咩？</p><div class="fin"><span><input class="blank" data-ans="optimizing§optimising"></span></div></div>
+<div class="frow"><p><b>4.</b> Waterfall 第 3 個 phase（英文）</p><div class="fin"><span><input class="blank" data-ans="implementation and unit testing§implementation & unit testing"></span></div></div>
+<div class="frow"><p><b>5.</b> 只支持 change anticipation 嘅方法</p><div class="fin"><span><input class="blank" data-ans="prototyping§system prototyping"></span></div></div>
+<div class="frow"><p><b>6.</b> Scrum 入面保護團隊唔受外界干擾嘅角色</p><div class="fin"><span><input class="blank" data-ans="scrummaster§scrum master"></span></div></div>
+<div class="fillbar"><button class="btn pri" data-check>對答案</button><button class="btn" data-show>顯示答案</button><button class="btn" data-clear>清除</button><span class="fillmsg"></span></div></div>
+
+<h2 id="mcq">七、T/F + MC</h2>
+<h3>T/F（24 題）</h3>
+<div class="mcq" data-set="T"><script type="application/json">[
+{"t":"L1","s":"<p>Software is defined as computer programs and their associated documentation.</p>","a":0,"e":"<b>True</b>。L1 FAQ。"},
+{"t":"L1","s":"<p>Computer science focuses on the practicalities of developing and delivering useful software, while software engineering focuses on theory.</p>","a":1,"e":"<b>False</b>。調轉咗：CS 重理論，SE 重實際。"},
+{"t":"L1","s":"<p>Software engineering is part of the more general discipline of system engineering.</p>","a":0,"e":"<b>True</b>。System engineering 包括硬件、軟件、process engineering。"},
+{"t":"L1","s":"<p>Dependability includes reliability, availability, safety, maintainability and fault tolerance.</p>","a":0,"e":"<b>True</b>。L1 good software attributes。"},
+{"t":"L1","s":"<p>Between 60% and 70% of faults in large-scale products are requirements, analysis and design faults.</p>","a":0,"e":"<b>True</b>。所以要改善早期技術、盡早搵錯。"},
+{"t":"L1","s":"<p>Ethical conduct for software engineers is the same as legal compliance.</p>","a":1,"e":"<b>False</b>。Ethical conduct transcends mere legal compliance。"},
+{"t":"L1","s":"<p>The SE Code of Ethics approved by ACM and IEEE-CS contains eight principles.</p>","a":0,"e":"<b>True</b>。"},
+{"t":"L2","s":"<p>The four fundamental process activities are specification, development, verification and validation, and evolution.</p>","a":0,"e":"<b>True</b>。"},
+{"t":"L2","s":"<p>In practice, most software processes include elements of both plan-driven and agile approaches.</p>","a":0,"e":"<b>True</b>。冇絕對啱或錯嘅 process。"},
+{"t":"L2","s":"<p>The waterfall model is appropriate for most business systems because their requirements are usually stable.</p>","a":1,"e":"<b>False</b>。L2：few business systems have stable requirements。"},
+{"t":"L2","s":"<p>In incremental development, every increment must be delivered to the system customer.</p>","a":1,"e":"<b>False</b>。You don't have to deliver each increment to the customer。"},
+{"t":"L2","s":"<p>A problem of incremental development is that system structure tends to degrade as new increments are added.</p>","a":0,"e":"<b>True</b>。"},
+{"t":"L2","s":"<p>Reuse-oriented software engineering gives the developer full control over the evolution of the system.</p>","a":1,"e":"<b>False</b>。缺點之一正係 loss of control over the system evolution。"},
+{"t":"L2","s":"<p>There is a complete solution to the moving target problem if requirements are frozen early.</p>","a":1,"e":"<b>False</b>。L2：There is no solution to the moving target problem。"},
+{"t":"L2","s":"<p>In incremental delivery, once the development of an increment has started, its requirements are frozen.</p>","a":0,"e":"<b>True</b>。之後 increment 嘅 requirement 仲可以變。"},
+{"t":"L2","s":"<p>Process capability refers to the institutionalization of processes across the whole organization.</p>","a":1,"e":"<b>False</b>。呢個係 <b>maturity</b>；capability 係單一 process 可預期嘅結果範圍。"},
+{"t":"L2","s":"<p>At CMMI maturity level 4, organizations use statistical and quantitative techniques to control sub-processes.</p>","a":0,"e":"<b>True</b>。Quantitatively Managed。"},
+{"t":"L3","s":"<p>All agile methods suggest that software should be developed and delivered incrementally.</p>","a":0,"e":"<b>True</b>。L3 原句。"},
+{"t":"L3","s":"<p>The Agile Manifesto states that comprehensive documentation has no value.</p>","a":1,"e":"<b>False</b>。右邊嘅項目都有價值，只係左邊（working software）更重要。"},
+{"t":"L3","s":"<p>XP proposes designing for change because changes can be reliably anticipated.</p>","a":1,"e":"<b>False</b>。XP 認為 changes cannot be reliably anticipated，所以用 refactoring。"},
+{"t":"L3","s":"<p>In XP, all tests must be run for every build, and the build is accepted only if the tests run successfully.</p>","a":0,"e":"<b>True</b>。"},
+{"t":"L3","s":"<p>The ScrumMaster is responsible for protecting the development team from external distractions.</p>","a":0,"e":"<b>True</b>。"},
+{"t":"L3","s":"<p>A Scrum development team should ideally contain at least 15 people.</p>","a":1,"e":"<b>False</b>。Should be no more than 7 people。"},
+{"t":"L3","s":"<p>Agile methods are most appropriate for software maintenance rather than new software development.</p>","a":1,"e":"<b>False</b>。剛剛相反：most appropriate for new software development。"}
+]</script></div>
+<h3>MC（8 題，含多選）</h3>
+<div class="mcq" data-set="M"><script type="application/json">[
+{"t":"L2","s":"<p>For which types of systems is the waterfall model appropriate according to L2? (Select all that apply)</p>","o":["Embedded systems interfacing with hardware","Critical systems needing extensive safety analysis","Large systems developed by several partner companies","Small consumer apps with unclear requirements"],"a":[0,1,2],"e":"A、B、C 係 L2 列出嘅。D 適合 agile／incremental。"},
+{"t":"L2","s":"<p>Which approach supports BOTH change anticipation and change tolerance?</p>","o":["Throwaway prototyping","Incremental delivery","Waterfall","Formal specification"],"a":1,"e":"B 啱。A 只係 anticipation；C、D 兩樣都唔特別支持。"},
+{"t":"L2","s":"<p>The \"golden rule\" of prototyping in L2 is:</p>","o":["Always evolve the prototype into the final product","Prototype just enough to learn, but not enough to ship","Never show prototypes to customers","Prototype only the user interface"],"a":1,"e":"B 係 L2 原句。A 會導致 evolutionary code rot。"},
+{"t":"L2","s":"<p>A company sets a goal to reach CMMI maturity level 3 and improves all practice areas required for it. This is the:</p>","o":["Continuous approach","Staged approach","Agile approach","Capability approach"],"a":1,"e":"B：staged = 以 maturity level 為目標，改善所需嘅全部 practice areas。A 係揀個別 PA 提升 capability。"},
+{"t":"L3","s":"<p>Which are listed as benefits of pair programming? (Select all that apply)</p>","o":["Supports collective ownership and responsibility","Acts as an informal review process","Encourages refactoring","Removes the need for testing"],"a":[0,1,2],"e":"A、B、C 係 L3 原文（仲有「not necessarily inefficient」）。D 錯：XP 非常重視 testing。"},
+{"t":"L3","s":"<p>The three C's of user stories are:</p>","o":["Card, Communication, Confirmation","Code, Compile, Commit","Customer, Contract, Change","Card, Code, Coverage"],"a":0,"e":"A：L3 原文（Card = 寫低用嚟計劃、Communication = 同人討論、Confirmation = 達成共識）。"},
+{"t":"L3","s":"<p>In Scrum, the estimate of how much product backlog effort a team can cover in one sprint is called:</p>","o":["Sprint backlog","Velocity","Burn rate","Potentially shippable increment"],"a":1,"e":"B：velocity。"},
+{"t":"L3","s":"<p>Which situations make agile methods less suitable? (Select all that apply)</p>","o":["Large, long-lifetime systems for external clients under contracts","Weak or fragmented product ownership","Small product with a committed customer and few regulations","Legacy maintenance with interrupt-driven work"],"a":[0,1,3],"e":"A、B、D 係 L3 practical problems。C 係 agile 最適合嘅情況。"}
+]</script></div>
+
+<h2 id="short">八、短答題</h2>
+<p class="q">1. Compare throwaway and evolutionary prototyping. (&lt;60 words)</p>
+<details class="ans"><summary>參考答案</summary><div><div class="ansbox"><b>答案</b>A throwaway (rapid) prototype is built quickly to clarify requirements or test design options and is then discarded; the real system is built properly. An evolutionary prototype is developed and refined until it becomes the delivered system. Evolutionary prototyping risks code rot, since quick-and-dirty code is carried into the product.</div></div></details>
+<p class="q">2. Why may agile methods be unsuitable for maintaining a large legacy system? Give two reasons. (&lt;80 words)</p>
+<details class="ans"><summary>參考答案</summary><div><div class="ansbox"><b>答案</b>1) Maintenance work is interrupt-driven (urgent bug fixes, support requests), which conflicts with planning work in fixed sprints. 2) Legacy systems often lack a clear product owner and documentation, and their old code and architecture constraints create high regression risk, while agile minimizes documentation needed for long-term handover and compliance.</div></div></details>
+<p class="q">3. What are the roles of the product owner and the ScrumMaster? (&lt;60 words)</p>
+<details class="ans"><summary>參考答案</summary><div><div class="ansbox"><b>答案</b>The product owner identifies product features or requirements, prioritizes them and continuously reviews the product backlog to meet business needs. The ScrumMaster ensures the Scrum process is followed, arranges daily meetings, tracks the backlog, communicates with customers and management, and protects the team from outside interference.</div></div></details>
+<p class="q">4. Describe the three phases of Scrum. (&lt;60 words)</p>
+<details class="ans"><summary>參考答案</summary><div><div class="ansbox"><b>答案</b>1) Outline planning: establish the general project objectives and design the software architecture. 2) A series of sprint cycles, each developing an increment of the system. 3) Project closure: wrap up the project, complete the required documentation such as help frames and user manuals, and assess the lessons learned.</div></div></details>
+
+<h2 id="faq">九、常見疑問</h2>
+<dl class="faq">
+<dt>Q：「贊成／反對 agile」可唔可以答贊成？</dt><dd>可以，只要理由同情境配合。不過真卷嘅情境（大型、多公司、safety-critical、硬件固定）明顯偏向反對，官方 solution 都係反對。</dd>
+<dt>Q：Incremental development 同 incremental delivery 有咩分別？</dt><dd>Development 係開發方式（版本不斷演化，唔一定交俾客）；delivery 係真係將每個 increment 交俾客用，係 coping with change 嘅方法。</dd>
+<dt>Q：CMMI 一定要背晒 5 級？</dt><dd>要。2023 考咗 3 個 level 嘅特徵同排序；最易混係 Managed（project 層面）同 Defined（全機構）。</dd>
+<dt>Q：XP practice 對 agile principle 有冇一對多？</dt><dd>有：small releases → incremental delivery + embrace change；refactoring → embrace change + maintain simplicity。考試答 L3 列出嘅其中一個就得。</dd>
+<dt>Q：Velocity 係咪越高越好？</dt><dd>Velocity 係估計工具，用嚟計劃同量度改善；唔同團隊之間唔應該直接比較。</dd>
+</dl>
+<footer>COMP3211 Software Engineering Final 溫習包 · 考試 2026-12-05</footer></main><script>
+(function(){
+var PAGE=document.body.dataset.page;
+function ld(k,d){try{var v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}}
+function sv(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
+// section done checkboxes
+document.querySelectorAll('h2[id]').forEach(function(h){
+  var key='done:'+PAGE+':'+h.id;var l=document.createElement('label');l.className='done';
+  var c=document.createElement('input');c.type='checkbox';c.checked=!!ld(key,false);
+  c.onchange=function(){sv(key,c.checked)};l.appendChild(c);l.appendChild(document.createTextNode('呢部分溫完'));
+  h.insertAdjacentElement('afterend',l);
+});
+// MCQ / TF / multi-select
+function same(x,y){if(Array.isArray(y)){return Array.isArray(x)&&x.slice().sort().join()==y.slice().sort().join()}return x===y}
+document.querySelectorAll('.mcq').forEach(function(box){
+  var id=box.dataset.set, data=JSON.parse(box.querySelector('script').textContent);
+  var key='mcq:'+PAGE+':'+id, st=ld(key,{});
+  var bar=document.createElement('div');bar.className='bar';
+  var sc=document.createElement('span');var rs=document.createElement('button');rs.textContent='重做呢套';
+  bar.appendChild(sc);bar.appendChild(rs);box.appendChild(bar);
+  function score(){var a=0,c=0;data.forEach(function(q,i){if(st[i]!==undefined){a++;if(same(st[i],q.a))c++}});
+    sc.textContent='答咗 '+a+'/'+data.length+' · 啱 '+c;sv(key,st);sv('mcqsum:'+PAGE+':'+id,{a:a,c:c,n:data.length})}
+  data.forEach(function(q,i){
+    var tf=!q.o, opts=q.o||['True','False'], multi=Array.isArray(q.a), L=tf?'TF':'ABCDEFG';
+    var kind=tf?'T/F':(multi?'多選：揀晒所有啱嘅':'MC');
+    var d=document.createElement('div');d.className='mq';
+    d.innerHTML='<div class="num">'+id+(i+1)+' · '+kind+(q.t?' · '+q.t:'')+'</div><div class="stem">'+q.s+'</div>';
+    var btns=[], sel=[];
+    opts.forEach(function(o,j){var b=document.createElement('button');b.className='opt';
+      b.innerHTML='<span>'+L[j]+'</span><span>'+o+'</span>';
+      b.onclick=function(){if(st[i]!==undefined)return;
+        if(multi){var k=sel.indexOf(j);if(k<0)sel.push(j);else sel.splice(k,1);b.classList.toggle('sel')}
+        else{st[i]=j;show();score()}};
+      btns.push(b);d.appendChild(b)});
+    var chk=null;if(multi){chk=document.createElement('button');chk.className='btn pri';chk.textContent='對答案';
+      chk.onclick=function(){if(!sel.length)return;st[i]=sel.slice();show();score()};d.appendChild(chk)}
+    var ex=document.createElement('div');ex.className='exp';ex.hidden=true;d.appendChild(ex);
+    function lab(a){return Array.isArray(a)?a.map(function(x){return L[x]}).sort().join('、'):L[a]}
+    function show(){if(st[i]===undefined){sel=[];btns.forEach(function(b){b.disabled=false;b.className='opt'});if(chk)chk.hidden=false;ex.hidden=true;return}
+      var mine=st[i];if(chk)chk.hidden=true;
+      btns.forEach(function(b,j){var inA=multi?q.a.indexOf(j)>=0:j===q.a, picked=multi?mine.indexOf(j)>=0:j===mine;
+        b.disabled=true;b.className='opt'+(inA?' right':(picked?' wrong':''))+(multi&&inA&&!picked?' miss':'')});
+      ex.hidden=false;ex.innerHTML=(same(mine,q.a)?'<span class="v" style="color:var(--ok)">答啱！</span> ':'<span class="v" style="color:var(--bad)">答錯，正確答案係 '+lab(q.a)+'。</span> ')+q.e}
+    d._show=show;show();box.appendChild(d);
+  });
+  rs.onclick=function(){st={};box.querySelectorAll('.mq').forEach(function(d){d._show()});score()};
+  score();
+});
+
+function norm(s){return s.replace(/[“”"]/g,"'").replace(/[‘’]/g,"'").replace(/\s+/g,'').toLowerCase()}
+document.querySelectorAll('input.blank').forEach(function(inp){var alts=inp.dataset.ans.split('§');var w=Math.max.apply(null,alts.map(function(a){return a.length}));inp.style.width=(Math.max(w,3)+2)+'ch';inp.addEventListener('input',function(){inp.classList.remove('ok','bad','shown')})});
+document.querySelectorAll('.fill').forEach(function(box){var inputs=box.querySelectorAll('input.blank');var msg=box.querySelector('.fillmsg');
+ box.querySelector('[data-check]').addEventListener('click',function(){var r=0;inputs.forEach(function(inp){var v=norm(inp.value);var ok=inp.dataset.ans.split('§').some(function(a){return norm(a)===v});inp.classList.remove('ok','bad','shown');inp.classList.add(ok?'ok':'bad');if(ok)r++});msg.textContent='答啱 '+r+' / '+inputs.length+(r===inputs.length?'，全對！':'：紅色格再諗下，或者撳「顯示答案」。')});
+ box.querySelector('[data-show]').addEventListener('click',function(){inputs.forEach(function(inp){inp.value=inp.dataset.ans.split('§')[0];inp.classList.remove('ok','bad');inp.classList.add('shown')});msg.textContent='已填入答案（虛線格）。'});
+ box.querySelector('[data-clear]').addEventListener('click',function(){inputs.forEach(function(inp){inp.value='';inp.classList.remove('ok','bad','shown')});msg.textContent=''})});
+
+
+
+document.querySelectorAll('.tw > table:not(.stack)').forEach(function(t){if(t.closest('.dp')||t.classList.contains('nostack'))return;
+ var hr=t.querySelector('tr');if(!hr)return;var nh=hr.querySelectorAll('th').length;if(nh<3)return;
+ var cells=t.querySelectorAll('td'),L=0;cells.forEach(function(c){L+=c.textContent.trim().length});
+ if(cells.length&&L/cells.length>14)t.classList.add('stack')});
+document.querySelectorAll('table.stack').forEach(function(t){var hs=[].map.call(t.querySelectorAll('tr:first-child th'),function(h){return h.textContent});
+ t.querySelectorAll('tr').forEach(function(r,i){if(i===0)return;[].forEach.call(r.children,function(c,j){if(hs[j])c.setAttribute('data-label',hs[j])})})});
+
+// progress panel on index
+var pp=document.getElementById('progress');
+if(pp){var pages=JSON.parse(pp.dataset.pages);var html='';
+  pages.forEach(function(p){var n=0,m=0,a=0,c=0;
+    for(var i=0;i<localStorage.length;i++){var k=localStorage.key(i);
+      if(k.indexOf('done:'+p[0]+':')===0&&ld(k,false))n++;
+      if(k.indexOf('mcqsum:'+p[0]+':')===0){var s=ld(k,{});a+=s.a||0;c+=s.c||0;m+=s.n||0}}
+    html+='<div class="row"><a href="'+p[0]+'">'+p[1]+'</a><span>'+(m||n?'溫完 '+n+' 部分 · MCQ '+a+'/'+m+'（啱 '+c+'）':'未開始')+'</span></div>'});
+  pp.innerHTML=html}
+})();
+</script><script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script><script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js" onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'\(',right:'\)',display:false}],ignoredClasses:['mcq','uml'],throwOnError:false})"></script></body></html>
