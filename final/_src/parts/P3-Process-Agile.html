@@ -77,8 +77,20 @@
 <ul><li>管理層要求為趕 launch 跳過關鍵 testing 或者忽略保安漏洞 → clauses 1.03、3.10。</li>
 <li>老闆要你偷偷收集用戶資料、用 dark pattern → principle 2、clauses 3.12、1.06。</li>
 <li>ML model 對某族群有偏見、唔考慮殘疾人士 → clauses 1.07、4.03。</li></ul>
+<span class="lab why">8 個 principles（Code 全文，L1 slide 20）</span>
+<div class="tw"><table class="stack"><tr><th>Principle</th><th>意思</th></tr>
+<tr><td>1 PUBLIC</td><td>行事要符合公眾利益（最重要，其他都要「consistent with the public interest」）</td></tr>
+<tr><td>2 CLIENT AND EMPLOYER</td><td>為客戶同僱主最佳利益做事，但唔可以違反公眾利益</td></tr>
+<tr><td>3 PRODUCT</td><td>產品同修改要達到最高專業標準</td></tr>
+<tr><td>4 JUDGMENT</td><td>保持專業判斷嘅 integrity 同獨立</td></tr>
+<tr><td>5 MANAGEMENT</td><td>管理者要推動有道德嘅開發同維護管理</td></tr>
+<tr><td>6 PROFESSION</td><td>提升專業嘅 integrity 同聲譽</td></tr>
+<tr><td>7 COLLEAGUES</td><td>對同事公平、支持</td></tr>
+<tr><td>8 SELF</td><td>終身學習，推動有道德嘅專業實踐</td></tr></table></div>
+<p>L1 dilemmas 用到嘅 clauses：<b>1.03</b> 只批准有充分理由相信安全、符合 spec、通過測試、唔損害私隱同環境嘅軟件；<b>1.06</b> 公開陳述要公平、唔可以欺騙；<b>1.07</b> 考慮殘疾、經濟弱勢等會減少用軟件機會嘅因素；<b>3.10</b> 確保足夠嘅 testing、debugging 同 review；<b>3.12</b> 開發尊重受影響人士私隱嘅軟件；<b>4.03</b> 評估軟件時保持專業客觀。</p>
+<p>個人層面（L1 Practicing the Principles）：唔偷資料謀私利；唔分發或出售工作得到嘅 proprietary 資料；唔用電腦科技助長歧視或騷擾。</p>
 <span class="lab trap">易錯</span>
-<p>「Ethics = 守法」係錯：L1 話 ethical conduct transcends legal compliance。</p>
+<p>「Ethics = 守法」係錯：L1 話 ethical conduct transcends legal compliance。Code 由 <b>IEEE-CS 同 ACM</b> 批准；適用於 practitioners、educators、managers、policymakers，<b>連 trainees 同 students 都包</b>。Code 唔係一條會自動出答案嘅「ethical algorithm」，要用判斷。</p>
 </div>
 
 <div class="concept">
@@ -445,7 +457,7 @@
 <div class="fillbar"><button class="btn pri" data-check>對答案</button><button class="btn" data-show>顯示答案</button><button class="btn" data-clear>清除</button><span class="fillmsg"></span></div></div>
 
 <h2 id="mcq">七、T/F + MC</h2>
-<h3>T/F（24 題）</h3>
+<h3>T/F（29 題）</h3>
 <div class="mcq" data-set="T"><script type="application/json">[
 {"t":"L1","s":"<p>Software is defined as computer programs and their associated documentation.</p>","a":0,"e":"<b>True</b>。L1 FAQ。"},
 {"t":"L1","s":"<p>Computer science focuses on the practicalities of developing and delivering useful software, while software engineering focuses on theory.</p>","a":1,"e":"<b>False</b>。調轉咗：CS 重理論，SE 重實際。"},
@@ -470,9 +482,14 @@
 {"t":"L3","s":"<p>In XP, all tests must be run for every build, and the build is accepted only if the tests run successfully.</p>","a":0,"e":"<b>True</b>。"},
 {"t":"L3","s":"<p>The ScrumMaster is responsible for protecting the development team from external distractions.</p>","a":0,"e":"<b>True</b>。"},
 {"t":"L3","s":"<p>A Scrum development team should ideally contain at least 15 people.</p>","a":1,"e":"<b>False</b>。Should be no more than 7 people。"},
-{"t":"L3","s":"<p>Agile methods are most appropriate for software maintenance rather than new software development.</p>","a":1,"e":"<b>False</b>。剛剛相反：most appropriate for new software development。"}
+{"t":"L3","s":"<p>Agile methods are most appropriate for software maintenance rather than new software development.</p>","a":1,"e":"<b>False</b>。剛剛相反：most appropriate for new software development。"},
+{"t":"L1","s":"<p>The Software Engineering Code of Ethics was approved by the IEEE-CS and ACM.</p>","a":0,"e":"<b>True</b>。"},
+{"t":"L1","s":"<p>The Code of Ethics applies only to practising software engineers, not to students.</p>","a":1,"e":"<b>False</b>。連 trainees 同 students 都包括。"},
+{"t":"L1","s":"<p>The Code of Ethics contains eight principles, the first being PUBLIC.</p>","a":0,"e":"<b>True</b>。Public、Client and employer、Product、Judgment、Management、Profession、Colleagues、Self。"},
+{"t":"L1","s":"<p>The Code of Ethics is a simple ethical algorithm that generates ethical decisions.</p>","a":1,"e":"<b>False</b>。Code 原文講明唔係，要用 ethical judgment。"},
+{"t":"L1","s":"<p>In the ETHICS-PLUS model, the Sunshine test asks whether a decision can be discussed openly and disclosed without misgiving.</p>","a":0,"e":"<b>True</b>。"}
 ]</script></div>
-<h3>MC（8 題，含多選）</h3>
+<h3>MC（9 題，含多選）</h3>
 <div class="mcq" data-set="M"><script type="application/json">[
 {"t":"L2","s":"<p>For which types of systems is the waterfall model appropriate according to L2? (Select all that apply)</p>","o":["Embedded systems interfacing with hardware","Critical systems needing extensive safety analysis","Large systems developed by several partner companies","Small consumer apps with unclear requirements"],"a":[0,1,2],"e":"A、B、C 係 L2 列出嘅。D 適合 agile／incremental。"},
 {"t":"L2","s":"<p>Which approach supports BOTH change anticipation and change tolerance?</p>","o":["Throwaway prototyping","Incremental delivery","Waterfall","Formal specification"],"a":1,"e":"B 啱。A 只係 anticipation；C、D 兩樣都唔特別支持。"},
@@ -481,7 +498,8 @@
 {"t":"L3","s":"<p>Which are listed as benefits of pair programming? (Select all that apply)</p>","o":["Supports collective ownership and responsibility","Acts as an informal review process","Encourages refactoring","Removes the need for testing"],"a":[0,1,2],"e":"A、B、C 係 L3 原文（仲有「not necessarily inefficient」）。D 錯：XP 非常重視 testing。"},
 {"t":"L3","s":"<p>The three C's of user stories are:</p>","o":["Card, Communication, Confirmation","Code, Compile, Commit","Customer, Contract, Change","Card, Code, Coverage"],"a":0,"e":"A：L3 原文（Card = 寫低用嚟計劃、Communication = 同人討論、Confirmation = 達成共識）。"},
 {"t":"L3","s":"<p>In Scrum, the estimate of how much product backlog effort a team can cover in one sprint is called:</p>","o":["Sprint backlog","Velocity","Burn rate","Potentially shippable increment"],"a":1,"e":"B：velocity。"},
-{"t":"L3","s":"<p>Which situations make agile methods less suitable? (Select all that apply)</p>","o":["Large, long-lifetime systems for external clients under contracts","Weak or fragmented product ownership","Small product with a committed customer and few regulations","Legacy maintenance with interrupt-driven work"],"a":[0,1,3],"e":"A、B、D 係 L3 practical problems。C 係 agile 最適合嘅情況。"}
+{"t":"L3","s":"<p>Which situations make agile methods less suitable? (Select all that apply)</p>","o":["Large, long-lifetime systems for external clients under contracts","Weak or fragmented product ownership","Small product with a committed customer and few regulations","Legacy maintenance with interrupt-driven work"],"a":[0,1,3],"e":"A、B、D 係 L3 practical problems。C 係 agile 最適合嘅情況。"},
+{"t":"L1","s":"<p>Which principle of the SE Code of Ethics covers ensuring adequate testing, debugging and review (clause 3.10)?</p>","o":["PUBLIC","PRODUCT","JUDGMENT","SELF"],"a":1,"e":"B：3.xx 係 Principle 3 PRODUCT。"}
 ]</script></div>
 
 <h2 id="short">八、短答題</h2>

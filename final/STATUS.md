@@ -78,3 +78,4 @@
 - COMP3211-revision/README.md
 
 - 2026-11-23：補讀 L7（weak entity、derivable status、IPO pre/post-condition、structured programming 三種 construct、over-decomposition）、L7b 全份（signature、constructor、this、aliasing、access modifier、abstract／interface 規則）、L8 ISP 細節、L9 exit criteria；P7 加內容同 T/F 16 題、MC 2 題（T/F 44、MC 10）。按 Max 通知刪走 L12 內容（P5、index）。
+- 2026-11-23（第二輪檢查）：讀埋 L0（final 3 小時 closed book、佔 70%）同 SE Code of Ethics 全文；P3 概念卡 2 加 8 個 principles 表同 L1 dilemma clauses（1.03、1.06、1.07、3.10、3.12、4.03）意思，T/F +5（29）、MC +1（9）。逐頁掃過 L1–L11 PDF 入面字少嘅頁（圖片頁），內容都已經涵蓋；L7 slide 33（With IH）喺 PDF 入面係空白頁。
