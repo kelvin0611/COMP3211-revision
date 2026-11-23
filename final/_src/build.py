@@ -88,7 +88,7 @@ input.blank.ok{border-color:var(--ok);background:var(--okbg)}input.blank.bad{bor
 .key{background:#FAE6DA;border-left:4px solid var(--acc);padding:12px 16px;margin:14px 0}
 .key>b:first-child{display:block;color:var(--acc);margin-bottom:4px}
 .key ul{margin:4px 0;padding-left:20px}
-.fx{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:6px 12px;margin:12px 0;overflow-x:auto;text-align:center}
+.fx{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:6px 12px;margin:12px 0;overflow-x:auto;text-align:center}@media(max-width:480px){.fx .katex-display>.katex{font-size:.86em}}
 .concept{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:6px 16px 12px;margin:18px 0}
 .concept>h3{margin-top:14px}
 .lab{display:inline-block;font-size:12.5px;font-weight:700;color:#fff;background:var(--acc2);border-radius:6px;padding:1px 8px;margin:14px 0 4px}
@@ -210,7 +210,7 @@ def build(fname):
     title = re.sub('<.*?>','',title)
     nav = "".join(f'<a href="{f}"{" class=on" if f==fname else ""}>{n}</a>' for f,n in PAGES)
     body = body.replace("{{PAGES}}", json.dumps(PAGES, ensure_ascii=False).replace('"','&quot;'))
-    html = f"""<!DOCTYPE html><html lang="zh-HK"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light"><title>{title}</title><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css"><style>{CSS}</style></head><body data-page="{fname}"><nav class="top">{nav}</nav><main>{body}<footer>COMP3211 Software Engineering Final 溫習包 · 考試 2026-12-05</footer></main><script>{JS}</script><script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script><script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js" onload="renderMathInElement(document.body,{{delimiters:[{{left:'$$',right:'$$',display:true}},{{left:'\\(',right:'\\)',display:false}}],ignoredClasses:['mcq','uml'],throwOnError:false}})"></script></body></html>"""
+    html = f"""<!DOCTYPE html><html lang="zh-HK"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light"><title>{title}</title><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css"><style>{CSS}</style></head><body data-page="{fname}"><nav class="top">{nav}</nav><main>{body}<footer>COMP3211 Software Engineering Final 溫習包 · 考試 2026-12-05</footer></main><script>{JS}</script><script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script><script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js" onload="renderMathInElement(document.body,{{delimiters:[{{left:'$$',right:'$$',display:true}},{{left:'\\\\(',right:'\\\\)',display:false}}],ignoredClasses:['mcq','uml'],throwOnError:false}})"></script></body></html>"""
     pathlib.Path("out").mkdir(exist_ok=True)
     (pathlib.Path("out")/fname).write_text(html)
     print(fname, len(html))

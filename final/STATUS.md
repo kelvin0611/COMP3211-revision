@@ -65,7 +65,7 @@
 ## 下一步
 - 8 頁全部完成（2026-11-22）。全部 390px／820px 檢查冇溢出、冇 JS error；所有填充題「顯示答案 → 對答案」全對；共 184 T/F + 66 MC
 - 等 Kelvin push 上 GitHub（repo：COMP3211-revision，Pages 由 main branch 根目錄出；網址 https://kelvin0611.github.io/COMP3211-revision/final/）
-- KaTeX 經 CDN 喺瀏覽器 render（container 預覽唔到），要喺手機確認公式顯示正常
+- 2026-11-23 修正：build.py 嘅 inline 數學 delimiter 原本輸出 JS 字串 '\('（即係普通括號），令所有 (…) 都被 KaTeX 當數學 → 中文 warning。已改為 '\\('；MCQ JSON 入面唔好用 LaTeX（.mcq 被 KaTeX 忽略）。用本地 KaTeX（/opt/npm-tools/node_modules/katex）驗證：8 頁 0 warning，手機公式唔溢出
 - 之後按 Kelvin 溫書時嘅問題補 FAQ／drill；可以加第二套模擬卷（mock2.html）
 
 ## Kelvin 唔熟／想補嘅位

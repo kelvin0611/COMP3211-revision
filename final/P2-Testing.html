@@ -84,7 +84,7 @@ input.blank.ok{border-color:var(--ok);background:var(--okbg)}input.blank.bad{bor
 .key{background:#FAE6DA;border-left:4px solid var(--acc);padding:12px 16px;margin:14px 0}
 .key>b:first-child{display:block;color:var(--acc);margin-bottom:4px}
 .key ul{margin:4px 0;padding-left:20px}
-.fx{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:6px 12px;margin:12px 0;overflow-x:auto;text-align:center}
+.fx{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:6px 12px;margin:12px 0;overflow-x:auto;text-align:center}@media(max-width:480px){.fx .katex-display>.katex{font-size:.86em}}
 .concept{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:6px 16px 12px;margin:18px 0}
 .concept>h3{margin-top:14px}
 .lab{display:inline-block;font-size:12.5px;font-weight:700;color:#fff;background:var(--acc2);border-radius:6px;padding:1px 8px;margin:14px 0 4px}
@@ -251,8 +251,8 @@ footer{color:var(--mut);font-size:13px;text-align:center;margin-top:50px}
 <h3>5. Code coverage：statement、branch、path</h3>
 <span class="lab">一句講完</span>
 <p>Coverage 量度 test suite 行過幾多 code：<b>statement</b>（每句行過最少一次）、<b>branch</b>（每個 if／loop 嘅 true 同 false 都出現過）、<b>path</b>（每條執行路線都行過）。</p>
-<div class="fx">$$\text{Statement coverage} = \frac{\#\text{statements executed}}{\#\text{statements}}\times 100\%$$</div>
-<div class="fx">$$\text{Branch coverage} = \frac{\#\text{branch outcomes exercised}}{\#\text{branch outcomes}}\times 100\%$$</div>
+<div class="fx">$$\text{Statement coverage} = \frac{\text{executed}}{\text{all statements}}\times 100\%$$</div>
+<div class="fx">$$\text{Branch coverage} = \frac{\text{outcomes exercised}}{\text{all outcomes}}\times 100\%$$</div>
 <span class="lab why">點解 branch 比 statement 強</span>
 <p>冇 else 嘅 if：一個令條件 true 嘅 test 已經行晒所有 statement，但 false 嗰邊從未試過。100% branch coverage 一定包含 100% statement coverage（假設冇死 code），反過來唔成立。Path coverage 再強，但 loop 令 path 數量爆炸。</p>
 <span class="lab pic">圖解：2023 Q25(2) canFormTriangle</span>
@@ -804,4 +804,4 @@ if(pp){var pages=JSON.parse(pp.dataset.pages);var html='';
     html+='<div class="row"><a href="'+p[0]+'">'+p[1]+'</a><span>'+(m||n?'溫完 '+n+' 部分 · MCQ '+a+'/'+m+'（啱 '+c+'）':'未開始')+'</span></div>'});
   pp.innerHTML=html}
 })();
-</script><script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script><script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js" onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'\(',right:'\)',display:false}],ignoredClasses:['mcq','uml'],throwOnError:false})"></script></body></html>
+</script><script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script><script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js" onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'\\(',right:'\\)',display:false}],ignoredClasses:['mcq','uml'],throwOnError:false})"></script></body></html>

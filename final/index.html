@@ -84,7 +84,7 @@ input.blank.ok{border-color:var(--ok);background:var(--okbg)}input.blank.bad{bor
 .key{background:#FAE6DA;border-left:4px solid var(--acc);padding:12px 16px;margin:14px 0}
 .key>b:first-child{display:block;color:var(--acc);margin-bottom:4px}
 .key ul{margin:4px 0;padding-left:20px}
-.fx{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:6px 12px;margin:12px 0;overflow-x:auto;text-align:center}
+.fx{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:6px 12px;margin:12px 0;overflow-x:auto;text-align:center}@media(max-width:480px){.fx .katex-display>.katex{font-size:.86em}}
 .concept{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:6px 16px 12px;margin:18px 0}
 .concept>h3{margin-top:14px}
 .lab{display:inline-block;font-size:12.5px;font-weight:700;color:#fff;background:var(--acc2);border-radius:6px;padding:1px 8px;margin:14px 0 4px}
@@ -391,7 +391,8 @@ footer{color:var(--mut);font-size:13px;text-align:center;margin-top:50px}
 <tr><td>3 個 testing stages</td><td>Development testing（unit → component → system）→ Release testing → User testing（alpha、beta、acceptance）</td><td>L9</td></tr>
 <tr><td>Legacy 4 個策略</td><td>低質低值 → Scrap；低質高值 → Re-engineer（或有合適系統就 replace）；高質低值 → Scrap 或者照 maintain；高質高值 → 正常 maintain</td><td>L10；2025 Q27(2)</td></tr></table></div>
 <p>Coverage 計法（考 coverage 數字題時用）：</p>
-<div class="fx">$$\text{Statement coverage} = \frac{\text{statements executed}}{\text{total statements}} \times 100\%\qquad \text{Branch coverage} = \frac{\text{branch outcomes exercised}}{\text{total branch outcomes}} \times 100\%$$</div>
+<div class="fx">$$\text{Statement coverage} = \frac{\text{statements executed}}{\text{total statements}} \times 100\%$$</div>
+<div class="fx">$$\text{Branch coverage} = \frac{\text{outcomes exercised}}{\text{total outcomes}} \times 100\%$$</div>
 <p>一個 <code>if</code> 有 2 個 outcome（true、false）；所以 3 個 if 共 6 個 branch outcome。</p>
 
 <h2 id="trap">十二、易錯位總表</h2>
@@ -485,4 +486,4 @@ if(pp){var pages=JSON.parse(pp.dataset.pages);var html='';
     html+='<div class="row"><a href="'+p[0]+'">'+p[1]+'</a><span>'+(m||n?'溫完 '+n+' 部分 · MCQ '+a+'/'+m+'（啱 '+c+'）':'未開始')+'</span></div>'});
   pp.innerHTML=html}
 })();
-</script><script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script><script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js" onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'\(',right:'\)',display:false}],ignoredClasses:['mcq','uml'],throwOnError:false})"></script></body></html>
+</script><script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script><script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js" onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'\\(',right:'\\)',display:false}],ignoredClasses:['mcq','uml'],throwOnError:false})"></script></body></html>

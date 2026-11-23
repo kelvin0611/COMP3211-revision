@@ -135,8 +135,8 @@
 <h3>5. Code coverage：statement、branch、path</h3>
 <span class="lab">一句講完</span>
 <p>Coverage 量度 test suite 行過幾多 code：<b>statement</b>（每句行過最少一次）、<b>branch</b>（每個 if／loop 嘅 true 同 false 都出現過）、<b>path</b>（每條執行路線都行過）。</p>
-$$\text{Statement coverage} = \frac{\#\text{statements executed}}{\#\text{statements}}\times 100\%$$
-$$\text{Branch coverage} = \frac{\#\text{branch outcomes exercised}}{\#\text{branch outcomes}}\times 100\%$$
+$$\text{Statement coverage} = \frac{\text{executed}}{\text{all statements}}\times 100\%$$
+$$\text{Branch coverage} = \frac{\text{outcomes exercised}}{\text{all outcomes}}\times 100\%$$
 <span class="lab why">點解 branch 比 statement 強</span>
 <p>冇 else 嘅 if：一個令條件 true 嘅 test 已經行晒所有 statement，但 false 嗰邊從未試過。100% branch coverage 一定包含 100% statement coverage（假設冇死 code），反過來唔成立。Path coverage 再強，但 loop 令 path 數量爆炸。</p>
 <span class="lab pic">圖解：2023 Q25(2) canFormTriangle</span>
