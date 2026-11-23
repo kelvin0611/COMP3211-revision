@@ -10,6 +10,7 @@
   - **Section A**：Q1–20，**True/False，每題 1 分 = 20 分**（2023 答題紙寫明；4 份真卷嘅 Section A 頁全部被抽走，冇原題）
   - **Section B**：Q21–27，短答 + 畫圖 = 80 分；每小題有字數上限（<50／<100／<150 words），超字會扣分
 - 老師冇講額外考試資料；Kelvin 話「同之前出嘅差唔多」
+- **考試範圍：L1–L11（連 L7b）**。Max 通知：「Lecture 12 (Distributed Software Engineering) and Lecture 13 (Vibe Coding) will NOT be tested in the final exam.」
 - 教材：lecture L0–L12、4 份真卷（2022–2025）、Asm1（有官方 solution）、Asm2（冇 solution）、L5 Exercise
 - tutorial／lab 資料夾係空嘅
 - 真卷冇官方答案：溫習包答案按 lecture 寫，標明出處
@@ -35,9 +36,9 @@
 | final/P2-Testing.html | 14 張概念卡（validation vs defect、V&V、3 stages、black/white box、coverage、EP+BVA、branch-coverage partition、oracle + V-model、interface、regression/CI、TDD、release、alpha/beta/acceptance、static + stop criteria）；2025 Q26(3) 決策樹示範；2025／2024／2023／2022 testing 題全答（nextDate 14 行、removeLDLetters 5 行、calculateDiscount 8 行，全部 Java 窮舉驗證）；4 drill；2 個互動 partition 表；22 T/F + 8 MC | Q25／26（11–15） | ✅ 2026-11-22 |
 | final/P3-Process-Agile.html | 13 張概念卡（SE 定義 + good software、ethics/ETHICS-PLUS、4 activities、waterfall、incremental、reuse、coping with change、prototyping vs incremental delivery、CMMI、agile manifesto、XP、Scrum、agile 問題 + 決策圖）；2025 Q21 完整示範（Q21(4) 選項缺頁已註明）；2024／2023／2022 Q21 + Asm1 Q1 全答；4 drill；2 組填充；24 T/F + 8 MC | Q21（15） | ✅ 2026-11-22 |
 | final/P4-Requirements.html | 12 張概念卡（RE 定義、user vs system、F vs NF、verifiable NFR + metrics、F/NF 界線 + 衝突、spiral 3 activities、elicitation 持份者 + 4 stage、interview/observation、NL spec 指引、SRS 結構、5 validation checks、traceability + moving target）；2022 Q22 = Asm1 Q4 完整示範；2025／2024／2023 Q22 + Asm1 Q3 全答；3 drill；2 組填充；22 T/F + 8 MC | Q22（10–12） | ✅ 2026-11-22 |
-| final/P5-Architecture.html | 12 張概念卡（architectural design、NFR 對 architecture、MVC（Sommerville 6.3 圖）、layered（iLearn 對 HappyProgramming）、repository vs blackboard、client-server、pipe & filter、EDA、揀／組合 pattern 決策表、application architectures、distributed + thin/fat + CAP、master-slave／multi-tier／DCA／P2P／SaaS）；2025 Q23 完整示範；2024／2023／2022 Q23 + Asm2 Q2 全答；3 drill；MVC 12 格 + module 分層互動填；24 T/F + 8 MC | Q23（10–14） | ✅ 2026-11-22 |
+| final/P5-Architecture.html | 11 張概念卡（architectural design、NFR 對 architecture、MVC、layered、repository、client-server、pipe and filter、EDA、揀／組合 pattern、application architectures、client-server 分配 layer（Asm2 Q2））；L12 內容（CAP、P2P、master-slave、multi-tier、SaaS）已按 Max 通知刪除；T/F 24 + MC 8 | ✅ 2026-11-23 |
 | final/P6-Evolution-Reuse.html | 14 張概念卡（evolution process、CCB 流程（2024 圖）、agile evolution + maintenance 成本、technical debt quadrant、legacy、value×quality 四格、refactoring vs re-engineering、codeline/baseline、centralized vs distributed、fork+PR + VC key features、reuse 層次 + L2 reuse 流程（2023 圖）、framework vs product line、CBSE + container、SOA + MDE）；2024 Q26 完整示範；2025 Q27、2022 Q27、Asm2 Q4、2023 Q26 全答；3 drill；CCB + reuse 互動填圖；24 T/F + 8 MC | Q26／27（10–14） | ✅ 2026-11-22 |
-| final/P7-Design-OO.html | 13 張概念卡（analysis vs design、structured development、DFD leveling/balancing、ER、structure chart、cohesion/coupling、info hiding KWIC、Java OOP、inheritance/polymorphism/composite、OO vs PO + CRC、GRASP 9、SOLID 5（Java 跑過 LSP／OCP）、pitfalls）；SOLID 改 code 示範；2022 Q23(3) + 3 條預測題；3 drill；2 組填充；28 T/F + 8 MC | T/F + 小題 | ✅ 2026-11-22 |
+| final/P7-Design-OO.html | 13 張概念卡（analysis vs design、structured development、DFD leveling/balancing、ER、structure chart、cohesion/coupling、info hiding KWIC、Java OOP、inheritance/polymorphism/composite、OO vs PO + CRC、GRASP 9、SOLID 5（Java 跑過 LSP／OCP）、pitfalls）；SOLID 改 code 示範；2022 Q23(3) + 3 條預測題；3 drill；2 組填充；28 T/F + 8 MC | T/F + 小題 | ✅ 2026-11-23 |
 
 次序：index → P1 → P2 → P3 → P4 → P5 → P6 → P7
 
@@ -75,3 +76,5 @@
 - COMP3211-revision/index.html：自動跳去 final/
 - COMP3211-revision/.gitignore：.DS_Store、final/_src/out/
 - COMP3211-revision/README.md
+
+- 2026-11-23：補讀 L7（weak entity、derivable status、IPO pre/post-condition、structured programming 三種 construct、over-decomposition）、L7b 全份（signature、constructor、this、aliasing、access modifier、abstract／interface 規則）、L8 ISP 細節、L9 exit criteria；P7 加內容同 T/F 16 題、MC 2 題（T/F 44、MC 10）。按 Max 通知刪走 L12 內容（P5、index）。

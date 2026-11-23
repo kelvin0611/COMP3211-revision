@@ -115,6 +115,11 @@
 <p>D4 Fines 冇對應 entity：fine 只係 return 時計出嚟報告，係 design 決定要唔要存，唔係 analysis 發現。</p>
 <span class="lab trap">易錯</span>
 <p>DFD 同 ER model 要對得上：每個 data store 對應 entity（或者講明點解冇）。</p>
+<span class="lab trap">L7 細節（易出 T/F）</span>
+<div class="tw"><table class="stack"><tr><th>概念</th><th>L7 嘅講法</th></tr>
+<tr><td>Weak entity</td><td>LOAN 冇 MEMBER 同 ITEM 就唔存在（identifier 靠 member_id + item_id + loan_date），所以係 weak／associative entity</td></tr>
+<tr><td>Derivable attribute</td><td>ITEM.status（on loan／available）可以由「有冇 open LOAN」推算出嚟，係 derivable，唔一定要存</td></tr>
+<tr><td>Fine</td><td>Analysis 入面 fine 只係 return 時計嘅結果（LOAN 嘅 attribute 或者報告），唔使開獨立 entity</td></tr></table></div>
 </div>
 
 <div class="concept">
@@ -140,6 +145,10 @@
 <p>每個 module 變一個短、單一目的嘅 Python function；main driver 一個 loop：load data → show menu → read choice → dispatch → loop until quit。Testing 跟 structure chart：先 unit-test 葉，再 bottom-up 整合。</p>
 <span class="lab trap">易錯</span>
 <p>Design 只係組織，<b>唔會發明新工作</b>：每片葉都應該係 DFD 已有嘅 primitive。</p>
+<span class="lab why">Task 3–5 細節</span>
+<ol class="steps"><li><b>IPO contract</b>（Task 3）：每個 module 寫 Input、Process、Output，加 <b>pre-condition</b>（call 之前要成立，例如 member_id 存在）同 <b>post-condition</b>（做完之後成立，例如 LOAN 已建立、ITEM 變 on loan）。</li><li><b>Data structure</b>（Task 4）：每個 record／table 有一個 owner module；資料經 parameter 傳，<b>唔用 global variable</b>（避免 common coupling）。</li><li><b>Structured programming</b>（Task 5）：pseudocode 只用三種 control construct：<b>sequence、selection（if）、iteration（loop）</b>，唔用 goto（Dijkstra）。例如 checkout_item：validate_member → look_up_item → if available and under limit → create loan → else report error。</li></ol>
+<span class="lab trap">Over-decomposition</span>
+<p>L7 警告：唔好按<b>執行次序</b>（step 1、step 2…）切 module，亦唔好拆到每個 module 得一兩行；咁會令 coupling 上升、cohesion 下降（同 Parnas 嘅論點一致）。</p>
 </div>
 
 <div class="concept">
@@ -209,6 +218,19 @@
 <tr><td>例子</td><td><code>fight()</code>、<code>fight(Monster m)</code></td><td>Monster 改寫 Hero 嘅 <code>fight()</code></td></tr></table></div>
 <span class="lab trap">易錯</span>
 <p>Return type 唔同但 parameter 一樣<b>唔算</b> overloading（compile error）。</p>
+<span class="lab why">L7b 細節（易出 T/F）</span>
+<div class="tw"><table class="stack"><tr><th>概念</th><th>L7b 嘅講法</th></tr>
+<tr><td>Signature</td><td>Method name + parameter types 嘅數量、type、次序；<b>parameter 名同 return type 唔計</b></td></tr>
+<tr><td>Constructor</td><td>同 class 同名；<b>冇 return type（連 void 都冇）</b>；可以有 argument；用 <code>new</code> 時自動 call</td></tr>
+<tr><td><code>this</code></td><td>指向 method 正在處理嘅 object；喺 member method 入面<b>保證唔係 null</b></td></tr>
+<tr><td>Object vs reference</td><td>Object 有齊 class 所有 field；method 唔佔 object 空間；reference 只存 null 或地址；多個 reference 指同一 object = <b>aliasing</b>；object 只可以經 reference 存取</td></tr>
+<tr><td>Member access</td><td>用 <code>.</code>（Java 冇 <code>-&gt;</code>）；<code>heroA.increaseHealth(2)</code>：heroA = receiver、increaseHealth = message name、2 = parameter</td></tr></table></div>
+<div class="tw"><table class="stack"><tr><th>Access modifier</th><th>邊個存取到</th></tr>
+<tr><td><code>public</code></td><td>所有 code</td></tr>
+<tr><td><code>protected</code></td><td>同一 package，或者 subclass</td></tr>
+<tr><td>（冇寫）package／default</td><td>同一 package</td></tr>
+<tr><td><code>private</code></td><td>只限同一個 class</td></tr></table></div>
+<p>點解要 encapsulation：(1) 冇 access control 會令資料被破壞（<code>heroA.age = -100</code>）；(2) client code 會對實作改動好敏感（Hero 由 name 改做 firstName + lastName，外面 <code>heroA.name</code> 就壞；用 setName() 就唔使改 client）。</p>
 </div>
 
 <div class="concept">
@@ -224,6 +246,8 @@
 {{UML:p7-composite}}
 <span class="lab trap">易錯</span>
 <p>Abstract class 可以有 concrete method 同 attribute；interface（傳統 Java）只有 method signature 同常數。Abstract class <b>唔可以 new</b>。</p>
+<span class="lab why">L7b 規則清單</span>
+<ul><li>有<b>最少一個</b> abstract method 嘅 class 一定要宣告 abstract。</li><li>Abstract method 會被繼承；subclass 如果冇實作晒所有 abstract method，自己都要宣告 abstract。</li><li>Abstract class 雖然唔可以 new，但<b>定義咗一個 type</b>：<code>Shape[] shapes = new Shape[2];</code> 合法。</li><li>Interface：<b>唔可以有 instance field</b>；所有 instance method 都係 public abstract（兩個 keyword 可以省略）；寫 <code>private</code> method 或者有 body 都係 error。</li><li>Class 用 <code>implements</code>；interface 可以 <code>extends</code> <b>多個</b> interface（<code>interface D extends A, B, C</code>）。</li><li>Generic programming：用 polymorphic call <code>heroes[i].fight()</code> 代替 <code>instanceof</code> + cast 嘅 if-chain。</li></ul>
 </div>
 
 <div class="concept">
@@ -302,6 +326,7 @@ r.setW(5); r.setH(4);
 r.area();   // Rectangle → 20；Square → 16（已用 Java 跑過）</code></pre>
 <p>Square 改寫 setW／setH 令兩邊一齊變，用 Rectangle 嘅 test 就會失敗 → 違反 LSP。L8 建議：<b>composition + delegation</b>（Square 入面有一個 Rectangle）通常好過 inheritance。</p>
 <span class="lab trap">易錯</span>
+<p>ISP 細節：Door extends TimerClient 會造成 <b>interface pollution</b>（Door 被迫有佢唔需要嘅 timeOut()）；Timer 一改（例如加 timeoutID），所有 Door 嘅 client 都要改：client 對 interface 有 backwards force，fat interface = 更多改變理由。解法：TimedDoor 經 <b>DoorTimerAdapter</b>（delegation）或者多重繼承 interface，「one interface for each responsibility」。DIP 例子：<code>List&lt;Hero&gt; getHeros()</code> 好過 <code>ArrayList&lt;Hero&gt;</code>（依賴 abstraction）。</p>
 <p>OCP：「closure cannot be complete」：唔可能對所有改變都封閉，開頭作合理估計，之後 refactor。DIP 兩句：高層同低層都依賴 abstraction；<b>abstraction 唔依賴細節，細節依賴 abstraction</b>。</p>
 </div>
 
@@ -395,7 +420,7 @@ r.area();   // Rectangle → 20；Square → 16（已用 Java 跑過）</code></
 <div class="fillbar"><button class="btn pri" data-check>對答案</button><button class="btn" data-show>顯示答案</button><button class="btn" data-clear>清除</button><span class="fillmsg"></span></div></div>
 
 <h2 id="mcq">七、T/F + MC</h2>
-<h3>T/F（28 題）</h3>
+<h3>T/F（44 題）</h3>
 <div class="mcq" data-set="T"><script type="application/json">[
 {"t":"L7","s":"<p>The analysis model is implementation-independent, while design is implementation-oriented.</p>","a":0,"e":"<b>True</b>。"},
 {"t":"L7","s":"<p>A design is always directly executable.</p>","a":1,"e":"<b>False</b>。Design 係藍圖，not necessarily executable itself。"},
@@ -424,9 +449,25 @@ r.area();   // Rectangle → 20；Square → 16（已用 Java 跑過）</code></
 {"t":"L8","s":"<p>The Open/Closed principle states that software entities should be open for modification but closed for extension.</p>","a":1,"e":"<b>False</b>。調轉咗：open for extension, closed for modification。"},
 {"t":"L8","s":"<p>Making Square a subclass of Rectangle with setters that change both sides can violate the Liskov substitution principle.</p>","a":0,"e":"<b>True</b>。setW(5)、setH(4) 後 area 係 16 唔係 20（Java 跑過）。"},
 {"t":"L8","s":"<p>The Interface Segregation principle prefers one general-purpose interface over many client-specific ones.</p>","a":1,"e":"<b>False</b>。剛剛相反。"},
-{"t":"L8","s":"<p>Anemic objects are objects that contain data but no meaningful behaviour.</p>","a":0,"e":"<b>True</b>。修正：將 method 搬去資料旁邊。"}
+{"t":"L8","s":"<p>Anemic objects are objects that contain data but no meaningful behaviour.</p>","a":0,"e":"<b>True</b>。修正：將 method 搬去資料旁邊。"},
+{"t":"L7","s":"<p>LOAN is a weak entity because it cannot exist without MEMBER and ITEM.</p>","a":0,"e":"<b>True</b>。LOAN 靠 member 同 item 識別。"},
+{"t":"L7","s":"<p>ITEM.status (on loan or available) is a derivable attribute.</p>","a":0,"e":"<b>True</b>。可以由有冇 open LOAN 推算。"},
+{"t":"L7","s":"<p>A pre-condition in an IPO specification describes what is true after the module finishes.</p>","a":1,"e":"<b>False</b>。咁係 post-condition；pre-condition 係 call 之前要成立。"},
+{"t":"L7","s":"<p>Structured programming uses only sequence, selection and iteration constructs.</p>","a":0,"e":"<b>True</b>。唔用 goto。"},
+{"t":"L7","s":"<p>Decomposing modules by order of execution usually improves cohesion.</p>","a":1,"e":"<b>False</b>。L7 同 Parnas 都話咁會令 coupling 高、cohesion 低。"},
+{"t":"L7b","s":"<p>The return type is part of a Java method signature.</p>","a":1,"e":"<b>False</b>。Signature = name + parameter types（數量、type、次序）。"},
+{"t":"L7b","s":"<p>A constructor must declare the return type void.</p>","a":1,"e":"<b>False</b>。Constructor 冇 return type，連 void 都冇。"},
+{"t":"L7b","s":"<p>Inside a member method, this is guaranteed never to be null.</p>","a":0,"e":"<b>True</b>。"},
+{"t":"L7b","s":"<p>Methods take space in every object of a class.</p>","a":1,"e":"<b>False</b>。每個 field 喺每個 object 有空間，method 冇。"},
+{"t":"L7b","s":"<p>A member with no access keyword is accessible to code in the same package.</p>","a":0,"e":"<b>True</b>。Package（default）access。"},
+{"t":"L7b","s":"<p>A protected member is accessible only within the same class.</p>","a":1,"e":"<b>False</b>。咁係 private；protected = 同 package 或 subclass。"},
+{"t":"L7b","s":"<p>An interface may declare instance fields.</p>","a":1,"e":"<b>False</b>。No instance field is allowed。"},
+{"t":"L7b","s":"<p>A Java interface can extend more than one interface.</p>","a":0,"e":"<b>True</b>。interface D extends A, B, C。"},
+{"t":"L7b","s":"<p>A class containing at least one abstract method must itself be declared abstract.</p>","a":0,"e":"<b>True</b>。"},
+{"t":"L8","s":"<p>Making Door extend TimerClient pollutes the Door interface with a method it does not require.</p>","a":0,"e":"<b>True</b>。Interface pollution，違反 ISP。"},
+{"t":"L8","s":"<p>Declaring a return type as List rather than ArrayList follows the dependency inversion principle.</p>","a":0,"e":"<b>True</b>。依賴 abstraction（L8 Game.getHeros 例子）。"}
 ]</script></div>
-<h3>MC（8 題，含多選）</h3>
+<h3>MC（10 題，含多選）</h3>
 <div class="mcq" data-set="M"><script type="application/json">[
 {"t":"L7","s":"<p>Which are the four DFD symbols? (Select all that apply)</p>","o":["Process","Data store","External entity","Data flow","Class"],"a":[0,1,2,3],"e":"A–D 係 DFD 四個符號。E 係 UML class diagram。"},
 {"t":"L7","s":"<p>When should you stop decomposing a process in a DFD?</p>","o":["When it is a functional primitive","When it has exactly three sub-processes","When it reads a data store","When it becomes a Python function"],"a":0,"e":"A：單一目的、一份 mini-spec 寫得晒、唔使 design 決定。"},
@@ -435,7 +476,9 @@ r.area();   // Rectangle → 20；Square → 16（已用 Java 跑過）</code></
 {"t":"L8","s":"<p>Which are OO pitfalls listed in L8? (Select all that apply)</p>","o":["God class","Deep inheritance","Anemic objects","Getters everywhere","High cohesion"],"a":[0,1,2,3],"e":"A–D 係 pitfalls。E 係目標。"},
 {"t":"L8","s":"<p>A loop uses instanceof checks to call drawCircle() or drawRectangle(). Which principle does introducing a Shape interface with draw() mainly satisfy?</p>","o":["SRP","OCP","LSP","ISP"],"a":1,"e":"B：加新 shape 唔使改 loop（open for extension, closed for modification）。"},
 {"t":"L8","s":"<p>\"Depend upon abstractions. Do not depend upon concretions.\" is the:</p>","o":["Single responsibility principle","Liskov substitution principle","Dependency inversion principle","Interface segregation principle"],"a":2,"e":"C。"},
-{"t":"L8","s":"<p>What does L8 suggest as an alternative to making Square inherit from Rectangle?</p>","o":["Multiple inheritance","Composition and delegation","Making all fields public","Using a kind field"],"a":1,"e":"B：Square 入面持有一個 Rectangle，委派 area()。"}
+{"t":"L8","s":"<p>What does L8 suggest as an alternative to making Square inherit from Rectangle?</p>","o":["Multiple inheritance","Composition and delegation","Making all fields public","Using a kind field"],"a":1,"e":"B：Square 入面持有一個 Rectangle，委派 area()。"},
+{"t":"L7b","s":"<p>Which are part of a Java method signature? (Select all that apply)</p>","o":["Method name","Number of parameters","Types and order of parameters","Return type"],"a":[0,1,2],"e":"Return type 同 parameter 名唔計。"},
+{"t":"L7b","s":"<p>Which access level allows access from the same package and from subclasses?</p>","o":["private","package (default)","protected","public"],"a":2,"e":"C：protected。"}
 ]</script></div>
 
 <h2 id="short">八、短答題</h2>

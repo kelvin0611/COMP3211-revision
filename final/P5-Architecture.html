@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="zh-HK"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light"><title>P5 · Architectural Design（+ Distributed）</title><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css"><style>
+<!DOCTYPE html><html lang="zh-HK"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light"><title>P5 · Architectural Design</title><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css"><style>
 :root{color-scheme:light;--bg:#F2F4F7;--card:#FFFFFF;--ink:#15202B;--mut:#566273;--line:#D2D9E1;--acc:#BF4A14;--acc2:#0B7472;--soft:#D9EFEE;--ok:#17733A;--okbg:#DCF1E3;--bad:#B42318;--badbg:#FADFDB;--code:#E9EDF2;--warn:#8F6200;--warnbg:#F6EBCB}
 *{box-sizing:border-box}html{-webkit-text-size-adjust:100%}
 body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.7 -apple-system,BlinkMacSystemFont,"PingFang HK","Noto Sans HK","Microsoft JhengHei",sans-serif}
@@ -114,8 +114,8 @@ table.pt td,table.pt th{padding:4px 3px;font-size:12.5px}table.pt input.blank{wi
 .ansbox{background:var(--okbg);border-left:4px solid var(--ok);padding:10px 14px;margin:8px 0}
 .ansbox>b:first-child{display:block;color:var(--ok);margin-bottom:2px}
 footer{color:var(--mut);font-size:13px;text-align:center;margin-top:50px}
-</style></head><body data-page="P5-Architecture.html"><nav class="top"><a href="index.html">總覽</a><a href="P1-UML.html">P1 UML 圖</a><a href="P2-Testing.html">P2 Testing</a><a href="P3-Process-Agile.html">P3 Process</a><a href="P4-Requirements.html">P4 Requirements</a><a href="P5-Architecture.html" class=on>P5 Architecture</a><a href="P6-Evolution-Reuse.html">P6 Evolution</a><a href="P7-Design-OO.html">P7 Design</a></nav><main><h1>P5 · Architectural Design（+ Distributed）</h1>
-<p class="sub">必考，Q23 每年 10–14 分 · 對應 L6 Architectural Design、L12 Distributed Software Engineering、L8（DIP）、Asm2 Q2</p>
+</style></head><body data-page="P5-Architecture.html"><nav class="top"><a href="index.html">總覽</a><a href="P1-UML.html">P1 UML 圖</a><a href="P2-Testing.html">P2 Testing</a><a href="P3-Process-Agile.html">P3 Process</a><a href="P4-Requirements.html">P4 Requirements</a><a href="P5-Architecture.html" class=on>P5 Architecture</a><a href="P6-Evolution-Reuse.html">P6 Evolution</a><a href="P7-Design-OO.html">P7 Design</a></nav><main><h1>P5 · Architectural Design</h1>
+<p class="sub">必考，Q23 每年 10–14 分 · 對應 L6 Architectural Design、L8（DIP）、Asm2 Q2</p>
 <ul class="toc">
 <li><a href="#exam">一、點考</a></li><li><a href="#notes">二、筆記：由零講起</a></li>
 <li><a href="#demo">三、完整示範：2025 Q23</a></li><li><a href="#past">四、Past paper 全答</a></li>
@@ -144,7 +144,8 @@ footer{color:var(--mut);font-size:13px;text-align:center;margin-top:50px}
 <li>Architecture = 系統點樣組織成一組互相溝通嘅 component；係 RE 同 design 之間嘅關鍵橋樑。</li>
 <li>6 個 pattern：<b>MVC、Layered、Client-server、Repository、Pipe and filter、Event-driven</b>。</li>
 <li>NFR 決定 architecture：performance 要大 component、maintainability 要細 component，會衝突。</li>
-<li>Distributed：thin vs fat client、multi-tier、P2P、CAP theorem。</li></ul></div>
+<li>Client-server 點樣分配 layer（thin vs fat，Asm2 Q2）：用 L6 嘅 layered + client-server 就答到。</li></ul></div>
+<div class="warn"><b>Max 通知：L12 同 L13 唔考</b>L12 Distributed Software Engineering 同 L13 Vibe Coding 唔會喺 final 考。呢頁已經刪走 L12 獨有嘅內容（CAP、P2P、master-slave、multi-tier、SaaS 等）。Thin／fat client 呢兩個名出自 L12，不過 Asm2 Q2 考過「layered app 分去 client／server」，用 L6 知識都答到，所以保留做 Asm2 參考。</div>
 
 <div class="concept">
 <h3>1. Architectural design 係咩；點解要明確嘅 architecture</h3>
@@ -389,15 +390,14 @@ footer{color:var(--mut);font-size:13px;text-align:center;margin-top:50px}
 </div>
 
 <div class="concept">
-<h3>11. Distributed systems：好處、設計問題、thin vs fat client</h3>
+<h3>11. Client-server 點樣分配 layer（Asm2 Q2）</h3>
 <span class="lab">一句講完</span>
-<p>Distributed system 係一堆獨立電腦，對用戶嚟講似一個系統。5 個好處：<b>resource sharing、openness、concurrency、scalability、fault tolerance</b>；6 個設計問題：<b>transparency、openness、scalability、security、failure management、QoS</b>。</p>
-<span class="lab why">Two-tier client-server：thin vs fat（Asm2 Q2）</span>
-<div class="tw"><table class="stack"><tr><th></th><th>Thin client</th><th>Fat client</th></tr>
-<tr><td>Client 做咩</td><td>只做 presentation</td><td>Presentation + application processing</td></tr>
-<tr><td>Server 做咩</td><td>Application processing + data management + DB</td><td>Data management + DB</td></tr>
-<tr><td>優點</td><td>易管理（好多 client 都唔使逐部更新）</td><td>本地處理減少 server 同網絡負擔</td></tr>
-<tr><td>缺點</td><td>Server 同網絡負擔重</td><td>管理複雜：新版本要裝落每部 client</td></tr></table></div>
+<p>將一個 layered 系統搬去 client-server 時，要決定邊幾層放 client、邊幾層放 server：<b>只有 presentation 喺 client</b>（俗稱 thin client），或者 <b>presentation + application processing 都喺 client</b>（fat client）。</p>
+<span class="lab why">兩種分法嘅取捨</span>
+<div class="tw"><table class="stack"><tr><th></th><th>Presentation 喺 client（thin）</th><th>Presentation + application 喺 client（fat）</th></tr>
+<tr><td>Server 做咩</td><td>Application processing + database</td><td>Database（data management）</td></tr>
+<tr><td>優點</td><td>易管理：改 application logic 只改 server，唔使逐部 client 更新；client 可以好簡單</td><td>用 client 嘅運算能力，減少 server 負擔同網絡流量，反應快</td></tr>
+<tr><td>缺點</td><td>Server 同網絡負擔重</td><td>新版本要裝落每部 client，管理複雜</td></tr></table></div>
 <span class="lab pic">圖解：Asm2 嘅兩個 design</span>
 <figure class="fig"><svg viewBox="0 0 360 200" role="img" aria-label="thin vs fat client" style="max-width:380px">
 <text x="90" y="16" text-anchor="middle" font-size="12.5" font-weight="700">Design 1（fat）</text><text x="270" y="16" text-anchor="middle" font-size="12.5" font-weight="700">Design 2（thin）</text>
@@ -407,38 +407,14 @@ footer{color:var(--mut);font-size:13px;text-align:center;margin-top:50px}
 <rect class="ac" x="190" y="26" width="160" height="34" rx="4"/><text x="198" y="47">Presentation</text>
 <rect class="hl" x="190" y="84" width="160" height="34" rx="4"/><text x="198" y="105">Application processing</text>
 <rect class="hl" x="190" y="122" width="160" height="34" rx="4"/><text x="198" y="143">Database</text></g>
-<line x1="5" y1="110" x2="175" y2="110" stroke="#B42318" stroke-dasharray="5 4"/><line x1="185" y1="72" x2="355" y2="72" stroke="#B42318" stroke-dasharray="5 4"/>
-<g font-size="11" fill="#B42318"><text x="172" y="106" text-anchor="end">client ↑ server ↓</text><text x="352" y="68" text-anchor="end">client ↑ server ↓</text></g>
+<line x1="5" y1="116" x2="175" y2="116" stroke="#B42318" stroke-dasharray="5 4"/><line x1="185" y1="78" x2="355" y2="78" stroke="#B42318" stroke-dasharray="5 4"/>
+<g font-size="10" fill="#B42318"><text x="172" y="111" text-anchor="end">client ↑ server ↓</text><text x="352" y="73" text-anchor="end">client ↑ server ↓</text></g>
 <text x="180" y="185" text-anchor="middle" font-size="12">橙 = client；青 = server；紅虛線 = 網絡分界</text>
-</svg><figcaption>Multi-tier（three-tier）將每層放唔同 process／server，避開 thin／fat 嘅兩難</figcaption></figure>
-<span class="lab eg">例子：CAP theorem</span>
-<p>分散式系統唔可以同時保證 <b>Consistency</b>（每次讀到最新寫入）、<b>Availability</b>（每個 request 都有非錯誤回應）、<b>Partition tolerance</b>（網絡斷都繼續運作）。網絡一定會斷，所以斷網時要揀 <b>CP</b>（拒絕 request 保證資料啱，例如金融交易，strong consistency）或者 <b>AP</b>（俾最好嘅資料保持在線，例如社交 feed，eventual consistency）。</p>
+</svg><figcaption>同一個 3 層系統，分界線放唔同位置</figcaption></figure>
+<span class="lab eg">例子：點樣用 L6 知識答</span>
+<ol class="steps"><li>L6 layered：每層只用下一層嘅 service，所以可以喺任何兩層之間切開，放去唔同機器。</li><li>L6 client-server：server 提供 service、client 經網絡用；performance 受網絡影響。</li><li>切得越高（只有 presentation 喺 client）：網絡上傳嘅係用戶操作同結果，server 做晒運算 → 易管理但 server 重。切得越低：網絡只傳 database query → server 輕但 client 要裝完整程式。</li></ol>
 <span class="lab trap">易錯</span>
-<p>Transparency 理想係用戶唔覺得系統係分散，但實際上好少做到完全 transparent，有時應該<b>話俾用戶知</b>先可以應付問題。Scale out（加機）平但難管理；scale up（升級機器）簡單但貴、有上限。</p>
-</div>
-
-<div class="concept">
-<h3>12. 其他 distributed patterns：master-slave、multi-tier、DCA、P2P、SaaS</h3>
-<span class="lab">一句講完</span>
-<p>L12 列出 5 種分散式 architecture：<b>master-slave、two-tier client-server、multi-tier client-server、distributed component architecture、peer-to-peer</b>；另外 SaaS 同 SOA 係兩種提供 service 嘅方式。</p>
-<span class="lab why">比較</span>
-<div class="tw"><table class="stack"><tr><th>Pattern</th><th>特點</th><th>例子／問題</th></tr>
-<tr><td>Master-slave</td><td>Master 負責計算、協調、溝通；slave 做特定動作（讀 sensor）</td><td>即時系統，例如交通管理</td></tr>
-<tr><td>Multi-tier</td><td>每層係獨立 process，可以喺唔同 processor</td><td>Tier 1 presentation、Tier 2 application + data management、Tier 3 database</td></tr>
-<tr><td>DCA</td><td>冇 client／server 之分，全部係 component，經 middleware 提供同接收 service</td><td>靈活易擴展；但複雜、冇通用標準；漸被 SOA 取代</td></tr>
-<tr><td>P2P</td><td>去中心化，任何節點都可以計算</td><td>BitTorrent、Bitcoin；<b>保安</b>係唔普及嘅主因</td></tr>
-<tr><td>SaaS</td><td>軟件放遠端，用瀏覽器存取，按用量或訂閱收費</td><td>好處：快速擴展、平；問題：資料傳輸、失去演化控制、法規</td></tr></table></div>
-<span class="lab pic">圖解：master-slave</span>
-<figure class="fig"><svg viewBox="0 0 360 160" role="img" aria-label="master slave" style="max-width:380px">
-<rect class="ac" x="120" y="10" width="120" height="44" rx="8"/><text x="180" y="30" text-anchor="middle" font-size="12.5" font-weight="700">Master</text><text x="180" y="46" text-anchor="middle" font-size="11">控制中心</text>
-<g class="hl"><rect x="5" y="100" width="105" height="44" rx="8"/><rect x="128" y="100" width="105" height="44" rx="8"/><rect x="250" y="100" width="105" height="44" rx="8"/></g>
-<g font-size="11.5" text-anchor="middle"><text x="57" y="120">Sensor slave</text><text x="57" y="136" font-size="10.5">讀交通流量</text><text x="180" y="120">Light slave</text><text x="180" y="136" font-size="10.5">控制燈號</text><text x="302" y="120">Display slave</text><text x="302" y="136" font-size="10.5">顯示資訊</text></g>
-<g stroke="#15202B" stroke-width="1.3"><line x1="150" y1="54" x2="57" y2="100"/><line x1="180" y1="54" x2="180" y2="100"/><line x1="210" y1="54" x2="302" y2="100"/></g>
-</svg><figcaption>L12：traffic management system with a master-slave architecture</figcaption></figure>
-<span class="lab eg">例子：SaaS vs SOA</span>
-<p>SaaS：功能喺遠端 server，經瀏覽器用，保存用戶資料同狀態（長交易，例如編輯 Google Doc）。SOA：系統由獨立、stateless 嘅 service 組成，可以來自唔同供應商，通常係短交易（call 一個 service 攞結果）。</p>
-<span class="lab trap">易錯</span>
-<p>Timeout 只限制 caller 等幾耐，<b>唔會取消</b>遠端操作；caller timeout 時唔知道 request 係未到、處理緊、定係做完但回覆唔見咗（L12 partial failure）。</p>
+<p>唔好寫 CAP、P2P、multi-tier 呢類 L12 內容做答案主體；Max 已講明 L12 唔考，用 L6 嘅 layered 同 client-server 理由就夠。</p>
 </div>
 
 <h2 id="demo">三、完整示範：2025 Q23（14 分）</h2>
@@ -488,9 +464,9 @@ footer{color:var(--mut);font-size:13px;text-align:center;margin-top:50px}
 <p class="q">(3) Explain what the Dependency Inversion Principle proposes instead and why. (&lt;120 words, 5 points)</p>
 <details class="ans"><summary>參考答案</summary><div><div class="ansbox"><b>答案</b>DI proposes that high-level modules should not depend on low-level modules; both should depend on abstractions, such as interfaces. Moreover, abstractions should not depend on details; details should depend on abstractions. For example, instead of a PDFReader depending directly on a concrete PDFBook class, an EBookReader depends on an EBook interface that PDFBook and other book types implement. The reason is that when higher-level components depend directly on lower-level ones, they have limited reusability and must change whenever the lower-level implementation changes. Depending on abstractions decouples the layers, so low-level implementations can be replaced or extended without modifying high-level policy code.</div><p class="wl">約 105 字 · L8 DIP (1)–(3)</p></div></details></div>
 
-<div class="practice"><span class="src">Asm2 Q2 · Client-server 兩個 design · Asm 12 分 · L6、L12</span>
+<div class="practice"><span class="src">Asm2 Q2 · Client-server 兩個 design · Asm 12 分 · L6</span>
 <p class="q">Give one advantage of each design. (&lt;200 words)</p>
-<details class="ans"><summary>參考答案</summary><div><div class="ansbox"><b>答案</b>Design 1 (presentation and application processing on the client, database on the server – a fat client): application processing uses the computing power of the client machines, so the server only handles data management. This reduces the processing load on the server and the amount of traffic over the network, since only database queries and results are transferred, giving more responsive interaction and allowing the server to support more clients.<br>Design 2 (only presentation on the client – a thin client): all application logic runs on the server, so the system is simple to manage; when the application processing changes, only the server needs updating and no new version has to be installed on every client. Clients can also be lightweight devices, and business logic and data stay together on the server, which makes them easier to secure and keep consistent.</div><p>出處：L12「Thin vs. Fat Client Trade-offs」。</p></div></details></div>
+<details class="ans"><summary>參考答案</summary><div><div class="ansbox"><b>答案</b>Design 1 (presentation and application processing on the client, database on the server – a fat client): application processing uses the computing power of the client machines, so the server only handles data management. This reduces the processing load on the server and the amount of traffic over the network, since only database queries and results are transferred, giving more responsive interaction and allowing the server to support more clients.<br>Design 2 (only presentation on the client – a thin client): all application logic runs on the server, so the system is simple to manage; when the application processing changes, only the server needs updating and no new version has to be installed on every client. Clients can also be lightweight devices, and business logic and data stay together on the server, which makes them easier to secure and keep consistent.</div><p>Thin／fat 呢兩個名出自 L12（唔考），但答案理由用 L6 layered + client-server 就夠。</p></div></details></div>
 
 <h2 id="drill">五、Drill</h2>
 <div class="practice"><span class="src">Drill 1 · 揀 pattern</span>
@@ -499,10 +475,6 @@ footer{color:var(--mut);font-size:13px;text-align:center;margin-top:50px}
 <div class="practice"><span class="src">Drill 2 · 違反 MVC</span>
 <p class="q">以下邊啲設計違反 MVC？(a) Controller 收到「刪除」按鈕就 call model.deleteTask() (b) Model 入面 format 日期做「22 Nov」再 return 俾 View 顯示 (c) View 直接改 Model 嘅 list (d) Model 改咗之後通知所有登記咗嘅 View。</p>
 <details class="ans"><summary>答案</summary><div><p>(b) 違反：顯示格式屬於 View。(c) 違反：用戶操作應該經 Controller 更新 Model。(a)、(d) 正確。</p></div></details></div>
-<div class="practice"><span class="src">Drill 3 · CAP</span>
-<p class="q">網上銀行轉帳 vs 社交平台 like 數：斷網時應該揀 CP 定 AP？</p>
-<details class="ans"><summary>答案</summary><div><p>轉帳：CP（寧願拒絕 request 都要資料正確，strong consistency）。Like 數：AP（顯示舊少少嘅數字都可以，保持可用，eventual consistency）。</p></div></details></div>
-
 <h2 id="fill">六、互動填圖：2023 Q23(1) MVC 12 格</h2>
 <p>對住概念卡 3 嘅圖（先遮住佢自己諗），每格填 A–L：</p>
 <div class="card"><p style="font-size:14px">A Selects view · B Sends user events to controller · C Renders model · D Notifies view of state change · E Requests model updates · F View selection · G Encapsulates application state · H Maps user actions to model updates · I State query · J User events · K State change · L Change notification</p></div>
@@ -543,11 +515,11 @@ footer{color:var(--mut);font-size:13px;text-align:center;margin-top:50px}
 {"t":"L6","s":"<p>A disadvantage of pipe and filter is that each transformation must parse its input and unparse its output.</p>","a":0,"e":"<b>True</b>。增加 overhead。"},
 {"t":"L6","s":"<p>Event-driven architectures guarantee immediate (strong) consistency.</p>","a":1,"e":"<b>False</b>。只保證 <b>eventual</b> consistency。"},
 {"t":"L6","s":"<p>Compilers and interpreters are examples of language processing systems.</p>","a":0,"e":"<b>True</b>。"},
-{"t":"L12","s":"<p>In a thin-client model, application processing is done on the client.</p>","a":1,"e":"<b>False</b>。Thin client 只做 presentation。"},
-{"t":"L12","s":"<p>A disadvantage of the fat-client model is that new versions must be installed on all clients.</p>","a":0,"e":"<b>True</b>。管理複雜。"},
-{"t":"L12","s":"<p>According to the CAP theorem, a distributed system can guarantee consistency, availability and partition tolerance at the same time.</p>","a":1,"e":"<b>False</b>。三樣唔可以同時保證。"},
-{"t":"L12","s":"<p>Security is the main reason peer-to-peer systems are not widely adopted.</p>","a":0,"e":"<b>True</b>。"},
-{"t":"L12","s":"<p>A timeout cancels and reverses the remote operation.</p>","a":1,"e":"<b>False</b>。Timeout 只限制等幾耐，唔取消遠端操作。"}
+{"t":"Asm2","s":"<p>When only the presentation layer runs on the client (thin client), application processing is done on the client.</p>","a":1,"e":"<b>False</b>。Thin client 只做 presentation。"},
+{"t":"Asm2","s":"<p>A disadvantage of the fat-client model is that new versions must be installed on all clients.</p>","a":0,"e":"<b>True</b>。管理複雜。"},
+{"t":"L6","s":"<p>In MVC, the Model notifies the View when its state changes.</p>","a":0,"e":"<b>True</b>。Sommerville 圖：Model「Notifies view of state change」，箭咀 Change notification。"},
+{"t":"L6","s":"<p>A disadvantage of the repository pattern is that distributing the repository across several computers may be difficult.</p>","a":0,"e":"<b>True</b>。L6 repository disadvantages。"},
+{"t":"L6","s":"<p>An ATM system can be conceptually organized using a pipe and filter architecture.</p>","a":0,"e":"<b>True</b>。L6 transaction processing 例子：讀卡 → 驗證 → 處理 → 出錢。"}
 ]</script></div>
 <h3>MC（8 題，含多選）</h3>
 <div class="mcq" data-set="M"><script type="application/json">[
@@ -556,8 +528,8 @@ footer{color:var(--mut);font-size:13px;text-align:center;margin-top:50px}
 {"t":"L6","s":"<p>In Sommerville's MVC figure, the arrow from Controller to Model is labelled:</p>","o":["State query","State change","Change notification","View selection"],"a":1,"e":"B。A 係 View→Model；C 係 Model→View；D 係 Controller→View。"},
 {"t":"L6","s":"<p>An online platform needs remote access and must cope with variable load. Which single pattern best addresses both?</p>","o":["Repository","Client-server","Pipe and filter","MVC"],"a":1,"e":"B：多地點存取 + server 可以 replicate。"},
 {"t":"L6","s":"<p>Which are disadvantages of the event-driven architecture? (Select all that apply)</p>","o":["Difficult to test and debug","Difficult to track overall system state","Adding a consumer requires modifying producers","Only eventual consistency is guaranteed"],"a":[0,1,3],"e":"A、B、D 啱。C 錯：加 consumer <b>唔使</b>改 producer，係優點。"},
-{"t":"L12","s":"<p>Which architecture places Tier 1 presentation on the client, Tier 2 application processing on a web server and Tier 3 on a database server?</p>","o":["Two-tier thin client","Multi-tier client-server","Peer-to-peer","Master-slave"],"a":1,"e":"B：three-tier 係 multi-tier 例子。"},
-{"t":"L12","s":"<p>Which are listed as benefits of distributed systems? (Select all that apply)</p>","o":["Resource sharing","Openness","Concurrency","Simpler top-down control"],"a":[0,1,2],"e":"A、B、C（仲有 scalability、fault tolerance）。D 錯：L12 話 top-down control 係<b>冇可能</b>。"},
+{"t":"L6","s":"<p>Which architectural views can be used to document an architecture? (Select all that apply)</p>","o":["Conceptual view","Logical view","Process view","Development view"],"a":[0,1,2,3],"e":"L6 key points：可以由 conceptual、logical、process、development 四種 view 記錄。"},
+{"t":"L6","s":"<p>A compiler front-end transforms source code through lexical, syntax and semantic analysis stages. Which pattern best describes this organization?</p>","o":["Repository","Pipe and filter","Client-server","MVC"],"a":1,"e":"B：分階段轉換資料（language processing system 可以用 pipe and filter）。"},
 {"t":"L8","s":"<p>The Dependency Inversion Principle states that:</p>","o":["Low-level modules should depend on high-level modules","High-level and low-level modules should both depend on abstractions","Each layer may only depend on the layer immediately below","Abstractions should depend on details"],"a":1,"e":"B 啱。D 調轉咗（details 依賴 abstractions）。C 係 conventional layered 規則。"}
 ]</script></div>
 
@@ -566,15 +538,15 @@ footer{color:var(--mut);font-size:13px;text-align:center;margin-top:50px}
 <details class="ans"><summary>參考答案</summary><div><div class="ansbox"><b>答案</b>Stakeholder communication: the architecture is a high-level presentation of the system that different stakeholders can discuss. System analysis: making architectural decisions explicit allows analysis of whether the system can meet critical non-functional requirements. (Also: large-scale reuse across systems with similar requirements.)</div></div></details>
 <p class="q">2. Describe the pipe and filter pattern and give one situation where it is unsuitable. (&lt;60 words)</p>
 <details class="ans"><summary>參考答案</summary><div><div class="ansbox"><b>答案</b>Each processing component (filter) carries out one type of data transformation, and data flows through pipes from one filter to the next, as in Unix pipes. It suits batch data processing. It is unsuitable for interactive systems, such as a word processor, where users continuously interact with the system.</div></div></details>
-<p class="q">3. Explain the CAP theorem and the choice a system must make during a network partition. (&lt;80 words)</p>
-<details class="ans"><summary>參考答案</summary><div><div class="ansbox"><b>答案</b>A distributed system cannot simultaneously guarantee consistency (every read gets the latest write), availability (every request gets a non-error response) and partition tolerance. Since network partitions are inevitable, during a partition a node must choose: a CP system rejects requests to keep data correct, while an AP system returns the best available, possibly stale, data to stay online.</div></div></details>
+<p class="q">3. Describe the repository pattern and give one advantage and one disadvantage. (&lt;80 words)</p>
+<details class="ans"><summary>參考答案</summary><div><div class="ansbox"><b>答案</b>All data in the system is managed in a central repository accessible to all components, and components do not interact directly, only through the repository. Advantage: components are independent and changes made by one component are visible to all, with data managed consistently in one place. Disadvantage: the repository is a single point of failure, so problems in it affect the whole system.</div></div></details>
 
 <h2 id="faq">九、常見疑問</h2>
 <dl class="faq">
 <dt>Q：MVC 同 layered 有咩分別？</dt><dd>MVC 專注將 UI 同 data 分開（3 個 component，有雙向通知）；layered 係將成個系統按抽象層次分層，只向下依賴。MVC 嘅 Model 通常喺 layered 嘅下層。</dd>
 <dt>Q：Repository 同 client-server 都有中央 database，有咩分別？</dt><dd>Repository 重點係 component 只經 repository 交換資料、互相唔知；client-server 重點係 service 分佈喺網絡上，client 經網絡用。兩者可以一齊用。</dd>
 <dt>Q：2024 Q23(2) MVC 拆三層，答可以定唔可以？</dt><dd>冇官方答案。關鍵係講清楚依賴方向：strict layering 只可以向下依賴，而經典 MVC 有 View→Model 直接 query 同 Model→View 通知。講到呢點，加上點樣改先可以分層，就有分。</dd>
-<dt>Q：Thin／fat client 屬於 L6 定 L12？</dt><dd>L12（two-tier client-server）。Asm2 Q2 就係考呢個。</dd>
+<dt>Q：Thin／fat client 考唔考？</dt><dd>呢兩個名出自 L12，Max 講咗 L12 唔考。但 Asm2 Q2 嘅問題（layered 系統點樣分去 client／server）用 L6 嘅 layered + client-server 已經答到，所以概念卡 11 保留做參考。</dd>
 <dt>Q：L6 EDA 表個名寫「Pipe and filter」？</dt><dd>係 lecture 筆誤，內容係 event-driven。</dd>
 </dl>
 <footer>COMP3211 Software Engineering Final 溫習包 · 考試 2026-12-05</footer></main><script>
