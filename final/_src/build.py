@@ -105,6 +105,7 @@ figure.slide img{display:block;width:100%;height:auto;border:1px solid #E3E7EC;b
 figure.slide figcaption{font-size:14.5px;line-height:1.65;margin-top:8px;color:var(--ink)}
 figure.slide figcaption>b:first-child{display:block;color:#8F6200;font-size:13.5px;margin-bottom:2px}
 figure.slide .zoom{font-size:12px;color:var(--mut)}
+details.sl.pp{border-color:#3D4BAA;background:#F4F6FF}details.sl.pp>summary{color:#3D4BAA}
 .scroll{overflow-x:auto}
 ol.steps{padding-left:0;list-style:none;counter-reset:s}
 ol.steps>li{counter-increment:s;position:relative;padding:8px 10px 8px 42px;margin:8px 0;background:var(--card);border:1px solid var(--line);border-radius:10px}
