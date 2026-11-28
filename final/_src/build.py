@@ -95,6 +95,16 @@ input.blank.ok{border-color:var(--ok);background:var(--okbg)}input.blank.bad{bor
 .lab.why{background:#3D4BAA}.lab.pic{background:#8F6200}.lab.eg{background:var(--acc)}.lab.trap{background:var(--bad)}
 figure.fig{margin:14px 0;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px}
 figure.fig figcaption{font-size:13.5px;color:var(--mut);text-align:center;margin-top:6px}
+details.sl{border:1.5px solid #8F6200;border-radius:12px;margin:12px 0;background:#FFFBF0}
+details.sl>summary{cursor:pointer;padding:9px 14px;color:#8F6200;font-weight:700;list-style:none}
+details.sl>summary::-webkit-details-marker{display:none}
+details.sl>summary::before{content:"▸ "}details.sl[open]>summary::before{content:"▾ "}
+details.sl>.sw{padding:0 10px 10px}
+figure.slide{margin:10px 0 16px;background:#fff;border:1px solid var(--line);border-radius:10px;padding:8px}
+figure.slide img{display:block;width:100%;height:auto;border:1px solid #E3E7EC;border-radius:6px}
+figure.slide figcaption{font-size:14.5px;line-height:1.65;margin-top:8px;color:var(--ink)}
+figure.slide figcaption>b:first-child{display:block;color:#8F6200;font-size:13.5px;margin-bottom:2px}
+figure.slide .zoom{font-size:12px;color:var(--mut)}
 .scroll{overflow-x:auto}
 ol.steps{padding-left:0;list-style:none;counter-reset:s}
 ol.steps>li{counter-increment:s;position:relative;padding:8px 10px 8px 42px;margin:8px 0;background:var(--card);border:1px solid var(--line);border-radius:10px}
